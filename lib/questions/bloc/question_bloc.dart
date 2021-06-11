@@ -1,17 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:trivia_expert_app/main_model/questions.dart';
+import 'package:trivia_expert_app/questions/databaase_operations.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
+import 'package:path/path.dart';
 part 'question_event.dart';
 part 'question_state.dart';
 class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
-  final http.Client httpClient;
 
-  QuestionBloc({@required this.httpClient}) : super(const QuestionState());
+
+  QuestionBloc() : super(const QuestionState());
 
 
 
@@ -28,21 +29,21 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
   @override
   Stream<QuestionState> mapEventToState(QuestionEvent event) async* {
     if(event is QuestionsFetched) {
-      yield await _mapQuestionFetchedToState(state);
+      yield await _mapQuestionFetchedToState(state, QuestionsFetched.offSet);
     }
   }
 
-  Future<QuestionState>_mapQuestionFetchedToState(QuestionState state) async {
+  Future<QuestionState>_mapQuestionFetchedToState(QuestionState state, int offSet) async {
     try {
       if(state.status == QuestionStatus.initial) {
-        final results = await _fetchQuestions();
+        final questions = await _fetchQuestions(offSet);
         return state.copyWith(
           status: QuestionStatus.success,
-          questions: results,
-          hasReachedMax: _hasReachedMax(results.length)
+          questions: questions,
+          hasReachedMax: _hasReachedMax(questions.length)
         );
       }
-      final questions = await _fetchQuestions(state.questions.length);
+      final questions = await _fetchQuestions(offSet);
       return questions.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -51,27 +52,34 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
         hasReachedMax: _hasReachedMax(questions.length),
       );
 
-    } on Exception {
+    } on Exception catch(e) {
+      print('error: $e');
       return state.copyWith(status: QuestionStatus.failure);
     }
   }
-
-  Future<List<Result>>_fetchQuestions([int startIndex = 0]) async {
-    final response = await httpClient.get(
-      'https://opentdb.com/api.php?amount=10',
-    );
-
-    if(response.statusCode == 200) {
-      final body = json.decode(response.body);
-      Question question = Question.fromJson(body);
-      List<Result> results = question.results;
-      return results;
-    }
-    throw Exception('error fetching questions');
+  Future<List<Result>> parseTrivia(String jsonBody) async {
 
   }
 
+  Future<List<Questions>>_fetchQuestions(int offSet) async {
+    final database = openDatabase(
+      join(await getDatabasesPath(), 'trivia_ex.datbase'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE questions(id INTEGER PRIMARY KEY, category TEXT, type TEXT, difficulty TEXT, question TEXT, '
+              'correctAnswer TEXT, incorrectone TEXT, incorrecttwo TEXT, incorrectthree TEXT)',
+        );
+      },
+      version: 1,
+    );
+
+      Future<List<Questions>> questions = DatabaseOperations.getQuestionsFromDatabase(await database, offSet);
+      return questions;
+  }
+
   bool _hasReachedMax(int postCount) => false;
+
+
 
 
 }

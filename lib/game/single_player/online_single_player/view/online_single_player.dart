@@ -15,7 +15,7 @@ class OnlineSinglePlayer extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(0.0),
         child: BlocProvider(
-          create: (_) => QuestionBloc(httpClient: http.Client())..add(QuestionsFetched()),
+          create: (_) => QuestionBloc()..add(QuestionsFetched()),
           child: GamePage(),
         ),
       ),

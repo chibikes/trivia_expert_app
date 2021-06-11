@@ -16,7 +16,6 @@ class Question extends Equatable {
     return Question(responseCode: parsedJson['response_code'], results: results);
   }
   @override
-  // TODO: implement props
   List<Object> get props => [responseCode, results];
 
 }

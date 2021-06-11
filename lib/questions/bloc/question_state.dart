@@ -4,12 +4,12 @@ enum QuestionStatus{initial, success, failure}
 class QuestionState extends Equatable {
 
   final QuestionStatus status;
-  final List<Result> questions;
+  final List<Questions> questions;
   final bool hasReachedMax;
 
   const QuestionState({
     this.status = QuestionStatus.initial,
-    this.questions = const <Result>[],
+    this.questions = const <Questions>[],
     this.hasReachedMax = false,
 
   });
@@ -17,7 +17,7 @@ class QuestionState extends Equatable {
   QuestionState copyWith({
     QuestionStatus status,
     List<String> answers,
-    List<Result> questions,
+    List<Questions> questions,
     bool hasReachedMax,
 }) {
     return QuestionState(

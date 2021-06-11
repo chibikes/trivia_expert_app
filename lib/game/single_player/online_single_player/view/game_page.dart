@@ -22,19 +22,23 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State {
+  bool disableButton = false;
   QuestionBloc _questionBloc;
   Timer _timer;
   int _start = 10;
   Result results;
   int index = 0;
-  Color btnColor = Colors.blue; // default color for buttons
-  List<int> indices = <int>[0,1,2];
-  int randomVal;
+  List<Color> colors = [
+    Colors.blue,Colors.blue,
+    Colors.blue,Colors.blue
+  ];
+  // List<String> answers; // TODO: don't forget to use this
+  String correctAnswer;
 
   Artboard _artboard;
   final landscapeFile = 'assets/landscape.riv';
 
-  var noOfquestionsAnswered;
+  int qAnswered=0, qFailed=0;
 
   bool ansIsCorrect;
 
@@ -54,11 +58,8 @@ class _GamePageState extends State {
   }
   @override
   void initState() {
-    noOfquestionsAnswered = 0;
     _loadRiveFile();
     fetchQuestions();
-    randomizeVal();
-    indices.shuffle();
     startTimer();
     super.initState();
   }
@@ -86,6 +87,7 @@ class _GamePageState extends State {
 
                   Column(
                     children: [
+                      // Animated
                       Padding(padding: EdgeInsets.only(top: 8.0),
                         child: Row(
                         children: [
@@ -99,11 +101,9 @@ class _GamePageState extends State {
                               child: LinearProgressIndicator(
                                 minHeight: 50,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                    noOfquestionsAnswered > 0 ?
-                                    Colors.green :
-                                    Colors.red
+                                    Colors.green
                                 ),
-                                value: (noOfquestionsAnswered.abs()/20),
+                                value: (qAnswered.abs()/15),
                               )
                           )
 
@@ -127,31 +127,32 @@ class _GamePageState extends State {
 
                       SizedBox(height: 20,),
                       ElevatedButton(
-                        onPressed: () => {checkAnswer(0)},
-                        child: Text(randomVal == 0 ? state.questions[index].correctAnswer
-                            : state.questions[index].incorrectAnswers[indices[0]] ?? ''),
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(btnColor)),
+                        onPressed: () => {
+
+                            validateAnswer(
+                                state.questions[index].incorrectOne, colors[0])
+                        },
+                        child: Text(state.questions[index].incorrectOne),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(colors[0]),
+                        ),
                       ),
                       ElevatedButton(
-                        onPressed:() => checkAnswer(1),
-                        child: Text(randomVal == 1 ? state.questions[index].correctAnswer
-                            : state.questions[index].incorrectAnswers[indices[1]] ?? ''),
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(btnColor)),
+                        onPressed:() => validateAnswer(state.questions[index].incorrectTwo, colors[1]),
+                        child: Text(state.questions[index].incorrectTwo),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(colors[1])),
                       ),
 
                       ElevatedButton(
-                        onPressed: () => checkAnswer(2),
-                        child: Text(randomVal == 2 ? state.questions[index].correctAnswer
-                            : state.questions[index].incorrectAnswers[indices[2]] ?? ''),
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(btnColor)),
+                        onPressed: () => validateAnswer(state.questions[index].incorrectThree, colors[2]),
+                        child: Text(state.questions[index].incorrectThree),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(colors[2])),
                       ),
                       ElevatedButton(
-                        onPressed: () => checkAnswer(3),
-                        child: Text(randomVal == 3 ? state.questions[index].correctAnswer
-                            : state.questions[index].incorrectAnswers[indices[randomVal]] ?? ''),
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(btnColor)),
+                        onPressed: () => validateAnswer(state.questions[index].correctAnswer, colors[3]),
+                        child: Text(state.questions[index].correctAnswer),
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(colors[3])),
                       ),
-
 
                     ],
                   ),
@@ -186,37 +187,41 @@ class _GamePageState extends State {
             }
             );
    }
-   void checkAnswer(int value) {
-    if(value == randomVal) {
-      setState(() {
-        updateState();
-        updateProgress();
-        noOfquestionsAnswered++;
-        btnColor = Colors.green;
-
-      });
-    } else {
-      noOfquestionsAnswered--;
-      btnColor = Colors.red;
-      updateState();
-      updateProgress();
-    }
+   void validateAnswer(String value, Color color) {
+     if (!disableButton) {
+       _questionBloc = context.read<QuestionBloc>();
+       correctAnswer = _questionBloc.state.questions[index].correctAnswer;
+       if (value == correctAnswer) {
+         setState(() {
+           updateState();
+           updateProgress();
+           qAnswered++;
+           color = Colors.green;
+         });
+       } else {
+         disableButton = true;
+         setState(() {
+           _timer.cancel();
+           Navigator.of(context).pop();
+           color = Colors.red;
+           updateState();
+           updateProgress();
+         });
+       }
+     }
    }
 
    void updateState() {
-     randomizeVal();
      index++;
      fetchQuestions();
-     indices.shuffle();
      _start = 10;
    }
 
    void updateProgress() {
-    if (noOfquestionsAnswered == 10)
-      /// emit state win
-    if(noOfquestionsAnswered == -10)
-      /// emit state lose
-    Navigator.pop(context);
+    if (qAnswered == 15) {
+      Navigator.pop(context);
+      _timer.cancel();
+    }
    }
 
 
@@ -227,14 +232,11 @@ class _GamePageState extends State {
   }
 
   void fetchQuestions()  {
-    _questionBloc = context.read<QuestionBloc>();
-    if(index == 10) {
+    if(index == 9) {
+      QuestionsFetched.offSet+= 10;
       _questionBloc.add(QuestionsFetched());
+      index = 0;
     }
-  }
-  void randomizeVal(){
-    Random random = new Random();
-    randomVal = random.nextInt(3);
   }
 
 }
