@@ -36,11 +36,20 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
   Future<QuestionState>_mapQuestionFetchedToState(QuestionState state, int offSet) async {
     try {
       if(state.status == QuestionStatus.initial) {
+        List<List<String>> answers = [];
         final questions = await _fetchQuestions(offSet);
+        for(Questions question in questions) {
+          answers.add([question.correctAnswer!,
+            question.incorrectOne!,
+            question.incorrectTwo!,
+            question.incorrectThree!,]
+          );
+
+        }
         return state.copyWith(
-          status: QuestionStatus.success,
-          questions: questions,
-          hasReachedMax: _hasReachedMax(questions.length)
+            status: QuestionStatus.success,
+            questions: questions,
+            hasReachedMax: _hasReachedMax(questions.length)
         );
       }
       final questions = await _fetchQuestions(offSet);
@@ -57,9 +66,9 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       return state.copyWith(status: QuestionStatus.failure);
     }
   }
-  Future<List<Result>> parseTrivia(String jsonBody) async {
-
-  }
+  // Future<List<Result>> parseTrivia(String jsonBody) async {
+  //
+  // }
 
   Future<List<Questions>>_fetchQuestions(int offSet) async {
     final database = openDatabase(
@@ -73,11 +82,11 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       version: 1,
     );
 
-      Future<List<Questions>> questions = DatabaseOperations.getQuestionsFromDatabase(await database, offSet);
-      return questions;
+    Future<List<Questions>> questions = DatabaseOperations.getQuestionsFromDatabase(await database, offSet);
+    return questions;
   }
 
-  bool _hasReachedMax(int postCount) => false;
+  bool _hasReachedMax(int postCount) => false; // TODO: if has reached max ? q = 0
 
 
 

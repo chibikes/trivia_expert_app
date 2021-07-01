@@ -12,7 +12,7 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
-    @required AuthenticationRepository authenticationRepository,
+    required AuthenticationRepository authenticationRepository,
   }) : assert(authenticationRepository !=  null),
         _authenticationRepository = authenticationRepository,
         super(const AuthenticationState.unknown()) {
@@ -23,7 +23,7 @@ class AuthenticationBloc
   }
 
   final AuthenticationRepository _authenticationRepository;
-  StreamSubscription _userSubscription;
+  StreamSubscription? _userSubscription;
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -37,9 +37,9 @@ class AuthenticationBloc
   }
 
   @override
-  Future<Function> close() {
+  Future<Function?> close() {
     _userSubscription?.cancel();
-    return super.close();
+    return super.close().then((value) => value as Function?);
   }
 
   AuthenticationState _mapAuthenticationUserChangedToState(

@@ -13,8 +13,8 @@ class OnlineSinglePlayerState extends Equatable {
   final int playerScore;
 
   OnlineSinglePlayerState copyWith({
-    GameStatus status,
-     int playerScore,
+    GameStatus? status,
+     int? playerScore,
   }) {
     return OnlineSinglePlayerState(
       gameStatus: status ?? this.gameStatus, /// if null then it would default

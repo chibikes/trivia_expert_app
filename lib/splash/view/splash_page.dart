@@ -30,8 +30,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   // final riveFileName = 'assets/truck.riv';
   final riveFileName = 'assets/trivia_expert.riv';
 
-  Artboard _artboard;
-  RiveAnimationController _wipersController;
+  Artboard? _artboard;
+  RiveAnimationController? _wipersController;
 
   bool _wipers = false;
 
@@ -43,25 +43,27 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   }
 
   void _loadRiveFile() async {
-    final bytes = await rootBundle.load(riveFileName);
-    final file = RiveFile();
+    // final bytes = await rootBundle.load(riveFileName);
+    rootBundle.load(riveFileName).then(
+            (data) async {
+              final file = RiveFile.import(data);
+              final artboard = file.mainArtboard;
+              artboard.addController(SimpleAnimation('fall_in_line'));
+              setState(() => _artboard = artboard);
+            });
+    // final file = RiveFile.import(bytes);
+    
 
-    if(file.import(bytes)) {
-      setState(() =>
-      _artboard = file.mainArtboard
-        ..addController(
-          SimpleAnimation('fall_in_line'),
-        ));
-    }
+
   }
 
   void _wipersChange(bool wipersOn) {
     if(_wipersController == null) {
-      _artboard.addController(
+      _artboard!.addController(
         _wipersController = SimpleAnimation('windshield_wipers'),
       );
     }
-    setState(() => _wipersController.isActive = _wipers = wipersOn);
+    setState(() => _wipersController!.isActive = _wipers = wipersOn);
   }
 
   @override
@@ -72,7 +74,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         Expanded(
           child: _artboard !=  null
               ? Rive(
-            artboard: _artboard,
+            artboard: _artboard!,
             fit: BoxFit.cover,
           )
               : Container(),

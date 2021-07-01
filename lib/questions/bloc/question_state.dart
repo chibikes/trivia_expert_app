@@ -5,21 +5,23 @@ class QuestionState extends Equatable {
 
   final QuestionStatus status;
   final List<Questions> questions;
+  // final List<List<String>> answers;
   final bool hasReachedMax;
 
   const QuestionState({
     this.status = QuestionStatus.initial,
     this.questions = const <Questions>[],
+    // this.answers = const List<String>[];
     this.hasReachedMax = false,
 
   });
 
   QuestionState copyWith({
-    QuestionStatus status,
-    List<String> answers,
-    List<Questions> questions,
-    bool hasReachedMax,
-}) {
+    QuestionStatus? status,
+    List<String>? answers,
+    List<Questions>? questions,
+    bool? hasReachedMax,
+  }) {
     return QuestionState(
       status: status ?? this.status,
       questions: questions ?? this.questions,

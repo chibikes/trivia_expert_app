@@ -14,15 +14,16 @@ class DatabaseOperations {
   }
 
   static Future<void> fetchQuestionsAndInsertToDatabase (Database database, int primaryKey) async {
+    var url = Uri.parse('https://opentdb.com/api.php?amount=50');
     for (int i=0; i < 60; i++) {
       final response = await http.get(
-        'https://opentdb.com/api.php?amount=50',
+        url,
       );
       if (response.statusCode == 200) {
         final body = json.decode(response.body);
 
         Question question = Question.fromJson(body);
-        List<Result> results = question.results;
+        List<Result> results = question.results!;
         for (int i = 0; i < results.length; i++) {
           Questions questions = Questions(id: primaryKey,
             category: results[i].category,
@@ -30,11 +31,11 @@ class DatabaseOperations {
             difficulty: results[i].difficulty,
             question: results[i].question,
             correctAnswer: results[i].correctAnswer,
-            incorrectOne: results[i].incorrectAnswers[0],
-            incorrectTwo: results[i].incorrectAnswers.length > 1 ? results[i]
-                .incorrectAnswers[1] : '',
-            incorrectThree: results[i].incorrectAnswers.length > 2 ? results[i]
-                .incorrectAnswers[2] : '',);
+            incorrectOne: results[i].incorrectAnswers![0],
+            incorrectTwo: results[i].incorrectAnswers!.length > 1 ? results[i]
+                .incorrectAnswers![1] : '',
+            incorrectThree: results[i].incorrectAnswers!.length > 2 ? results[i]
+                .incorrectAnswers![2] : '',);
           insertQuestions(questions, await database);
           primaryKey++;
         }

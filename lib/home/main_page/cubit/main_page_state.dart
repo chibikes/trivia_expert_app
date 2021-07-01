@@ -7,7 +7,7 @@ class MainPageState extends Equatable {
   const MainPageState({this.selectedItem = 0}); /// default state of item is zero which is tab zero
 
   MainPageState copyWith({
-    int selectedItem,
+    int? selectedItem,
 }) {
     return MainPageState(
       selectedItem: selectedItem ?? this.selectedItem, /// if null return our default selectedItem
