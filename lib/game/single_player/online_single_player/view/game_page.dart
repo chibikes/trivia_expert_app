@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rive/rive.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
@@ -11,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 import 'package:trivia_expert_app/widgets/banner.dart';
+import 'package:trivia_expert_app/widgets/chalkboard.dart';
+import 'package:trivia_expert_app/widgets/clock.dart';
 import 'package:trivia_expert_app/widgets/custom_button.dart';
 import 'package:trivia_expert_app/widgets/styles.dart';
 
@@ -27,10 +32,16 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     duration: const Duration(seconds: 2),
     vsync: this,
   );
-
+  late final AnimationController? _cardController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+  );
+  late double chalkBoardWidth = 0.85 * MediaQuery.of(context).size.width;
+  late double chalkBoardHeight = chalkBoardWidth/1.6180;
   late QuestionBloc _questionBloc;
   late Timer _timer;
-  int _start = 10;
+  int _start = 30;
+  int _totalTime = 30;
   Result? results;
   int index = 0;
   List<Color> colors = [
@@ -97,12 +108,19 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
                   Column(
                     children: [
+                      Text('category: ' +state.questions[index].category!),
                       // Animated
                       Padding(padding: EdgeInsets.only(top: 8.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(Icons.alarm, size: 30, color: Colors.orange,),
-                            Text('$_start'),
+                            Clock(
+                              width: 50.0,
+                              height: 40.0,
+                              widget: Text(
+                                '$_start',
+                                style: GoogleFonts.aladin(fontWeight: FontWeight.w400, fontSize: 15),),
+                            ),
                             SizedBox(width: 10,),
                             Container(
                                 width: 200,
@@ -119,29 +137,28 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                   value: (qAnswered.abs()/10),
                                 )
                             ),
-                            // Icon(Icons.accessibility, size: 30.0, color: Colors.red,),
-                            FaIcon(FontAwesomeIcons.heart, size: 30.0, color: Colors.red,)
+                            FaIcon(FontAwesomeIcons.solidHeart, size: 30.0, color: Colors.red,)
 
                           ],
 
                         ),
                       ),
                       SizedBox(height: 20,),
-
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 0.20 * MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
+                      ChalkBoard(
+                        height: chalkBoardHeight,
+                        width: chalkBoardWidth,
+                        widget: Padding(
+                          padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                          child: Text(state.questions[index].question!,
+                            style: GoogleFonts.aleo(
+                                textStyle: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                )
                             ),
-                            child: Padding(padding: EdgeInsets.all(8.0),
-                                child: Text(state.questions[index].question!, style: TextStyle(
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.bold,
-                                ),)
-                            ),
-                          )
+                          ),
+                        ),
                       ),
 
                       SizedBox(height: 50,),
@@ -159,7 +176,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      SizedBox(height: state.answers[index][0] == '' ? 0 : 20),
+                      SizedBox(height: state.answers[index][0] == '' ? 0 : 10),
                       SlideTransition(
                           position: Tween<Offset>(begin: Offset.zero, end: Offset(3.5, 0.0)).animate(CurvedAnimation(
                               parent: _controller!,
@@ -174,7 +191,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                               )
                           )
                       ),
-                      SizedBox(height: state.answers[index][1] == '' ? 0 : 20),
+                      SizedBox(height: state.answers[index][1] == '' ? 0 : 10),
                       SlideTransition(
                           position: Tween<Offset>(begin: Offset.zero, end: Offset(3.5, 0.0)).animate(CurvedAnimation(
                               parent: _controller!,
@@ -189,7 +206,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
                             ),)
                       ),
-                      SizedBox(height: state.answers[index][2] == '' ? 0 : 20),
+                      SizedBox(height: state.answers[index][2] == '' ? 0 : 10),
                       SlideTransition(
                           position: Tween<Offset>(begin: Offset.zero, end: Offset(3.5, 0.0)).animate(CurvedAnimation(
                               parent: _controller!,
@@ -204,6 +221,23 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             ),
                           )
                       ),
+                      SizedBox(height: 30,),
+                      FadeTransition(
+                        opacity: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _cardController!, curve: Curves.linear)),
+                        child: Card(
+                          color: Colors.blueAccent,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Text('1. Answer all questions in the science category\n '),
+                                Text('2. Beat the threshold time: that is score 30 > 40'),
+                              ],
+                            ),
+                          ),
+                          elevation: 8.0,
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -230,7 +264,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             });
           } else {
             setState(() {
+              _start % (_totalTime/3) == 0
+                  ? _cardController?.forward().whenComplete(() => {_cardController?.reverse()})
+                  : {};
               _start--;
+
             });
           }
         }
@@ -238,19 +276,19 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   }
   void validateAnswer(String? value, int tapped) {
     if (!isButtonTapped) {
-      AnimationController? _controllerx;
+      AnimationController? _controllerX;
       switch (tapped) {
         case 0:
-          _controllerx = AnimationHelper.controllerOne;
+          _controllerX = AnimationHelper.controllerOne;
           break;
         case 1:
-          _controllerx = AnimationHelper.controllerTwo;
+          _controllerX = AnimationHelper.controllerTwo;
           break;
         case 2:
-          _controllerx = AnimationHelper.controllerThree;
+          _controllerX = AnimationHelper.controllerThree;
           break;
         case 3:
-          _controllerx = AnimationHelper.controllerFour;
+          _controllerX = AnimationHelper.controllerFour;
           break;
       }
       isButtonTapped = true;
@@ -260,15 +298,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         updateProgress();
         setState(() {
           qAnswered++;
-          _playAnimation(_controllerx);
+          _playAnimation(_controllerX);
         });
       } else {
         // you only need to fail once and that's all for you
         setState(() {
           listBol[tapped] = false;
-          _timer.cancel();
+          _playAnimation(_controllerX);
         });
-        _playAnimationFail(_controllerx);
+
 
       }
     }
@@ -276,8 +314,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   void updateState() {
     index++;
+    // _cardController?.forward().whenComplete(() {
+    //   _cardController?.reverse();
+    // });
+    listBol = [true, true, true, true];
     fetchQuestions();
-    _start = 10;
   }
 
   void updateProgress() {
@@ -292,6 +333,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   void dispose() {
     _timer.cancel();
     _controller?.dispose();
+    _cardController?.dispose();
+    AnimationHelper.controllerOne?.dispose();
+    AnimationHelper.controllerTwo?.dispose();
+    AnimationHelper.controllerThree?.dispose();
+    AnimationHelper.controllerFour?.dispose();
     super.dispose();
   }
 
@@ -323,9 +369,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   Future<void> _playAnimationFail(AnimationController? colorController) async {
     try {
       await colorController!.forward().whenComplete(() {
-        Navigator.of(context).pop();
+        colorController.reverse();
       });
-      // Navigator.of(context).pop();
     } on TickerCanceled {
       // the animation got canceled, probably because we were disposed
     }
