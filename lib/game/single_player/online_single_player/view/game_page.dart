@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:rive/rive.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
@@ -81,11 +82,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             case QuestionStatus.failure:
               return const Center(child: Text('failed to connect to the internet'));
             case QuestionStatus.success:
-              answers?.add(state.questions[index].correctAnswer!);
-              answers?.add(state.questions[index].incorrectOne!);
-              answers?.add(state.questions[index].incorrectTwo!);
-              answers?.add(state.questions[index].incorrectThree!);
-              answers?.shuffle();
               return Stack(
                 children: [
                   _artboard != null
@@ -123,7 +119,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                   value: (qAnswered.abs()/10),
                                 )
                             ),
-                            Icon(Icons.accessibility, size: 30.0, color: Colors.red,),
+                            // Icon(Icons.accessibility, size: 30.0, color: Colors.red,),
+                            FaIcon(FontAwesomeIcons.heart, size: 30.0, color: Colors.red,)
 
                           ],
 
@@ -153,56 +150,56 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             parent: _controller!,
                             curve: Interval(0.0, 1.0, curve: Curves.elasticIn  ))),
                         child: GestureDetector(
-                          onTap: () => validateAnswer(answers!.elementAt(0), 0),
+                          onTap: () => validateAnswer(state.answers[index][0], 0),
                           child: CustomButton(
-                            // isAnswerEmpty: answers!.elementAt(0) == '',
+                            isAnswerEmpty: state.answers[index][0] == '',
                             animationController: AnimationHelper.controllerOne,
                             notFailed: listBol[0],
-                            child: Text('', style: MyTextStyle.style),
+                            child: Text(state.answers[index][0], style: MyTextStyle.style),
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: state.answers[index][0] == '' ? 0 : 20),
                       SlideTransition(
                           position: Tween<Offset>(begin: Offset.zero, end: Offset(3.5, 0.0)).animate(CurvedAnimation(
                               parent: _controller!,
                               curve: Interval(0.25, 1.0, curve: Curves.elasticIn  ))),
                           child: GestureDetector(
-                              onTap: () => validateAnswer(answers!.elementAt(1), 1),
+                              onTap: () => validateAnswer(state.answers[index][1], 1),
                               child:CustomButton(
-                                isAnswerEmpty: answers!.elementAt(1) == '',
+                                isAnswerEmpty: state.answers[index][1] == '',
                                 animationController: AnimationHelper.controllerTwo,
                                 notFailed: listBol[1],
-                                child: Text(answers!.elementAt(1), style: MyTextStyle.style,),
+                                child: Text(state.answers[index][1], style: MyTextStyle.style,),
                               )
                           )
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: state.answers[index][1] == '' ? 0 : 20),
                       SlideTransition(
                           position: Tween<Offset>(begin: Offset.zero, end: Offset(3.5, 0.0)).animate(CurvedAnimation(
                               parent: _controller!,
                               curve: Interval(0.50, 1.0, curve: Curves.elasticIn  ))),
                           child: GestureDetector(
-                            onTap: () => validateAnswer(answers!.elementAt(2), 2),
+                            onTap: () => validateAnswer(state.answers[index][2], 2),
                             child:CustomButton(
-                              isAnswerEmpty: answers!.elementAt(2) == '',
+                              isAnswerEmpty: state.answers[index][2] == '',
                               animationController: AnimationHelper.controllerThree,
                               notFailed: listBol[2],
-                              child: Text(answers!.elementAt(2), style: MyTextStyle.style,),
+                              child: Text(state.answers[index][2], style: MyTextStyle.style,),
 
                             ),)
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: state.answers[index][2] == '' ? 0 : 20),
                       SlideTransition(
                           position: Tween<Offset>(begin: Offset.zero, end: Offset(3.5, 0.0)).animate(CurvedAnimation(
                               parent: _controller!,
                               curve: Interval(0.75, 1.0, curve: Curves.elasticIn  ))),
                           child:GestureDetector(
-                            onTap: () => validateAnswer(answers!.elementAt(3), 3),
+                            onTap: () => validateAnswer(state.answers[index][3], 3),
                             child:CustomButton(
-                              isAnswerEmpty: answers!.elementAt(3) == '',
+                              isAnswerEmpty: state.answers[index][3] == '',
                               animationController: AnimationHelper.controllerFour!,
-                              child: Text(answers!.elementAt(3), style: MyTextStyle.style),
+                              child: Text(state.answers[index][3], style: MyTextStyle.style),
                               notFailed: listBol[3],
                             ),
                           )

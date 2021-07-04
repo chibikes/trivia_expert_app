@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:trivia_expert_app/main_model/questions.dart';
+import 'package:trivia_expert_app/mock_questions.dart';
 import 'package:trivia_expert_app/questions/databaase_operations.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 import 'package:path/path.dart';
@@ -38,17 +39,20 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       if(state.status == QuestionStatus.initial) {
         List<List<String>> answers = [];
         final questions = await _fetchQuestions(offSet);
+        int i = 0;
         for(Questions question in questions) {
           answers.add([question.correctAnswer!,
             question.incorrectOne!,
             question.incorrectTwo!,
             question.incorrectThree!,]
           );
-
+          answers[i].shuffle();
+          i++;
         }
         return state.copyWith(
             status: QuestionStatus.success,
             questions: questions,
+            answers: answers,
             hasReachedMax: _hasReachedMax(questions.length)
         );
       }
@@ -82,7 +86,8 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       version: 1,
     );
 
-    Future<List<Questions>> questions = DatabaseOperations.getQuestionsFromDatabase(await database, offSet);
+    // Future<List<Questions>> questions = DatabaseOperations.getQuestionsFromDatabase(await database, offSet);
+    Future<List<Questions>> questions = MockQuestions.getMockQuestions();
     return questions;
   }
 

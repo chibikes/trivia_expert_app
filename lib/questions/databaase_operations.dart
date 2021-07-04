@@ -36,7 +36,7 @@ class DatabaseOperations {
                 .incorrectAnswers![1] : '',
             incorrectThree: results[i].incorrectAnswers!.length > 2 ? results[i]
                 .incorrectAnswers![2] : '',);
-          insertQuestions(questions, await database);
+          insertQuestions(questions, database);
           primaryKey++;
         }
       }

@@ -67,14 +67,17 @@ class AuthenticationRepository {
   /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
-      final googleUser = await (_googleSignIn.signIn() as FutureOr<GoogleSignInAccount>);
-      final googleAuth = await googleUser.authentication;
+      final googleUser = await (_googleSignIn.signIn());
+      final googleAuth = await googleUser!.authentication;
       final credential = firebase_auth.GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
-    } on Exception {
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      print('*********');
+      print(e.message);
+      print("This is firebase error ***************");
       throw LogInWithGoogleFailure();
     }
   }
@@ -94,13 +97,14 @@ class AuthenticationRepository {
     required String email,
     required String password,
   }) async {
-    assert(email != null && password != null);
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-    } on Exception {
+    } on firebase_auth.FirebaseAuthException catch (e){
+      print(e.message);
+      print("**************");
       throw LogInWithEmailAndPasswordFailure();
     }
   }
