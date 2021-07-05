@@ -27,6 +27,7 @@ class _TabbedState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xfff5f5f5),
         appBar: AppBar(title: const Text('Login')),
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(

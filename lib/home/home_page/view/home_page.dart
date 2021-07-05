@@ -17,7 +17,7 @@ class Home extends StatelessWidget {
       child: Column(
             children: [
               Card(
-                elevation: 16.0,
+                elevation: 8.0,
                 color: Color(0xff3771c8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,6 +47,75 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Card(
+                  elevation: 16.0,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Text('HIGH SCORE : 20', style: TextStyle(fontFamily: 'ShowCardGothic', color: Colors.black, fontSize: 20)),
+                      SizedBox(height: 5.0,),
+                      Text('Tasks', style: GoogleFonts.aleo(fontSize: 20, fontWeight: FontWeight.w900),),
+                      SizedBox(height: 5,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                        Icon(Icons.wine_bar_rounded, color: Colors.orange,),
+                        Text('Win a participation trophy'),
+
+                      ],
+                      ),
+                      SizedBox(height: 5,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.wine_bar_rounded,  color: Colors.orange,),
+                          Text('Win in all category')
+                        ],
+                      )
+
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 65,
+                width: 0.80 * MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(8.0),
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              side: BorderSide(color: Colors.orange, width: 2.0)
+                          )
+                      ),
+                      alignment: Alignment.topCenter,
+                      backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    ),
+                    onPressed: () {},
+                    child: Stack(
+                      // clipBehavior: Clip.none,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              border: Border.all(style: BorderStyle.none, width: 0.0),
+                              borderRadius: BorderRadius.circular(8.0),
+                              color: Colors.orangeAccent
+                            ),
+                          ),
+                        ),
+                        Center(child: Text('PLAY', style: GoogleFonts.blackHanSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),))
+                      ],
+                    )
+                ),
+              ),
+              SizedBox(height: 5,),
               BubbleButton(),
 
               ElevatedButton(
