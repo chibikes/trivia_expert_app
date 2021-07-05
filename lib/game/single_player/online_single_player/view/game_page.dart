@@ -305,7 +305,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         setState(() {
           listBol[tapped] = false;
           _playAnimation(_controllerX);
-        });
+        }); 
 
 
       }

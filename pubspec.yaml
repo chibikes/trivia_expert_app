@@ -63,7 +63,12 @@ flutter:
     - assets/trivia_expert.riv
     - assets/landscape.riv
     - assets/trivia_ex.json
-    - assets/chalkboard.svg
+    - assets/profile_avatar.svg
+  fonts:
+    - family: ShowCardGothic
+      fonts:
+        - asset: assets/SHOWG.TTF
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
