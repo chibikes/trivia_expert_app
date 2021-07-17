@@ -26,6 +26,6 @@ class AnimationHelper extends State<StatefulWidget> with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    throw UnimplementedError();
+    throw UnimplementedError;
   }
 }

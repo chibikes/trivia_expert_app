@@ -4,8 +4,9 @@ import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/home/home_page/view/home_page.dart';
 import 'package:trivia_expert_app/home/main_page/cubit/main_page_cubit.dart';
 
-class HomePage extends StatefulWidget {
+import '../shop_page.dart';
 
+class HomePage extends StatefulWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => HomePage());
   }
@@ -18,16 +19,16 @@ class HomePage extends StatefulWidget {
 
 class _TabbedState extends State<HomePage> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    const Home(),
-    Text('Experiment Two'),
+  static List<Widget> _widgetOptions = <Widget>[
+    Home(),
+    ShopPage(),
     Text('Experiment Three'),
     Text('Last Experiment')
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xfff5f5f5),
+        backgroundColor: Colors.blueGrey,
         appBar: AppBar(title: const Text('Login')),
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
