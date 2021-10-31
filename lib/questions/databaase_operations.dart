@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
-import 'package:trivia_expert_app/main_model/questions.dart';
 import 'package:http/http.dart' as http;
+import 'package:trivia_expert_app/main_models/questions.dart';
 import 'models/question.dart';
 
 class DatabaseOperations {

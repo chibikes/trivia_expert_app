@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:repo_packages/repo_packakges.dart';
 
@@ -13,8 +12,7 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-  }) : assert(authenticationRepository !=  null),
-        _authenticationRepository = authenticationRepository,
+  }) : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState.unknown()) {
       _userSubscription = _authenticationRepository.user.listen(
           (user) => add(AuthenticationUserChanged(user)),

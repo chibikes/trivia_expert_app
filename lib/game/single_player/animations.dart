@@ -15,8 +15,6 @@ class AnimationHelper extends State<StatefulWidget> with TickerProviderStateMixi
   static bool startAnimationThree = false;
   static bool startAnimationFour = false;
 
-  late AnimationController? _controllerP = AnimationController(vsync: this, duration: Duration(milliseconds: 100));
-
   @override
   Ticker createTicker(TickerCallback onTick) {
     // TODO: implement createTicker
@@ -27,5 +25,21 @@ class AnimationHelper extends State<StatefulWidget> with TickerProviderStateMixi
   Widget build(BuildContext context) {
     // TODO: implement build
     throw UnimplementedError;
+  }
+  static void initControllers(TickerProvider provider) {
+    AnimationHelper.controllerFour =
+        AnimationController(vsync: provider, duration: Duration(milliseconds: 100));
+    AnimationHelper.controllerThree =
+        AnimationController(vsync: provider, duration: Duration(milliseconds: 100));
+    AnimationHelper.controllerTwo =
+        AnimationController(vsync: provider, duration: Duration(milliseconds: 100));
+    AnimationHelper.controllerOne =
+        AnimationController(vsync: provider, duration: Duration(milliseconds: 100));
+  }
+  static void disposeControllers() {
+    AnimationHelper.controllerOne?.dispose();
+    AnimationHelper.controllerTwo?.dispose();
+    AnimationHelper.controllerThree?.dispose();
+    AnimationHelper.controllerFour?.dispose();
   }
 }

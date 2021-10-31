@@ -8,8 +8,7 @@ part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationRepository)
-      : assert(_authenticationRepository != null),
-        super(const LoginState());
+      : super(const LoginState());
 
   final AuthenticationRepository _authenticationRepository;
 

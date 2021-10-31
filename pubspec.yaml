@@ -36,6 +36,7 @@ dependencies:
   google_fonts: ^2.1.0
   rxdart: ^0.27.1
   flutter_svg: ^0.22.0
+  image_picker: 0.8.4
   repo_packages:
     path: repo_packakges #don't forget to indent
 
@@ -64,6 +65,7 @@ flutter:
     - assets/landscape.riv
     - assets/trivia_ex.json
     - assets/profile_avatar.svg
+    - assets/avatars/
   fonts:
     - family: ShowCardGothic
       fonts:

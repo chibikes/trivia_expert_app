@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meta/meta.dart';
+
 
 import 'models/models.dart';
 
@@ -126,7 +126,9 @@ class AuthenticationRepository {
 }
 
 extension on firebase_auth.User {
-  User get toUser {
+  User get toUser  {
+
     return User(id: uid, email: email!, name: displayName, photo: photoURL);
   }
+
 }

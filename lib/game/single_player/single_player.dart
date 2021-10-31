@@ -6,20 +6,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
-
 import 'online_single_player/view/online_single_player.dart';
 
-class SinglePlayerPage extends StatefulWidget { /// should have win lose or initial so if you fail in game play you'll come back here with a state of lose
+class SinglePlayerPage extends StatefulWidget {
+  /// should have win lose or initial so if you fail in game play you'll come back here with a state of lose
 
   @override
   State<StatefulWidget> createState() {
     return SinglePlayerPageState();
   }
-
 }
 
-class SinglePlayerPageState extends State<SinglePlayerPage> with TickerProviderStateMixin {
-  late AnimationController _buttonController = AnimationController(vsync: this, duration: Duration(milliseconds: 50));
+class SinglePlayerPageState extends State<SinglePlayerPage>
+    with TickerProviderStateMixin {
+  late AnimationController _buttonController =
+      AnimationController(vsync: this, duration: Duration(milliseconds: 50));
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +34,56 @@ class SinglePlayerPageState extends State<SinglePlayerPage> with TickerProviderS
               children: [
                 Stack(
                   children: [
-                    CircularPads(radius: 50.0,text: '',),
+                    CircularPads(
+                      radius: 50.0,
+                      text: '',
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: FaIcon(Icons.info_outline, size: 18,),
+                      child: FaIcon(
+                        Icons.info_outline,
+                        size: 18,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 Stack(
                   children: [
-                    CircularPads(radius: 50.0,text: '',),
+                    CircularPads(
+                      radius: 50.0,
+                      text: '',
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: FaIcon(Icons.info_outline, size: 18,),
+                      child: FaIcon(
+                        Icons.info_outline,
+                        size: 18,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(width: 20.0,)
+                SizedBox(
+                  width: 20.0,
+                )
               ],
             ),
-            SizedBox(height: 100,),
+            SizedBox(
+              height: 100,
+            ),
             Padding(
-              padding:  EdgeInsets.only(right: 0.70 * MediaQuery.of(context).size.width),
-              child: Transform.rotate(angle: -0.5,child: Text('TIP', style: GoogleFonts.droidSans(fontSize: 20, fontWeight: FontWeight.w800),)),
+              padding: EdgeInsets.only(
+                  right: 0.70 * MediaQuery.of(context).size.width),
+              child: Transform.rotate(
+                angle: -0.5,
+                child: Text(
+                  'TIP',
+                  style: GoogleFonts.droidSans(
+                      fontSize: 20, fontWeight: FontWeight.w800),
+                ),
+              ),
             ),
             Container(
               decoration: BoxDecoration(
@@ -70,20 +97,23 @@ class SinglePlayerPageState extends State<SinglePlayerPage> with TickerProviderS
                 color: Color(0xff008080),
                 shape: Border.all(style: BorderStyle.none),
                 child: Column(
-                  children: [
-
-                  ],
+                  children: [],
                 ),
               ),
             ),
-            SizedBox(height: 50.0,),
+            SizedBox(
+              height: 50.0,
+            ),
             ProperElevatedButton(
               // tapUpFunction: () =>_longPressButton(),
               // tapDownFunction: (details) => _longPressStop(),
               function: () => _pressButton(),
               buttonHeight: 50.0,
-              buttonWidth: 0.85,text: 'Play',
-            position:  Tween<Offset>(begin: Offset.zero, end: Offset(0.0, 0.12)).animate(CurvedAnimation(parent: _buttonController, curve: Curves.linear)),
+              buttonWidth: 0.85, text: 'Play',
+              position:
+                  Tween<Offset>(begin: Offset.zero, end: Offset(0.0, 0.12))
+                      .animate(CurvedAnimation(
+                          parent: _buttonController, curve: Curves.linear)),
             ),
             Text('TRIVIA'),
             //     ElevatedButton(
@@ -104,16 +134,15 @@ class SinglePlayerPageState extends State<SinglePlayerPage> with TickerProviderS
   _pressButton() async {
     await _buttonController.forward();
     await _buttonController.reverse();
-    Navigator.push(
-      context, MaterialPageRoute(builder: (context){
-        return OnlineSinglePlayer();
-      })
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return OnlineSinglePlayer();
+    }));
+  }
 
-  }
   _longPressButton() {
-     _buttonController.forward();
+    _buttonController.forward();
   }
+
   _longPressStop() {
     _buttonController.reverse();
   }

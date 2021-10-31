@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:trivia_expert_app/main_model/questions.dart';
+import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:trivia_expert_app/mock_questions.dart';
 import 'package:trivia_expert_app/questions/databaase_operations.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 import 'package:path/path.dart';
 part 'question_event.dart';
 part 'question_state.dart';
-class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
+class QuestionBloc extends Bloc<QuestionEvent, QuestionState> { //TODO: rename class to GameBloc. it should have game failure and game success as statuses
 
 
   QuestionBloc() : super(const QuestionState());
