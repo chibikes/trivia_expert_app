@@ -174,9 +174,9 @@ class GameStateRepository {
     User user = User.empty;
     await FirebaseFirestore.instance
         .collection('users')
-        .orderBy('lastOnlineInteraction')
-        .where('maxGamesReached', isEqualTo: false)
-        .where('id', isNotEqualTo: user.id)
+        // .orderBy('lastOnlineInteraction')
+        // .where('maxGamesReached', isEqualTo: false)
+        // .where('id', isNotEqualTo: user.id)
         .limit(1)
         .get()
         .then((value) {

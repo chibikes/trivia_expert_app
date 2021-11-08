@@ -34,8 +34,8 @@ class User extends Equatable {
   final String? country;
   final String? photo;
   final String? email;
-  final List<String>? achievements;
-  final List<String>? gameIds;
+  final List<dynamic>? achievements;
+  final List<dynamic> gameIds;
   final String? lastOnlineInteraction;
   final bool? maxGamesReached;
 
@@ -68,8 +68,8 @@ class User extends Equatable {
     String? country,
     String? photo,
     String? email,
-    List<String>? achievements,
-    List<String>? gameIds,}
+    List<dynamic>? achievements,
+    List<dynamic>? gameIds,}
   ) {
     return User(
       id: id ?? this.id,
@@ -102,7 +102,7 @@ class User extends Equatable {
   @override
   List<Object?> get props => [name, photo, gameIds, achievements, country, age];
 
-  List<String> returnGameIds(List<String>? arr1, List<String>? arr2) {
+  List<dynamic> returnGameIds(List<dynamic>? arr1, List<dynamic>? arr2) {
     if(arr2 != null) arr1!.addAll(arr2);
     return arr1!;
   }
