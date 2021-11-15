@@ -64,7 +64,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       CollectionReference gameStates =
           FirebaseFirestore.instance.collection('gameStates');
       await gameStates.add(gameState.toMap()).then((value) =>
-          state.user!.gameIds![gameNo] =
+          state.user!.gameIds[gameNo] =
               value.id); // TODO: initialize gameId 'n' game states
       state.gameStates.add(gameState);
     } catch (e) {
@@ -81,7 +81,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           .get()
           .then((QuerySnapshot snapshot) {
         snapshot.docs.forEach((docs) {
-          state.user!.gameIds![gameNo] = docs.id;
+          state.user!.gameIds[gameNo] = docs.id;
           GameState gameState = GameState.name(
             rounds: docs["rounds"],
             tTL: docs["tTL"],
@@ -107,12 +107,12 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     Map<String, dynamic> map = Map();
     await FirebaseFirestore.instance
         .collection('gameStates')
-        .doc(state.user!.gameIds![gameNum])
+        .doc(state.user!.gameIds[gameNum])
         .get()
         .then((value) {
       map = value.data()!;
     });
-    state.gameStates[gameNum] = GameState.fromMap(map);
+    state.gameStates[gameNum] = GameState.fromMap(map, user: user);
   }
 
   void updateGameState(GameState state) {

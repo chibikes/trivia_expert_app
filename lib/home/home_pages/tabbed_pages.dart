@@ -16,6 +16,9 @@ import '../leaderboardpage.dart';
 import '../shop_page.dart';
 
 class HomePage extends StatefulWidget {
+  final UserRepository? userRepository;
+
+  const HomePage({Key? key, this.userRepository = const UserRepository()}) : super(key: key);
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => HomePage());
   }
@@ -96,29 +99,33 @@ class _TabbedState extends State<HomePage> {
           ],
         ),
         body: MainPageContainer(
-          child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (_) => FirstPageCubit(
-                    FirstPageState(),
+          child: RepositoryProvider.value(
+            value: widget.userRepository,
+            child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (_) => FirstPageCubit(
+                      FirstPageState(),
+                    ),
                   ),
-                ),
-                BlocProvider(
-                  create: (_) => GamePlayCubit(
-                    GamePlayState(),
+                  BlocProvider(
+                    create: (_) => GamePlayCubit(
+                      GamePlayState(),
+                    ),
                   ),
-                ),
-                BlocProvider(
-                  create: (_) => GameStatesBloc(
-                      gameStatesRepository: GameStateRepository(),
-                      user: context.read<MainBloc>().state.user)
-                    ..add(LoadGameStates()),
-                ),
-              ],
+                  BlocProvider(
+                    create: (_) => GameStatesBloc(
+                        userRepository: widget.userRepository,
+                        gameStatesRepository: GameStateRepository(),
+                        user: context.read<MainBloc>().state.user)
+                      ..add(LoadGameStates()),
+                  ),
+                ],
 
-              // create: (_) =>
-              //     MainPageBloc(MainPageState(homeStatus: HomeStatus.idle)),
-              child: _widgetOptions.elementAt(_selectedIndex)),
+                // create: (_) =>
+                //     MainPageBloc(MainPageState(homeStatus: HomeStatus.idle)),
+                child: _widgetOptions.elementAt(_selectedIndex)),
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: [

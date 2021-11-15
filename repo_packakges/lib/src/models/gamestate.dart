@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:equatable/equatable.dart';
 
 import '../../repo_packakges.dart';
@@ -34,16 +36,18 @@ class GameState extends Equatable {
         String? tTL,
         String? sessionId,
         bool? requestAccepted,
+        String? timeCreated,
         Player? player1,
         Player? player2, String? creatorId}) {
     return GameState.name(
-      sessionID: sessionID ?? this.sessionID,
+      sessionID: this.sessionID ?? sessionId,
       rounds: rounds ?? this.rounds,
       tTL: tTL ?? this.tTL,
       requestAccepted: requestAccepted ?? this.requestAccepted,
       player1: player1 ?? this.player1,
       player2: player2 ?? this.player2,
       creatorId: creatorId ?? this.creatorId,
+      timeCreated: timeCreated ?? this.timeCreated,
     );
   }
 
@@ -60,7 +64,7 @@ class GameState extends Equatable {
     };
   }
 
-  static GameState fromMap(Map<String, dynamic> data,{User? user}) {
+  static GameState fromMap(Map<String, dynamic> data,{required User? user}) {
     return GameState.name(
       sessionID: data['sessionID'],
       rounds: data['rounds'],
@@ -101,7 +105,7 @@ class Player extends User implements Equatable{
   }
 
   @override
-  List<Object?> get props => [id, score, round, turn];
+  List<Object?> get props => [id, score, round, turn, name, photo, score];
 
   Player copy({int? score, int? round, bool? turn, String? name, String? photo, String? id}) {
     return Player(
@@ -127,5 +131,5 @@ class Player extends User implements Equatable{
     return null;
   }
 
-  static const empty = Player(id: '', name: null, photo: '', score: 0);
+  static const empty = Player(id: null, name: null, photo: null, score: 0);
 }

@@ -297,7 +297,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                           .read<MainBloc>()
                                           .state
                                           .user!
-                                          .gameIds![index]
+                                          .gameIds[index]
                                           .isEmpty /// check if the string gameId at this index is empty
                                           ? context
                                           .read<GameStatesBloc>()

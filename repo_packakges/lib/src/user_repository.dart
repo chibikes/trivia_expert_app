@@ -6,6 +6,8 @@ import 'models/gamestate.dart';
 import 'models/models.dart';
 
 class UserRepository {
+
+
   Stream<repo.User?> getUser(
       String id, repo.AuthenticationRepository _authenticationRepository) {
     try {
@@ -24,8 +26,12 @@ class UserRepository {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(user.id)
-        .update(user.toMap());
+        .update(user.toMap())
+        .onError((error, stackTrace) => print('error occured'));
+        
   }
+
+  const UserRepository();
 }
 
 class GameStateRepository {
@@ -40,7 +46,7 @@ class GameStateRepository {
           .map((snapshot) {
             checkForRequestedGameSess(user);
             return snapshot.docs
-                .map((e) => GameState.fromMap(e.data()))
+                .map((e) => GameState.fromMap(e.data(), user: user))
                 .toList();
           });
     } catch (e) {
@@ -49,34 +55,24 @@ class GameStateRepository {
     }
   }
 
-  Stream<GameState?> startNewGameSession(repo.User user) {
+  Stream<GameState?> startNewGameSession(String id, repo.User user) {
     try {
-      GameState gameState = GameState.name(
-          sessionID: null,
-          creatorId: user.id,
-          timeCreated: DateTime.now().toUtc().toString(),
-          player1:
-              repo.Player(id: user.id, name: user.name, photo: user.photo)); /// player 2 becomes null, what to do?
-      gameStateCollection.add(gameState.toMap()).then((value) => gameState.copyWith(sessionId: value.id));
-      return gameStateCollection
-          .where('creatorId', isEqualTo: user.id)
-          .where('requestAccepted', isEqualTo: false)
-          .orderBy('timeCreated')
-          .limit(1)
-          .snapshots()
-          .map((snapshot) {
-        snapshot.docs.map((e) {
-          gameState = GameState.fromMap(e.data());
-        });
-        return gameState;
-      });
+        return gameStateCollection /// yield tells it not to close the function
+        // .where('creatorId', isEqualTo: user.id)
+        // .where('requestAccepted', isEqualTo: false)
+        // .orderBy('timeCreated', descending: true)
+        // .limit(1)
+        //TODO: remove the above indexes on trivia-ex firebase firestore
+            .doc(id)
+            .snapshots()
+            .map((event) => GameState.fromMap(event.data()!, user: user),);
     } catch (e) {
       print('Error : $e');
       return Stream.value(GameState.name());
     }
   }
 
-  Future<GameState> createNewGameSession(repo.User user) async {
+  Future<GameState> FindNewUser(repo.User user) async {
     User user2 = await searchForAvailablePlayer();
     Player player2 = Player(id: user2.id, name: user2.name, photo: user2.photo);
     GameState gameState = GameState.name(
@@ -94,7 +90,7 @@ class GameStateRepository {
     return gameStateCollection
         .doc(state.sessionID)
         .update(state.toMap())
-        .onError((error, stackTrace) => throw (''));
+        .onError((error, stackTrace) => throw ('this is an error'));
   }
 
   Future<GameState> searchAvailableGameSessions(
@@ -102,40 +98,42 @@ class GameStateRepository {
     GameState gameState = GameState.empty;
     try {
       await gameStateCollection
+          // .orderBy('timeCreated')
           .where('creatorId', isNotEqualTo: user.id)
           .where('requestAccepted', isEqualTo: false)
-          .limit(50)
+          // .limit(50)
+          .limit(5)
           .get()
           .then((snapshot) {
-        for (int i = 0; i < snapshot.docs.length; i++) {
-          try {
-            String id = snapshot.docs[i].id;
-            Map<String, dynamic> docs = snapshot.docs[i] as Map<String,
-                dynamic>;
+          for (int i = 0; i < snapshot.docs.length; i++) {
+            try {
+              String id = snapshot.docs[i].id;
+              Map<String, dynamic> docs = snapshot.docs[i].data();
 
-            gameState = GameState.fromMap(docs);
-            gameState.copyWith(
-                requestAccepted: true,
-                player2: Player(
-                    id: user.id, name: user.name, photo: user.photo),
-                sessionId: id);
-            updateGameState(gameState).then((value) {
-              return gameState;
-            });
-          } catch (e) {
-            if (i == snapshot.docs.length - 1) {
-              break;
+              gameState = GameState.fromMap(docs, user: user);
+              updateGameState(gameState.copyWith(
+                  requestAccepted: true,
+                  player2: Player(
+                      id: user.id, name: user.name, photo: user.photo),
+                  sessionId: id)).then((value) {
+                return gameState;
+              });
+            } catch (e) {
+              print('print *** $e');
+              if (i == snapshot.docs.length - 1) {
+                break;
+              }
             }
           }
-        }
       });
       return gameState;
     } catch (e) {
+      print('this is the exception ***** $e');
       return gameState;
     }
   }
 
-  Future<void> checkForRequestedGameSess(repo.User user) { // all you have to do is add usergameIds here. c'est fini. so what listens to you?
+  Future<void> checkForRequestedGameSess(repo.User user) {
     return gameStateCollection
         .where('playerTwo', isEqualTo: user.id)
         .orderBy('timeCreated')
@@ -144,7 +142,7 @@ class GameStateRepository {
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((doc) {
-        if (user.gameIds!.length != 5 && !user.gameIds!.contains(doc.id)) {
+        if (user.gameIds.length != 5 && !user.gameIds.contains(doc.id)) {
           GameState gameState = GameState.name(
             rounds: doc["rounds"],
             tTL: doc["tTL"],
@@ -157,8 +155,8 @@ class GameStateRepository {
             sessionID: doc.id,
           );
           updateGameState(gameState).then((value) {
-            for(int i=0;  i< user.gameIds!.length; i++) {
-              if(user.gameIds![i] == '') user.gameIds![i] = gameState.sessionID!;
+            for(int i=0;  i< user.gameIds.length; i++) {
+              if(user.gameIds[i] == '') user.gameIds[i] = gameState.sessionID!;
               break;
             }
 
@@ -174,7 +172,7 @@ class GameStateRepository {
     User user = User.empty;
     await FirebaseFirestore.instance
         .collection('users')
-        // .orderBy('lastOnlineInteraction')
+        .orderBy('lastOnlineInteraction', descending: true)
         // .where('maxGamesReached', isEqualTo: false)
         // .where('id', isNotEqualTo: user.id)
         .limit(1)
@@ -196,5 +194,9 @@ class GameStateRepository {
     return gameStateCollection
         .doc(gameState.sessionID)
         .update(gameState.toMap());
+  }
+
+  Future<String> stubbedFunc(GameState gameState) async{
+    return gameStateCollection.add(gameState.toMap()).then((value) => value.id);
   }
 }

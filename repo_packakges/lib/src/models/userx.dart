@@ -22,7 +22,7 @@ class User extends Equatable {
     this.email,
     this.photo,
     this.achievements,
-    this.gameIds = const ['', '', '', '', '',],
+    this.gameIds =  const ['', '', '', '', '',],
     this.lastOnlineInteraction,
     this.maxGamesReached,
   });
@@ -80,8 +80,8 @@ class User extends Equatable {
       country: country ?? this.country,
       photo: photo ?? this.photo,
       email: email ?? this.email,
-      achievements: returnGameIds(this.achievements, achievements),
-      gameIds: returnGameIds(this.gameIds, gameIds),
+      achievements: achievements,
+      gameIds: gameIds!,
     );
   }
 
@@ -102,10 +102,7 @@ class User extends Equatable {
   @override
   List<Object?> get props => [name, photo, gameIds, achievements, country, age];
 
-  List<dynamic> returnGameIds(List<dynamic>? arr1, List<dynamic>? arr2) {
-    if(arr2 != null) arr1!.addAll(arr2);
-    return arr1!;
-  }
+
 }
 
 

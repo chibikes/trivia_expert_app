@@ -18,6 +18,12 @@ class CreateGameState extends GameStatesEvent {
   @override
   List<Object> get props => [gameState];
 }
+class CreatedGameSuccess extends GameStatesEvent {
+  final GameState gameState;
+
+  CreatedGameSuccess(this.gameState);
+
+}
 class SearchForGameState extends GameStatesEvent {
   final int gameStateIndex;
 
