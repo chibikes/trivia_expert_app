@@ -38,10 +38,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       //   sessionIDs.add(element.sessionID);
       // });
       // }
-      final Stream<QuerySnapshot> _gameStates = FirebaseFirestore.instance
-          .collection('gameStates')
-          .where('sessionID', arrayContains: sessionIDs)
-          .snapshots();
+      // final Stream<QuerySnapshot> _gameStates = FirebaseFirestore.instance
+      //     .collection('gameStates')
+      //     .where('sessionID', arrayContains: sessionIDs)
+      //     .snapshots();
+
       switch (state.homeStatus) {
         case HomeStatus.failure_update:
           return Text('remove me later');
@@ -56,7 +57,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ProfilePage(
                           context: context,
                         ),
-                    GamePlayState(),
                       );
                 },
                 child: Text('Go to ->'),
@@ -101,18 +101,18 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 padding:
                                     const EdgeInsets.only(top: 20, left: 20),
                                 child: GestureDetector(
-                                  onTap: () =>
-                                      context.read<FirstPageCubit>().goToPage(
-                                            context,
-                                            BlocProvider.value(
-                                              value: BlocProvider.of<MainBloc>(
-                                                  context),
-                                              child: ProfilePage(
-                                                context: context,
-                                              ),
-                                            ),
-                                        GamePlayState(),
-                                          ),
+                                  // onTap: () =>
+                                  //     context.read<FirstPageCubit>().goToPage(
+                                  //           context,
+                                  //           BlocProvider.value(
+                                  //             value: BlocProvider.of<MainBloc>(
+                                  //                 context),
+                                  //             child: ProfilePage(
+                                  //               context: context,
+                                  //             ),
+                                  //           ),
+                                  //       GamePlayState(),
+                                  //         ),
                                   child: Icon(
                                     Icons.photo_camera_rounded,
                                     color: Colors.green,
@@ -256,84 +256,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       child: RoundRectBubbleButton(
                         text: 'Play',
                         onPressed: () =>
-                            context.read<FirstPageCubit>().animateButton(
+                            context.read<FirstPageCubit>().goToPage(
                                   context,
-                                  _bounceController,
                                   SinglePlayerPage(),
-                                  GamePlayState(),
                                 ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                SizedBox(
-                  height: 150,
-                  child: BlocListener<GameStatesBloc, GameStatesState>(
-                    listener: (context, state) {
-                      if (state is StartGameSession) {
-                        // context.read<GamePlayCubit>().emit(GamePlayState(gameState: state.gameState));
-                        context.read<FirstPageCubit>().goToPage(
-                              context,
-                              GamePage(),
-                              GamePlayState(gameState: state.gameState, gameStatus: GameStatus.multi_player),
-                            );
-                      }
-                    },
-                    child: ListView.builder(
-                      itemCount: 5,
-                      itemBuilder: (context, int index) {
-                        return Row(
-                          children: [
-                            BlocBuilder<GameStatesBloc, GameStatesState>(
-                              builder: (context, state) {
-                                if (state is GameStatesLoaded) {
-                                  return ElevatedButton(
-                                    child: Text('nothing'),
-                                    onPressed: () {
-                                      context
-                                          .read<MainBloc>()
-                                          .state
-                                          .user!
-                                          .gameIds[index]
-                                          .isEmpty /// check if the string gameId at this index is empty
-                                          ? context
-                                          .read<GameStatesBloc>()
-                                          .add(SearchForGameState(index))
-                                          : context
-                                          .read<FirstPageCubit>()
-                                          .goToPage(
-                                        context,
-                                        GamePage(),
-                                        GamePlayState(gameState: state.gameStates[index], gameStatus: GameStatus.multi_player),
-                                      );
-                                    },
-                                    // height: 0.60 *
-                                    //     MediaQuery.of(context).size.height,
-                                    // width: 0.37 *
-                                    //     MediaQuery.of(context).size.width,
-                                    // playerTwo: '',
-                                    // gameIsActive: false,
-                                    // imgLoci: state
-                                    //     .gameStates[index]!.player2 != null ? '' : '',
-                                  );
-                                } else {
-                                  return Container(
-                                    color: Colors.blueGrey,
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                              },
-                            ),
-                            SizedBox(
-                              width: 8.0,
-                            )
-                          ],
-                        );
-                      },
-                      scrollDirection: Axis.horizontal,
                     ),
                   ),
                 ),

@@ -18,7 +18,6 @@ class FinishedGamePageState extends State<FinishedGamePage> {
   var sciLevel;
   @override
   Widget build(BuildContext context) {
-    if(context.read<GamePlayCubit>().state.gameStatus != GameStatus.multi_player) {
       return Scaffold(
         backgroundColor: Colors.white,
         body: ListView(
@@ -134,35 +133,28 @@ class FinishedGamePageState extends State<FinishedGamePage> {
           ],
         ),
       );
-    } else {
-      return Scaffold(
-        body: Container(
-          color: Colors.blue,
-          child: Column(
-            children: [
-              Text('Round ${context.read<GamePlayCubit>().state.gameState!.rounds}'),
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(context.read<GamePlayCubit>().state.gameState!.player1!.photo!)
-                  ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(context.read<GamePlayCubit>().state.gameState!.player2!.photo!),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    }
+    // else {
+    //   return Scaffold(
+    //     body: Container(
+    //       color: Colors.blue,
+    //       child: Column(
+    //         children: [
+    //           Text('Round ${context.read<GamePlayCubit>().state.gameState!.rounds}'),
+    //           Row(
+    //             children: [
+    //               CircleAvatar(
+    //                 backgroundImage: NetworkImage(context.read<GamePlayCubit>().state.gameState!.player1!.photo!)
+    //               ),
+    //               CircleAvatar(
+    //                 backgroundImage: NetworkImage(context.read<GamePlayCubit>().state.gameState!.player2!.photo!),
+    //               ),
+    //             ],
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
   }
-  //  String _mapScoreToLevel(int score) {
-  //   /// beginner, amateur, good player, expert
-  //   if(score >= 0.9)
-  //     return 'Expert';
-  //   if(score)
-  //   return 'Beginner';
-  // }
 }

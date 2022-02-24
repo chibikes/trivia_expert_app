@@ -1,6 +1,7 @@
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/splash/view/splash_page.dart';
 import 'package:trivia_expert_app/theme.dart';
 import 'authentication/authentication.dart';
@@ -28,7 +29,8 @@ class App extends StatelessWidget {
               authenticationRepository: authenticationRepository,
             ),
           ),
-          BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData()))
+          BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
+          BlocProvider(create: (_)=> QuestionBloc()..add(QuestionsFetched())),
         ],
         child: AppView(),
       ),

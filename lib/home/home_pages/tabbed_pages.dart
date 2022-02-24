@@ -46,57 +46,6 @@ class _TabbedState extends State<HomePage> {
           toolbarHeight: 70,
           backgroundColor: Color(0xff1e4b7a),
           title: const Text('Login'),
-          actions: [
-            CheckMark(
-              height: 30,
-              width: 30,
-              smallSize: true,
-            ),
-            Text(
-              '3',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 17.0),
-            ),
-            SizedBox(
-              width: 0.05 * MediaQuery.of(context).size.width,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Crystal(
-                height: 20,
-                width: 20,
-              ),
-            ),
-            Text(
-              '3',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 17.0),
-            ),
-            SizedBox(
-              width: 0.05 * MediaQuery.of(context).size.width,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: FirstAidBox(
-                height: 25,
-                width: 25,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 3.0),
-              child: Text(
-                '3',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 17.0),
-              ),
-            ),
-          ],
         ),
         body: MainPageContainer(
           child: RepositoryProvider.value(
@@ -107,18 +56,6 @@ class _TabbedState extends State<HomePage> {
                     create: (_) => FirstPageCubit(
                       FirstPageState(),
                     ),
-                  ),
-                  BlocProvider(
-                    create: (_) => GamePlayCubit(
-                      GamePlayState(),
-                    ),
-                  ),
-                  BlocProvider(
-                    create: (_) => GameStatesBloc(
-                        userRepository: widget.userRepository,
-                        gameStatesRepository: GameStateRepository(),
-                        user: context.read<MainBloc>().state.user)
-                      ..add(LoadGameStates()),
                   ),
                 ],
 
