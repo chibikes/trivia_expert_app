@@ -12,6 +12,7 @@ import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trivia_expert_app/home/first_page/profile_page/view/profile_page.dart';
 import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
+import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import 'package:repo_packages/src/models/gamestate.dart';
 
@@ -161,9 +162,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),
-                          child: FirstAidBox(
-                            height: 25,
-                            width: 25,
+                          child: RedLifeCrystal(
+                            height: 30,
+                            width: 30,
                           ),
                         ),
                         Padding(

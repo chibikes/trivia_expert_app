@@ -11,7 +11,6 @@ class OnlineSinglePlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       backgroundColor: Colors.green,
       body: Padding(
         padding: const EdgeInsets.all(0.0),

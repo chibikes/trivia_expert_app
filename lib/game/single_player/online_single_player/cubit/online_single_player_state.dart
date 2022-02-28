@@ -27,6 +27,7 @@ class OnlineSinglePlayerState extends Equatable {
   OnlineSinglePlayerState copyWith({
     GameStatus? status,
     int? playerScore,
+    List<Questions>? questions,
     int? index,
     List<Color>? colors,
     int? time,
@@ -37,6 +38,7 @@ class OnlineSinglePlayerState extends Equatable {
       index: index ?? this.index,
       colors: colors ?? this.colors,
       time: time ?? this.time,
+      questions: questions ?? this.questions,
     );
   }
 

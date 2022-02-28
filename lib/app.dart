@@ -30,7 +30,7 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
-          BlocProvider(create: (_)=> QuestionBloc()..add(QuestionsFetched())),
+          BlocProvider(create: (_)=> QuestionBloc()..add(QuestionsFetched()), lazy: false,),
         ],
         child: AppView(),
       ),

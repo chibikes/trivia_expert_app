@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import 'dart:math' as math;
 
@@ -486,10 +487,9 @@ class PowerUpPageState extends State<PowerUpPage> {
                 padding: const EdgeInsets.all(4.0),
                 child: Column(
                   children: [
-                    FirstAidBox(
-                      width: widthCheckMark,
-                      height: heightCheckMark,
-                      color: Colors.orange,
+                    RedLifeCrystal(
+                      width: 70,
+                      height: 70,
                     ),
                     Text('1-orange card'),
                     Row(

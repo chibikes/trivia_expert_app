@@ -37,22 +37,19 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> { //TODO: rename c
   Future<QuestionState>_mapQuestionFetchedToState(QuestionState state, int offSet) async {
     try {
       if(state.status == QuestionStatus.initial) {
-        List<List<String>> answers = [];
+        List<String> answers = [];
         final questions = await _fetchQuestions(offSet);
         int i = 0;
         for(Questions question in questions) {
-          answers.add([question.correctAnswer!,
-            question.incorrectOne!,
-            question.incorrectTwo!,
-            question.incorrectThree!,]
-          );
-          answers[i].shuffle();
+          answers = question.answers!;
+          answers.add(question.correctAnswer!);
+          answers.shuffle();
+          question.copyWith(answers: answers);
           i++;
         }
         return state.copyWith(
             status: QuestionStatus.success,
             questions: questions,
-            answers: answers,
             hasReachedMax: _hasReachedMax(questions.length)
         );
       }
@@ -92,8 +89,6 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> { //TODO: rename c
   }
 
   bool _hasReachedMax(int postCount) => false; // TODO: if has reached max ? q = 0
-
-
 
 
 }

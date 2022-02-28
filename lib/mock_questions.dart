@@ -11,9 +11,8 @@ class MockQuestions {
         difficulty: i % 2 ==0 ? 'hard': 'false',
         question: i % 2 ==0 ? ' who framed roger rabbit' : 'Who kill \'em jenkins brothers',
         correctAnswer: 'The rabbit',
-        incorrectOne: 'No body',
-        incorrectTwo: 'The Sheriff?',
-        incorrectThree: 'No man on earth');
+        answers: ['No body', 'The Sheriff', 'No man on earth'],
+        );
       questions.add(question);
     }
     return questions;

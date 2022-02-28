@@ -18,6 +18,10 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
       emit(state.copyWith(time: state.time - 1));
     });
   }
+  Future<void> stopTimer() async {
+    await _timeSubscription?.cancel();
+
+  }
   void correctButtonSelected() { /// will the code be simpler without this cubit ? !
     emit(state.copyWith(status: GameStatus.correct));
   }
@@ -27,14 +31,22 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
 
-  void nextQuestion() {
-    emit(state.copyWith(index: state.index + 1));
+  Future<void> nextQuestion(int score) {
+    List<Color> colors = List.filled(4, Colors.white);
+    //TODO: make duration parameter smaller
+    return Future.delayed(Duration(seconds: 1), () {
+      emit(state.copyWith(playerScore: score, colors: colors, index: state.index + 1));
+    });
   }
-  void buttonSelected(String answer, int buttonSelected) {
+  void answerValidate(int buttonSelected) {
+    var score = state.playerScore;
+    var answer = state.questions[state.index].answers![buttonSelected];
+    var correctAnswer = state.questions[state.index].correctAnswer;
     List<Color> colors = List.generate(4, (index) {
       if(index == buttonSelected) {
-        if(index == buttonSelected && state.questions[state.index].correctAnswer == answer) {
-          return Colors.green;
+        if(correctAnswer == answer) {
+          score++;
+          return Colors.teal;
         } else return Colors.red;
       }
       //TODO: correct answer should be indicated,
@@ -42,6 +54,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
 
     });
     emit(state.copyWith(colors: colors));
+    nextQuestion(score);
   }
 
   @override

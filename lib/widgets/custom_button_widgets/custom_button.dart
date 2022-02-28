@@ -11,6 +11,7 @@ class AnimatedCustomButton extends StatelessWidget  {
   final AnimationController? multiButtonMotionController;
   final Interval interval;
   final Color color;
+  final Function()? onTap;
   /// intervals {0.0, 1.0,} {0.25, 1.0}, {0.5, 1.0} {0.75, 1.0} context.read<GamePlayCubit>().validateAnswer(
   ///           _multiButtonMotionController!,
   ///          state.answers[gameState.index!][1],
@@ -19,7 +20,7 @@ class AnimatedCustomButton extends StatelessWidget  {
   ///           context,
   ///         ),
 
-  const AnimatedCustomButton({Key? key, this.colors, this.notFailed = true, required this.animationController, this.child, this.isAnswerEmpty = false, required this.multiButtonMotionController, required this.interval, required this.color}) : super(key: key);
+  const AnimatedCustomButton({Key? key, this.colors, this.notFailed = true, required this.animationController, this.child, this.isAnswerEmpty = false, required this.multiButtonMotionController, required this.interval, required this.color, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,7 @@ class AnimatedCustomButton extends StatelessWidget  {
           parent: multiButtonMotionController!,
           curve: interval,)),
       child: GestureDetector(
+        onTap: onTap,
         child: AnimatedContainer(
             child: child,
             alignment: Alignment.center,
