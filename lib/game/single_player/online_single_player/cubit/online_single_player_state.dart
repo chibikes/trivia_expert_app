@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:trivia_expert_app/const.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 
@@ -14,7 +15,8 @@ class OnlineSinglePlayerState extends Equatable {
     this.questions = const [],
     this.gameStatus = GameStatus.inprogress,
     this.playerScore = 0,
-    this.time = 20,
+    this.time = kTotalGameTime,
+    this.gameStats = const {},
         /// for our offline the initial score is always the highest score.
   });
   final GameStatus gameStatus;
@@ -23,6 +25,7 @@ class OnlineSinglePlayerState extends Equatable {
   final List<Color> colors;
   final int index;
   final int time;
+  final Map<String, int> gameStats;
 
   OnlineSinglePlayerState copyWith({
     GameStatus? status,

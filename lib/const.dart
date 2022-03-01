@@ -1,0 +1,1 @@
+const kTotalGameTime = 20;
