@@ -13,7 +13,7 @@ class GameStatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('$category : $score'),
+        Text('$category : $score%'),
         SizedBox(
           width: 0.80 * MediaQuery.of(context).size.width,
           child: RoundRectIndicator(

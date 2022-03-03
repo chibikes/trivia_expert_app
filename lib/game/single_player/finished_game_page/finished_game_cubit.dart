@@ -8,8 +8,8 @@ class GameEndCubit extends Cubit<GameEndState> {
 
   void calcStats() {
     var speed = state.totalQuestions / kTotalGameTime;
-    var accuracy = state.totalScores ~/ state.totalQuestions;
-    emit(state.copyWith(speed: speed, accuracy: accuracy));
+    var accuracy = (state.totalScores / state.totalQuestions) * 100;
+    emit(state.copyWith(speed: speed, accuracy: accuracy.toInt()));
     calcProficiency();
   }
   void calcProficiency() {

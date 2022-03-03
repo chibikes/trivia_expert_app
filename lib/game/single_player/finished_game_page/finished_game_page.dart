@@ -42,7 +42,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
           padding: const EdgeInsets.all(8.0),
           child: GameStatsCard(
             category: key,
-            score: value.score,
+            score: ((value.score / value.categoryFrequency) * 100).toInt(),
             ratio: value.score / value.categoryFrequency,
           ),
         ));
