@@ -9,7 +9,8 @@ import 'package:repo_packages/repo_packakges.dart';
 import 'package:rive/rive.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
-import 'package:trivia_expert_app/game/single_player/finished_game_page.dart';
+import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game.dart';
+import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_page.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
@@ -86,7 +87,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               if (gameState.time == 0) {
                 //TODO: verify that it's close(); that you need
                 context.read<OnlineSinglePlayerCubit>().close();
-                return FinishedGamePage();
+                return FinishedGame();
               } else
               return Stack(
                 children: [
