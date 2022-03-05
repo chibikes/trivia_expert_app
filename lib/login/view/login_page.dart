@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/login/login.dart';
 
-
 class LoginPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => LoginPage());

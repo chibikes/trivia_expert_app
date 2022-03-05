@@ -8,5 +8,8 @@ abstract class QuestionEvent extends Equatable {
 
 }
 
-class QuestionsFetched extends QuestionEvent {}
+class QuestionsFetched extends QuestionEvent {
+   static int offSet = 0;
+
+}
 class QuestionsFetchedOffline extends QuestionEvent {}

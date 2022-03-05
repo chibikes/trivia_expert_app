@@ -1,31 +1,50 @@
-
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:trivia_expert_app/const.dart';
+import 'package:trivia_expert_app/main_models/questions.dart';
+import 'package:trivia_expert_app/questions/models/question.dart';
 
-enum GameStatus{ correct, incorrect, inprogress, timeout} /// should correct and incorrect be states? let's find out.
+enum GameStatus { correct, incorrect, inprogress, timeout }
+
+/// should correct and incorrect be states? let's find out.
 
 class OnlineSinglePlayerState extends Equatable {
   const OnlineSinglePlayerState({
+    this.colors = const [Colors.white, Colors.white, Colors.white, Colors.white,],
+    this.index = 0,
+    this.questions = const [],
     this.gameStatus = GameStatus.inprogress,
-    this.playerScore = 0 /// for our offline the initial score is always the highest score.
-
-});
+    this.playerScore = 0,
+    this.time = kTotalGameTime,
+    this.gameStats = const {},
+        /// for our offline the initial score is always the highest score.
+  });
   final GameStatus gameStatus;
   final int playerScore;
+  final List<Questions> questions;
+  final List<Color> colors;
+  final int index;
+  final int time;
+  final Map<String, int> gameStats;
 
   OnlineSinglePlayerState copyWith({
-    GameStatus status,
-     int playerScore,
+    GameStatus? status,
+    int? playerScore,
+    List<Questions>? questions,
+    int? index,
+    List<Color>? colors,
+    int? time,
   }) {
     return OnlineSinglePlayerState(
-      gameStatus: status ?? this.gameStatus, /// if null then it would default
+      gameStatus: status ?? this.gameStatus,
       playerScore: playerScore ?? this.playerScore,
+      index: index ?? this.index,
+      colors: colors ?? this.colors,
+      time: time ?? this.time,
+      questions: questions ?? this.questions,
     );
   }
 
-
-
   @override
-  // TODO: implement props
-  List<Object> get props => [];
-
+  List<Object> get props => [playerScore, questions, colors, index, time];
 }

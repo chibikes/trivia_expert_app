@@ -1,0 +1,123 @@
+[
+   {
+      "response_code": 0,
+      "results": [
+         {
+            "difficulty": "medium",
+            "question": "Typically, how many keys are on a piano?",
+            "correct_answer": "88",
+            "incorrect_answers": [
+               "24",
+               "12",
+               "96"
+            ],
+            "category": "Entertainment: Music",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "hard",
+            "question": "What&#039;s the name of the halloween-related Sims 4 Stuff Pack released September 29th, 2015?",
+            "correct_answer": "Spooky Stuff",
+            "incorrect_answers": [
+               "Ghosts n&#039; Ghouls",
+               "Nerving Nights",
+               "Fearful Frights"
+            ],
+            "category": "Entertainment: Video Games",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "easy",
+            "question": "In what year was the game &quot;FTL: Faster Than Light&quot; released?",
+            "correct_answer": "2012",
+            "incorrect_answers": [
+               "2014",
+               "2013",
+               "2011"
+            ],
+            "category": "Entertainment: Video Games",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "easy",
+            "question": "The numbering system with a radix of 16 is more commonly referred to as ",
+            "correct_answer": "Hexidecimal",
+            "incorrect_answers": [
+               "Binary",
+               "Duodecimal",
+               "Octal"
+            ],
+            "category": "Science: Computers",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "medium",
+            "question": "What is the name of the gang that Ponyboy is a part of in the book, The Outsiders?",
+            "correct_answer": "The Greasers",
+            "incorrect_answers": [
+               "The Outsiders",
+               "The Mafia",
+               "The Socs"
+            ],
+            "category": "Entertainment: Books",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "medium",
+            "question": "What breed of dog is &quot;Scooby Doo&quot;?",
+            "correct_answer": "Great Dane",
+            "incorrect_answers": [
+               "Pit bull",
+               "Boxer",
+               "Doberman Pinscher"
+            ],
+            "category": "Entertainment: Television",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "medium",
+            "question": "On which planet does the game Freedom Planet (2014) take place?",
+            "correct_answer": "Avalice",
+            "incorrect_answers": [
+               "Freedom",
+               "Galaxytrail",
+               "Shang Mu"
+            ],
+            "category": "Entertainment: Video Games",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "easy",
+            "question": "The likeness of which president is featured on the rare $2 bill of USA currency?",
+            "correct_answer": "Thomas Jefferson",
+            "incorrect_answers": [
+               "Martin Van Buren",
+               "Ulysses Grant",
+               "John Quincy Adams"
+            ],
+            "category": "General Knowledge",
+            "type": "multiple"
+         },
+         {
+            "difficulty": "medium",
+            "question": "Shang Tsung is a playable character in Mortal Kombat XL.",
+            "correct_answer": "False",
+            "incorrect_answers": ["True"],
+            "category": "Entertainment: Video Games",
+            "type": "boolean"
+         },
+         {
+            "difficulty": "medium",
+            "question": "Who was the guitarist in the band &quot;The Doors&quot;?",
+            "correct_answer": "Robby Krieger",
+            "incorrect_answers": [
+               "Eric Clapton",
+               "John Densmore",
+               "Jimi Hendrix"
+            ],
+            "category": "Entertainment: Music",
+            "type": "multiple"
+         }
+      ]
+   }
+   ]

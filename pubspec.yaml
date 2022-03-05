@@ -18,22 +18,25 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^6.1.0
-  equatable: ^1.2.3
-  flutter_bloc: ^6.1.0
-  font_awesome_flutter: ^8.4.0
-  formz: ^0.3.0
-  pedantic: ^1.9.0
-  rive: ^0.6.2
-  meta: ^1.1.8
-  google_fonts: ^1.1.0
-  rxdart: ^0.24.0
-  flutter_svg: ^0.21.0+1
+  bloc: ^7.0.0
+  sqflite: ^2.0.0+3
+  path: ^1.8.0
+  equatable: ^2.0.2
+  flutter_bloc: ^7.0.1
+  font_awesome_flutter: ^9.1.0
+  formz: ^0.4.0
+  pedantic: ^1.11.0
+  rive: ^0.7.17
+  meta: ^1.3.0
+  google_fonts: ^2.1.0
+  rxdart: ^0.27.1
+  flutter_svg: ^0.22.0
+  image_picker: 0.8.4
   repo_packages:
     path: repo_packakges #don't forget to indent
 
@@ -41,7 +44,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,14 @@ flutter:
   assets:
     - assets/trivia_expert.riv
     - assets/landscape.riv
+    - assets/trivia_ex.json
+    - assets/profile_avatar.svg
+    - assets/avatars/
+  fonts:
+    - family: ShowCardGothic
+      fonts:
+        - asset: assets/SHOWG.TTF
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
