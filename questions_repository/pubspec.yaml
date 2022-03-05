@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  sqflite: ^2.0.0+3
+  path: ^1.8.0
 
 
 dev_dependencies:

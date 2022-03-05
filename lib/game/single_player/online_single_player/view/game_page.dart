@@ -29,7 +29,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
-  GameState gState = GameState.empty;
   late final AnimationController? _multiButtonMotionController = AnimationController( /// controls all motions  of all the  buttons
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -121,9 +120,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             ),
                             Clock(
                               width: 50.0,
-                              height: 40.0,
+                              height: 50.0,
                               widget: Text(
-                                '${gameState.time}',
+                                '00:${gameState.time}',
                                 style: GoogleFonts.aladin(
                                     fontWeight: FontWeight.w400, fontSize: 15),
                               ),

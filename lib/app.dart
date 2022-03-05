@@ -1,3 +1,4 @@
+import 'package:questions_repository/questions_repository.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
-          BlocProvider(create: (_)=> QuestionBloc()..add(QuestionsFetched()), lazy: false,),
+          BlocProvider(create: (_)=> QuestionBloc(questionRepository: DatabaseQuestionsRepository())..add(QuestionsFetched()), lazy: false,),
           BlocProvider(create: (_)=> ShopCubit(ShopState()),),
         ],
         child: AppView(),

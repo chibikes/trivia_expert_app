@@ -50,12 +50,12 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
       if (index == buttonSelected) {
         if (question.correctAnswer == answer) {
           GameStats.gameStats.update(question.category!,
-              (value) => Stats(value.score + 1, value.categoryFrequency + 1));
+              (value) => Stats(value.score + 1, value.categoryFrequency + 1), ifAbsent: (){return Stats(1,1);});
           score++;
           return Colors.teal;
         } else {
           GameStats.gameStats.update(question.category!,
-              (value) => Stats(value.score, value.categoryFrequency + 1));
+              (value) => Stats(value.score, value.categoryFrequency + 1), ifAbsent: (){return Stats(0, 0);});
           return Colors.red;
         }
       }

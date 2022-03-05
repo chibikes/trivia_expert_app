@@ -1,4 +1,4 @@
-class Question {
+class TriviaQuestion {
   final int? id;
   final String? category;
   final String? type;
@@ -11,7 +11,7 @@ class Question {
   final String? incorrectTwo;
   final String? incorrectThree;
 
-  Question(
+  TriviaQuestion(
       {this.id,
       this.category,
       this.type,
@@ -39,7 +39,7 @@ class Question {
     };
   }
 
-  Question copyWith({
+  TriviaQuestion copyWith({
     int? id,
     String? category,
     String? type,
@@ -48,7 +48,7 @@ class Question {
     String? correctAnswer,
     List<String>? answers,
   }) {
-    return Question(
+    return TriviaQuestion(
       id: id ?? this.id,
       category: category ?? this.category,
       type: type ?? this.type,

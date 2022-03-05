@@ -39,6 +39,8 @@ dependencies:
   image_picker: 0.8.4
   repo_packages:
     path: repo_packakges #don't forget to indent
+  questions_repository:
+    path: questions_repository
 
 
 
