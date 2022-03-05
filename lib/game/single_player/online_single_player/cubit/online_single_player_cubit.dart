@@ -35,6 +35,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   Future<void> updateQuestion(int score) {
     List<Color> colors = List.filled(4, Colors.white);
     //TODO: make duration parameter smaller
+    //TODO: each new question will have a time of 3 seconds
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
           playerScore: score, colors: colors, index: state.index + 1));

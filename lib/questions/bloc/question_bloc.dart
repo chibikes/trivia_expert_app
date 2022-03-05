@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
@@ -6,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:trivia_expert_app/mock_questions.dart';
 import 'package:trivia_expert_app/questions/databaase_operations.dart';
+import 'package:http/http.dart' as http;
 import 'package:trivia_expert_app/questions/models/question.dart';
 import 'package:path/path.dart';
 part 'question_event.dart';
@@ -72,17 +75,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> { //TODO: rename c
   // }
 
   Future<List<Questions>>_fetchQuestions(int offSet) async {
-    final database = openDatabase(
-      join(await getDatabasesPath(), 'trivia_ex.datbase'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE questions(id INTEGER PRIMARY KEY, category TEXT, type TEXT, difficulty TEXT, question TEXT, '
-              'correctAnswer TEXT, incorrectone TEXT, incorrecttwo TEXT, incorrectthree TEXT)',
-        );
-      },
-      version: 1,
-    );
-
+    createAndInsertDatabase();
     // Future<List<Questions>> questions = DatabaseOperations.getQuestionsFromDatabase(await database, offSet);
     Future<List<Questions>> questions = MockQuestions.getMockQuestions();
     return questions;
@@ -92,3 +85,17 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> { //TODO: rename c
 
 
 }
+
+Future<void> createAndInsertDatabase() async {
+  final database = openDatabase(
+    join(await getDatabasesPath(), 'trivia_ex.database'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE trivia_questions(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, category TEXT, type TEXT, difficulty TEXT, question TEXT, '
+            'correct_answer TEXT, incorrect_one TEXT, incorrect_two TEXT, incorrect_three TEXT)',
+      );
+    },
+    version: 1,
+  );
+}
+

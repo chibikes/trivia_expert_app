@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import 'dart:math' as math;
@@ -13,22 +16,26 @@ class ShopPage extends StatefulWidget {
 class ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: Colors.deepPurple,
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [Text('POWERUPS'), Text('CRYSTALS')],
+    return BlocBuilder<ShopCubit, ShopState>(
+      builder: (context, state) {
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            backgroundColor: Colors.deepPurple,
+            appBar: AppBar(
+              bottom: TabBar(
+                tabs: [Text('POWERUPS'), Text('CRYSTALS')],
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                PowerUpPage(),
+                CrystalsPage(),
+              ],
+            ),
           ),
-        ),
-        body: TabBarView(
-          children: [
-            PowerUpPage(),
-            CrystalsPage(),
-          ],
-        ),
-      ),
+        );
+      }
     );
   }
 

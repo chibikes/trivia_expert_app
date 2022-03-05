@@ -30,7 +30,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          'Category',
+          'Category Stats',
           style: GoogleFonts.droidSans(
               fontSize: 20, color: Colors.black, fontWeight: FontWeight.w900),
         ),
@@ -52,89 +52,147 @@ class FinishedGamePageState extends State<FinishedGamePage> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.white,
-          body: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Container(
-                  width: 0.80 * MediaQuery.of(context).size.width,
-                  // elevation: 8.0,
-                  decoration:
-                      BoxDecoration(color: Colors.white, border: Border.all()),
-                  child: Column(
-                    children: listStats,
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    width: 0.80 * MediaQuery.of(context).size.width,
+                    height: 0.33 * MediaQuery.of(context).size.height,
+                    // elevation: 8.0,
+                    decoration:
+                        BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
+                    child: Column(
+                      children: listStats,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Container(
-                  width: 0.80 * MediaQuery.of(context).size.width,
-                  // elevation: 8.0,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                      )),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Game Stats',
-                        style: GoogleFonts.droidSans(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w900),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 0.80 * MediaQuery.of(context).size.width,
+                    height: 0.33 * MediaQuery.of(context).size.height,
+                    // elevation: 8.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2.0,
+                        )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         children: [
-                          Text('SPEED : '),
                           Text(
-                            //TODO: remove hard code
-                            '${state.speed}Q/s',
-                            style: TextStyle(
-                                fontFamily: 'showCardGothic',
-                                color: Colors.blue,
-                                fontSize: 20),
-                          )
+                            'Game Stats',
+                            style: GoogleFonts.droidSans(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              Text('TOTAL QUESTIONS ANSWERED: '),
+                              Text('${state.totalQuestions}', style: TextStyle(
+                                  fontFamily: 'showCardGothic',
+                                  color: Colors.blue,
+                                  fontSize: 18),),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Text('TOTAL SCORE: '),
+                              Text('${state.totalScores}', style: TextStyle(
+                                  fontFamily: 'showCardGothic',
+                                  color: Colors.blue,
+                                  fontSize: 18),),
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Row(
+                            children: [
+                              Text('SPEED: '),
+                              Text(
+                                //TODO: remove hard code
+                                '${state.speed} Q/s',
+                                style: TextStyle(
+                                    fontFamily: 'showCardGothic',
+                                    color: Colors.blue,
+                                    fontSize: 18),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              Text('ACCURACY: '),
+                              Text(
+                                '${state.accuracy}%',
+                                style: TextStyle(
+                                    fontFamily: 'showCardGothic',
+                                    color: Colors.blue,
+                                    fontSize: 18),
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    width: 0.80 * MediaQuery.of(context).size.width,
+                    height: 0.33 * MediaQuery.of(context).size.height,
+                    // elevation: 8.0,
+                    decoration:
+                    BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         children: [
-                          Text('ACCURACY : '),
                           Text(
-                            '${state.accuracy}%',
-                            style: TextStyle(
-                                fontFamily: 'showCardGothic',
-                                color: Colors.blue,
-                                fontSize: 20),
-                          )
-                        ],
+                            'Proficiency',
+                            style: GoogleFonts.droidSans(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          SizedBox(height: 15,),
+                          Stack(
+                            children: [
+                              SizedBox(
+                                height: 80,
+                                width: 80,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 8.0,
+                                  value: state.proficiency / 100,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                                  backgroundColor: Colors.blue,
+                                ),
+                              ),
+                              Positioned(top: 26.0, left: 14.0,child: Text('${state.proficiency}%', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),))
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Text(assessScore(state.proficiency), style: GoogleFonts.droidSans(
+                              fontSize: 16, color: Colors.black, fontWeight: FontWeight.w900),),
+                        ]
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Container(
-                  width: 0.80 * MediaQuery.of(context).size.width,
-                  // elevation: 8.0,
-                  decoration:
-                  BoxDecoration(color: Colors.white, border: Border.all()),
-                  child: Column(
-                    children: [
-                      Text(assessScore(state.proficiency)),
-                    ]
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }
@@ -146,5 +204,5 @@ String assessScore(double score) {
   if(score >= 90) return 'Excellent!';
   else if(score >= 70) return 'Nice!';
   else if(score >= 50) return 'Good!';
-  else return 'See if you can do better';
+  else return 'See if you can do better!';
 }

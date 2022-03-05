@@ -7,59 +7,54 @@
 //
 // class DatabaseOperations {
 //
-//   static Future<void> insertQuestions(Questions questions, Database database) async {
-//     final db = database;
+// Future<void> insertQuestions(Questions questions, Database database) async {
+//   final db = database;
+//   await db.insert(
+//     'trivia_questions',
+//     questions.toMap(),
+//     conflictAlgorithm: ConflictAlgorithm.replace,
+//   );
+// }
 //
-//     await db.insert('questions', questions.toMap(), conflictAlgorithm: ConflictAlgorithm.replace,);
-//   }
+// Future<void> fetchQuestionsAndInsertToDatabase(
+//     Database database, int primaryKey) async {
+//   Codec<String, String> stringToBase64 = utf8.fuse(base64);
+//   Question question;
+//   List<Result> results;
+//   var url = Uri.parse('https://opentdb.com/api.php?amount=50&encode=base64');
+//   for (int i = 0; i < 60; i++) {
+//     final response = await http.get(
+//       url,
+//     );
+//     if (response.statusCode == 200) {
+//       final body = json.decode(response.body);
 //
-//   static Future<void> fetchQuestionsAndInsertToDatabase (Database database, int primaryKey) async {
-//     var url = Uri.parse('https://opentdb.com/api.php?amount=50');
-//     for (int i=0; i < 60; i++) {
-//       final response = await http.get(
-//         url,
-//       );
-//       if (response.statusCode == 200) {
-//         final body = json.decode(response.body);
+//       question = Question.fromJson(body);
+//       results = question.results!;
 //
-//         Question question = Question.fromJson(body);
-//         List<Result> results = question.results!;
-//         for (int i = 0; i < results.length; i++) {
-//           Questions questions = Questions(id: primaryKey,
-//             category: results[i].category,
-//             type: results[i].type,
-//             difficulty: results[i].difficulty,
-//             question: results[i].question,
-//             correctAnswer: results[i].correctAnswer,
-//             incorrectOne: results[i].incorrectAnswers![0],
-//             incorrectTwo: results[i].incorrectAnswers!.length > 1 ? results[i]
-//                 .incorrectAnswers![1] : '',
-//             incorrectThree: results[i].incorrectAnswers!.length > 2 ? results[i]
-//                 .incorrectAnswers![2] : '',);
+//       for (int i = 0; i < results.length; i++) {
+//         Questions questions = Questions(
+//           category: stringToBase64.decode(results[i].category!),
+//           type: stringToBase64.decode(results[i].type!),
+//           difficulty: stringToBase64.decode(results[i].difficulty!),
+//           question: stringToBase64.decode(results[i].question!),
+//           correctAnswer: stringToBase64.decode(results[i].correctAnswer!),
+//           incorrectOne: stringToBase64.decode(results[i].incorrectAnswers![0]),
+//           incorrectTwo: results[i].incorrectAnswers!.length > 1
+//               ? stringToBase64.decode(results[i].incorrectAnswers![1])
+//               : '',
+//           incorrectThree: results[i].incorrectAnswers!.length > 2
+//               ? stringToBase64.decode(results[i].incorrectAnswers![2])
+//               : '',
+//         );
+//         try {
 //           insertQuestions(questions, database);
-//           primaryKey++;
+//         } catch(e) {
+//           print('could not insert into database $e');
 //         }
+//         primaryKey++;
 //       }
 //     }
 //   }
-//
-//   static Future<List<Questions>> getQuestionsFromDatabase(Database database, int offSet) async {
-//     final db = database;
-//
-//     final List<Map<String, dynamic>> maps = await db.query('questions', limit: 10, offset: offSet);
-//
-//     return List.generate(maps.length, (i) {
-//       return Questions(
-//         id: maps[i]['id'],
-//         category: maps[i]['category'],
-//         type: maps[i]['type'],
-//         difficulty: maps[i]['difficulty'],
-//         question: maps[i]['question'],
-//         correctAnswer: maps[i]['correctAnswer'],
-//         incorrectOne: maps[i]['incorrectone'],
-//         incorrectTwo: maps[i]['incorrecttwo'],
-//         incorrectThree: maps[i]['incorrectthree'],
-//       );
-//     });
-//   }
 // }
+//

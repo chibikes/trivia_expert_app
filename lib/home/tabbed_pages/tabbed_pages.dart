@@ -45,7 +45,7 @@ class _TabbedState extends State<HomePage> {
         appBar: AppBar(
           toolbarHeight: 70,
           backgroundColor: Color(0xff1e4b7a),
-          title: const Text('Login'),
+          title: const Text('Trivia Expert'),
         ),
         body: MainPageContainer(
           child: RepositoryProvider.value(

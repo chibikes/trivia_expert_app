@@ -2,10 +2,12 @@ import 'package:repo_packages/repo_packakges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/splash/view/splash_page.dart';
 import 'package:trivia_expert_app/theme.dart';
 import 'authentication/authentication.dart';
-import 'home/home_pages/tabbed_pages.dart';
+import 'package:trivia_expert_app/home/tabbed_pages/tabbed_pages.dart';
 import 'login/view/login_page.dart';
 import 'main_bloc/cubit/main_page_bloc.dart';
 
@@ -31,6 +33,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
           BlocProvider(create: (_)=> QuestionBloc()..add(QuestionsFetched()), lazy: false,),
+          BlocProvider(create: (_)=> ShopCubit(ShopState()),),
         ],
         child: AppView(),
       ),
