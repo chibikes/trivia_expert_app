@@ -51,7 +51,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
     return BlocBuilder<GameEndCubit, GameEndState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xffF8F0E3),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(

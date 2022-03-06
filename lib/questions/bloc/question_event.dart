@@ -9,7 +9,19 @@ abstract class QuestionEvent extends Equatable {
 }
 
 class QuestionsFetched extends QuestionEvent {
-   static int offSet = 0;
+
 
 }
-class QuestionsFetchedOffline extends QuestionEvent {}
+class RetrieveOffset extends QuestionEvent {
+
+}
+
+class SaveOffset extends QuestionEvent {
+
+}
+
+class UpdateOffset extends QuestionEvent {
+  final int offset;
+
+  UpdateOffset(this.offset);
+}

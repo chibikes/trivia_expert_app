@@ -1,22 +1,15 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
-import 'package:trivia_expert_app/mock_questions.dart';
-import 'package:trivia_expert_app/questions/databaase_operations.dart';
-import 'package:trivia_expert_app/questions/models/question.dart';
 import 'package:questions_repository/questions_repository.dart';
-import 'package:path/path.dart';
-import 'package:trivia_expert_app/questions/models/trivia.dart';
 part 'question_event.dart';
 part 'question_state.dart';
 
 class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
-  //TODO: rename class to GameBloc. it should have game failure and game success as statuses
+  final prefs = SharedPreferences.getInstance();
 
   QuestionBloc({required QuestionRepository questionRepository})
       : _questionRepository = questionRepository,
@@ -37,16 +30,26 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
   @override
   Stream<QuestionState> mapEventToState(QuestionEvent event) async* {
     if (event is QuestionsFetched) {
-      yield await _mapQuestionFetchedToState(state, QuestionsFetched.offSet);
+      yield await _mapQuestionFetchedToState(state);
+    }
+    else if(event is RetrieveOffset) {
+      yield await _retrieveOffset();
+    }
+    else if(event is SaveOffset) {
+      await _saveOffset();
+    }
+    else if(event is UpdateOffset) {
+      _updateOffset(event.offset);
     }
   }
 
   Future<QuestionState> _mapQuestionFetchedToState(
-      QuestionState state, int offSet) async {
+      QuestionState state) async {
+    add(RetrieveOffset());
     try {
       if (state.status == QuestionStatus.initial) {
         List<String> answers = [];
-        final questions = await _fetchQuestions(offSet);
+        final questions = await _fetchQuestions();
         for (Questions question in questions) {
           answers = question.answers!;
           answers.add(question.correctAnswer!);
@@ -59,7 +62,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
             questions: questions,
             hasReachedMax: _hasReachedMax(questions.length));
       }
-      final questions = await _fetchQuestions(offSet);
+      final questions = await _fetchQuestions();
       return questions.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -73,13 +76,13 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     }
   }
 
-  Future<List<Questions>> _fetchQuestions(int offSet) async {
-    Future<List<Questions>> questions = retrieveQuestionsFromDatabase();
+  Future<List<Questions>> _fetchQuestions() async {
+    List<Questions> questions = await retrieveQuestionsFromDatabase();
     return questions;
   }
 
   bool _hasReachedMax(int postCount) =>
-      false; // TODO: if has reached max ? q = 0
+      false; // TODO: delete hasREachedmax
   Future<List<Questions>> retrieveQuestionsFromDatabase() async {
     List<TriviaQuestion> triviaQuestions =
         await _questionRepository.fetchQuestions(state.offset);
@@ -99,5 +102,20 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
             triviaQuestions[index].incorrectThree!
           ]),
     );
+  }
+
+  Future<QuestionState> _retrieveOffset() async {
+    int? offset;
+    prefs.then((value) => offset = value.getInt('offset'));
+    return state.copyWith(offset: offset ?? state.offset);
+  }
+
+  Future<void> _saveOffset() async {
+    return prefs.then((value) => value.setInt('offset', state.offset));
+  }
+
+  Stream<void> _updateOffset(int offset) async* {
+    yield state.copyWith(offset: offset);
+    add(QuestionsFetched());
   }
 }

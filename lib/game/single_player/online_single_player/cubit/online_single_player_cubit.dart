@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 
@@ -8,6 +9,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   OnlineSinglePlayerCubit(OnlineSinglePlayerState state) : super(state);
   StreamSubscription? _timeSubscription;
   final Ticker _ticker = Ticker();
+  final prefs = SharedPreferences.getInstance();
 
   Future<void> startTimer() async {
     if (_timeSubscription != null) {
@@ -21,6 +23,14 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
 
   Future<void> stopTimer() async {
     await _timeSubscription?.cancel();
+  }
+  void retrieveIndex() {
+    int? index;
+    prefs.then((value) => index = value.getInt('index'));
+    emit(state.copyWith(index: index ?? state.index));
+  }
+  void saveIndex() {
+    prefs.then((value) => value.setInt('index', state.index));
   }
 
   void correctButtonSelected() {

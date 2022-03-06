@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:rive/rive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game.dart';
@@ -29,6 +30,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
+  final prefs = SharedPreferences.getInstance();
   late final AnimationController? _multiButtonMotionController = AnimationController( /// controls all motions  of all the  buttons
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -59,7 +61,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // isButtonTapped = false;
     _loadRiveFile();
     AnimationHelper.initControllers(this);
     // context.read<GamePlayCubit>().initializeState(
@@ -69,7 +70,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     //     );
     _multiButtonMotionController?.reset();
     context.read<OnlineSinglePlayerCubit>().startTimer();
+    context.read<OnlineSinglePlayerCubit>().retrieveIndex();
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    context.read<OnlineSinglePlayerCubit>().saveIndex();
+    context.read<QuestionBloc>().add(SaveOffset());
+    super.deactivate();
   }
 
   @override
@@ -83,6 +92,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
               var question = gameState.questions[gameState.index];
+              if(gameState.index == gameState.questions.length - 1) {
+                /// offset should be multiples of database limit parameter.
+                context.read<QuestionBloc>().add(UpdateOffset(questionState.offset + 50));
+              }
               if (gameState.time == 0) {
                 //TODO: verify that it's close(); that you need
                 context.read<OnlineSinglePlayerCubit>().close();
