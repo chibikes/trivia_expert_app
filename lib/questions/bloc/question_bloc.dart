@@ -34,21 +34,23 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     }
     else if(event is RetrieveOffset) {
       yield await _retrieveOffset();
+      add(QuestionsFetched());
     }
-    else if(event is SaveOffset) {
-      await _saveOffset();
-    }
+
     else if(event is UpdateOffset) {
-      _updateOffset(event.offset);
+      yield await _updateOffset(event.offset);
+      add(QuestionsFetched());
+    }
+    else if(event is FetchingQuestions) {
+      yield state.copyWith(status: QuestionStatus.inProgress);
     }
   }
 
   Future<QuestionState> _mapQuestionFetchedToState(
       QuestionState state) async {
-    add(RetrieveOffset());
     try {
-      if (state.status == QuestionStatus.initial) {
         List<String> answers = [];
+
         final questions = await _fetchQuestions();
         for (Questions question in questions) {
           answers = question.answers!;
@@ -61,15 +63,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
             status: QuestionStatus.success,
             questions: questions,
             hasReachedMax: _hasReachedMax(questions.length));
-      }
-      final questions = await _fetchQuestions();
-      return questions.isEmpty
-          ? state.copyWith(hasReachedMax: true)
-          : state.copyWith(
-              status: QuestionStatus.success,
-              questions: List.of(state.questions)..addAll(questions),
-              hasReachedMax: _hasReachedMax(questions.length),
-            );
+
     } on Exception catch (e) {
       print('error: $e');
       return state.copyWith(status: QuestionStatus.failure);
@@ -85,7 +79,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       false; // TODO: delete hasREachedmax
   Future<List<Questions>> retrieveQuestionsFromDatabase() async {
     List<TriviaQuestion> triviaQuestions =
-        await _questionRepository.fetchQuestions(state.offset);
+        await _questionRepository.fetchQuestions(state.offset, state.limit);
 
     return List.generate(
       triviaQuestions.length,
@@ -106,16 +100,13 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
 
   Future<QuestionState> _retrieveOffset() async {
     int? offset;
-    prefs.then((value) => offset = value.getInt('offset'));
+    await prefs.then((value) => offset = value.getInt('offset'));
     return state.copyWith(offset: offset ?? state.offset);
   }
 
-  Future<void> _saveOffset() async {
-    return prefs.then((value) => value.setInt('offset', state.offset));
-  }
 
-  Stream<void> _updateOffset(int offset) async* {
-    yield state.copyWith(offset: offset);
-    add(QuestionsFetched());
+  Future<QuestionState> _updateOffset(int offset)  async {
+    await prefs.then((value) => value.setInt('offset', offset));
+    return state.copyWith(offset: offset);
   }
 }

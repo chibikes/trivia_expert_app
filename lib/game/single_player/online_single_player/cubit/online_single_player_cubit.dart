@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
+import 'package:trivia_expert_app/main_models/questions.dart';
 
 class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   OnlineSinglePlayerCubit(OnlineSinglePlayerState state) : super(state);
@@ -24,13 +25,14 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   Future<void> stopTimer() async {
     await _timeSubscription?.cancel();
   }
-  void retrieveIndex() {
+  void retrieveIndex() async{
     int? index;
-    prefs.then((value) => index = value.getInt('index'));
+    await  prefs.then((value) => index = value.getInt('index'));
     emit(state.copyWith(index: index ?? state.index));
   }
-  void saveIndex() {
-    prefs.then((value) => value.setInt('index', state.index));
+  void saveIndex(int index) async {
+    await prefs.then((value) => value.setInt('index', index));
+    emit(state.copyWith(index: index));
   }
 
   void correctButtonSelected() {
@@ -52,7 +54,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     });
   }
 
-  void answerValidate(int buttonSelected) {
+  void validateAnswer(int buttonSelected) {
     var question = state.questions[state.index];
     var score = state.playerScore;
     var answer = question.answers![buttonSelected];
@@ -81,6 +83,10 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   Future<void> close() {
     _timeSubscription?.cancel();
     return super.close();
+  }
+
+  void emitQuestions(List<Questions> questions, int index) {
+    emit(state.copyWith(questions: questions, index: index));
   }
 }
 

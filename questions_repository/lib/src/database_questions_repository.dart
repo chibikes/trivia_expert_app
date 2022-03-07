@@ -8,9 +8,9 @@ class DatabaseQuestionsRepository implements QuestionRepository {
 
 
   @override
-  Future <List<TriviaQuestion>> fetchQuestions(int offset) async {
+  Future <List<TriviaQuestion>> fetchQuestions(int offset, int limit) async {
     await initDatabase();
-    final List<Map<String, dynamic>> maps = await _database!.query('trivia_questions', limit: 50, offset: offset);
+    final List<Map<String, dynamic>> maps = await _database!.query('trivia_questions', limit: limit, offset: offset);
 
     return List.generate(maps.length, (i) {
       return TriviaQuestion(

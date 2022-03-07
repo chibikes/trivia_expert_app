@@ -10,15 +10,19 @@ import 'package:http/http.dart' as http;
 class OnlineSinglePlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green,
-      body: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: BlocProvider(
-          create: (_) => OnlineSinglePlayerCubit(OnlineSinglePlayerState(questions: context.read<QuestionBloc>().state.questions)),
-          child: GamePage(),
-        ),
-      ),
+    return BlocBuilder<QuestionBloc, QuestionState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: state.status == QuestionStatus.inProgress ? Colors.lightBlueAccent : Colors.green,
+          body: Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: BlocProvider(
+              create: (_) => OnlineSinglePlayerCubit(OnlineSinglePlayerState()),
+              child: GamePage(),
+            ),
+          ),
+        );
+      }
     );
   }
 

@@ -23,7 +23,9 @@ import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({Key? key,}) : super(key: key);
+  const GamePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -31,7 +33,9 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   final prefs = SharedPreferences.getInstance();
-  late final AnimationController? _multiButtonMotionController = AnimationController( /// controls all motions  of all the  buttons
+  late final AnimationController? _multiButtonMotionController =
+      AnimationController(
+    /// controls all motions  of all the  buttons
     duration: const Duration(seconds: 2),
     vsync: this,
   );
@@ -76,191 +80,220 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   @override
   void deactivate() {
-    context.read<OnlineSinglePlayerCubit>().saveIndex();
-    context.read<QuestionBloc>().add(SaveOffset());
+    context
+        .read<OnlineSinglePlayerCubit>()
+        .saveIndex(context.read<OnlineSinglePlayerCubit>().state.index);
     super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
-    //TODO: move questionbloc up the widget tree!..
-    return BlocBuilder<QuestionBloc, QuestionState>(builder: (context, questionState) {
+    //TODO: delete this bloc builder and use the one in the main gamepage
+    return BlocBuilder<QuestionBloc, QuestionState>(
+        builder: (context, questionState) {
       switch (questionState.status) {
+        case QuestionStatus.inProgress:
+          return SizedBox(
+              height: 50, width: 50, child: CircularProgressIndicator());
+        //TODO: add circular indicator for inProgress status
         case QuestionStatus.failure:
           return const Center(child: Text('failed to get questions'));
         case QuestionStatus.success:
+          //TODO: should usually emit from savedIndex
+          context
+              .read<OnlineSinglePlayerCubit>()
+              .emitQuestions(questionState.questions, 0);
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
-              var question = gameState.questions[gameState.index];
-              if(gameState.index == gameState.questions.length - 1) {
+              if (gameState.index >= gameState.questions.length - 1) {
                 /// offset should be multiples of database limit parameter.
-                context.read<QuestionBloc>().add(UpdateOffset(questionState.offset + 50));
+                /// the question should be inclusive of the last question
+                //context.read<OnlineSinglePlayerCubit>().saveIndex(0);
+                context.read<QuestionBloc>().add(FetchingQuestions());
+                context.read<QuestionBloc>().add(
+                    UpdateOffset(questionState.offset + questionState.limit));
               }
+              var question = gameState.questions[gameState.index];
               if (gameState.time == 0) {
                 //TODO: verify that it's close(); that you need
                 context.read<OnlineSinglePlayerCubit>().close();
                 return FinishedGame();
               } else
-              return Stack(
-                children: [
-                  _artboard != null
-                      ? Rive(
-                          artboard: _artboard!,
-                          fit: BoxFit.cover,
-                        )
-                      : Container(),
-                  Column(
-                    children: [
-                      Text('category: ' +
-                          questionState.questions[gameState.index].category!),
-                      // Animated
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage: NetworkImage(context
-                                      .read<MainBloc>()
-                                      .state
-                                      .user!
-                                      .photo!),
-                                ),
-                                Text(''), //TODO: put player score here.
-                              ],
+                return Stack(
+                  children: [
+                    _artboard != null
+                        ? Rive(
+                            artboard: _artboard!,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(),
+                    Column(
+                      children: [
+                        Text('category: ' +
+                            questionState.questions[gameState.index].category!),
+                        // Animated
+                        Padding(
+                          padding: EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(context
+                                        .read<MainBloc>()
+                                        .state
+                                        .user!
+                                        .photo!),
+                                  ),
+                                  Text(''), //TODO: put player score here.
+                                ],
+                              ),
+                              Clock(
+                                width: 0.16 * MediaQuery.of(context).size.width,
+                                height:
+                                    0.16 * MediaQuery.of(context).size.width,
+                                text: gameState.time < 10 ? '00:0${gameState.time}':'00:${gameState.time}',
+                              ),
+                              Text(
+                                '${gameState.playerScore}',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              RedLifeCrystal(
+                                height: 30,
+                                width: 30,
+                              ),
+                              CheckMark(
+                                height: 30,
+                                width: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ChalkBoard(
+                          height: chalkBoardHeight,
+                          width: chalkBoardWidth,
+                          widget: Padding(
+                            padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                            child: Text(
+                              questionState
+                                  .questions[gameState.index].question!,
+                              style: GoogleFonts.aleo(
+                                  textStyle: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              )),
                             ),
-                            Clock(
-                              width: 50.0,
-                              height: 50.0,
-                              widget: Text(
-                                '00:${gameState.time}',
-                                style: GoogleFonts.aladin(
-                                    fontWeight: FontWeight.w400, fontSize: 15),
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 50,
+                        ),
+                        AnimatedCustomButton(
+                          onTap: () {
+                            context
+                                .read<OnlineSinglePlayerCubit>()
+                                .validateAnswer(0);
+                          },
+                          color: gameState.colors[0],
+                          interval: Interval(0.0, 1.0, curve: Curves.elasticIn),
+                          multiButtonMotionController:
+                              _multiButtonMotionController,
+                          isAnswerEmpty: question.answers![0] == '',
+                          animationController: AnimationHelper.controllerOne,
+                          child: Text(question.answers![0],
+                              style: MyTextStyle.style),
+                        ),
+                        SizedBox(height: question.answers![1] == '' ? 0 : 10),
+                        AnimatedCustomButton(
+                          onTap: () {
+                            context
+                                .read<OnlineSinglePlayerCubit>()
+                                .validateAnswer(1);
+                          },
+                          color: gameState.colors[1],
+                          interval:
+                              Interval(0.25, 1.0, curve: Curves.elasticIn),
+                          multiButtonMotionController:
+                              _multiButtonMotionController,
+                          isAnswerEmpty: question.answers![1] == '',
+                          animationController: AnimationHelper.controllerTwo,
+                          child: Text(
+                            question.answers![1],
+                            style: MyTextStyle.style,
+                          ),
+                        ),
+                        SizedBox(height: question.answers![2] == '' ? 0 : 10),
+                        AnimatedCustomButton(
+                          onTap: () {
+                            context
+                                .read<OnlineSinglePlayerCubit>()
+                                .validateAnswer(2);
+                          },
+                          color: gameState.colors[2],
+                          interval:
+                              Interval(0.50, 1.0, curve: Curves.elasticIn),
+                          multiButtonMotionController:
+                              _multiButtonMotionController,
+                          isAnswerEmpty: question.answers![2] == '',
+                          animationController: AnimationHelper.controllerThree,
+                          child: Text(
+                            question.answers![2],
+                            style: MyTextStyle.style,
+                          ),
+                        ),
+                        SizedBox(height: question.answers![3] == '' ? 0 : 10),
+                        AnimatedCustomButton(
+                          onTap: () {
+                            context
+                                .read<OnlineSinglePlayerCubit>()
+                                .validateAnswer(3);
+                          },
+                          color: gameState.colors[3],
+                          interval:
+                              Interval(0.75, 1.0, curve: Curves.elasticIn),
+                          multiButtonMotionController:
+                              _multiButtonMotionController,
+                          isAnswerEmpty: question.answers![3] == '',
+                          animationController: AnimationHelper.controllerFour!,
+                          child: Text(question.answers![3],
+                              style: MyTextStyle.style),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Expanded(
+                          child: Card(
+                            color: Colors.blueAccent,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                      '1. Answer all questions in the science category\n '),
+                                  Text(
+                                      '2. Beat the threshold time: that is score 30 > 40'),
+                                ],
                               ),
                             ),
-                            Text('${gameState.playerScore}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            RedLifeCrystal(height: 30, width: 30,),
-                            CheckMark(height: 30, width: 30,),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ChalkBoard(
-                        height: chalkBoardHeight,
-                        width: chalkBoardWidth,
-                        widget: Padding(
-                          padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                          child: Text(
-                            questionState.questions[gameState.index].question!,
-                            style: GoogleFonts.aleo(
-                                textStyle: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            )),
+                            elevation: 8.0,
                           ),
                         ),
-                      ),
-
-                      SizedBox(
-                        height: 50,
-                      ),
-                      AnimatedCustomButton(
-                        onTap: () {context.read<OnlineSinglePlayerCubit>().answerValidate(0);},
-                        color: gameState.colors[0],
-                        interval: Interval(0.0, 1.0, curve: Curves.elasticIn),
-                        multiButtonMotionController: _multiButtonMotionController,
-                        isAnswerEmpty:
-                            question.answers![0] == '',
-                        animationController: AnimationHelper.controllerOne,
-                        child: Text(question.answers![0],
-                            style: MyTextStyle.style),
-                      ),
-                      SizedBox(
-                          height: question.answers![1] == ''
-                              ? 0
-                              : 10),
-                      AnimatedCustomButton(
-                        onTap: () {context.read<OnlineSinglePlayerCubit>().answerValidate(1);},
-                        color: gameState.colors[1],
-                        interval: Interval(0.25, 1.0, curve: Curves.elasticIn),
-                        multiButtonMotionController: _multiButtonMotionController,
-                        isAnswerEmpty:
-                            question.answers![1] ==
-                                '',
-                        animationController:
-                            AnimationHelper.controllerTwo,
-                        child: Text(
-                          question.answers![1],
-                          style: MyTextStyle.style,
-                        ),
-                      ),
-                      SizedBox(
-                          height: question.answers![2] == ''
-                              ? 0
-                              : 10),
-                      AnimatedCustomButton(
-                        onTap: () {context.read<OnlineSinglePlayerCubit>().answerValidate(2);},
-                        color: gameState.colors[2],
-                        interval: Interval(0.50, 1.0, curve: Curves.elasticIn),
-                        multiButtonMotionController: _multiButtonMotionController,
-                        isAnswerEmpty:
-                            question.answers![2] == '',
-                        animationController:
-                            AnimationHelper.controllerThree,
-                        child: Text(
-                          question.answers![2],
-                          style: MyTextStyle.style,
-                        ),
-                      ),
-                      SizedBox(
-                          height: question.answers![3] == ''
-                              ? 0
-                              : 10),
-                      AnimatedCustomButton(
-                        onTap: () {context.read<OnlineSinglePlayerCubit>().answerValidate(3);},
-                        color: gameState.colors[3],
-                        interval: Interval(0.75, 1.0, curve: Curves.elasticIn),
-                        multiButtonMotionController: _multiButtonMotionController,
-                        isAnswerEmpty:
-                            question.answers![3] == '',
-                        animationController:
-                            AnimationHelper.controllerFour!,
-                        child: Text(
-                            question.answers![3],
-                            style: MyTextStyle.style),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Expanded(
-                        child: Card(
-                          color: Colors.blueAccent,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                    '1. Answer all questions in the science category\n '),
-                                Text(
-                                    '2. Beat the threshold time: that is score 30 > 40'),
-                              ],
-                            ),
-                          ),
-                          elevation: 8.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
+                      ],
+                    ),
+                  ],
+                );
             },
           );
         default:
@@ -277,5 +310,4 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     AnimationHelper.disposeControllers();
     super.dispose();
   }
-
 }

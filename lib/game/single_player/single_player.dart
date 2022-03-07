@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
+import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 import 'online_single_player/view/online_single_player.dart';
@@ -30,21 +31,12 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
           children: [
             CircleAvatar(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Stack(
                   children: [
-                    CircularPads(
-                      radius: 50.0,
-                      text: '',
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: FaIcon(
-                        Icons.info_outline,
-                        size: 18,
-                      ),
-                    ),
+                    Crystal(height: 45, width: 45,),
+                    Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
                   ],
                 ),
                 SizedBox(
@@ -52,22 +44,19 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
                 ),
                 Stack(
                   children: [
-                    CircularPads(
-                      radius: 50.0,
-                      text: '',
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: FaIcon(
-                        Icons.info_outline,
-                        size: 18,
-                      ),
-                    ),
+                    RedLifeCrystal(height: 45, width: 45,),
+                    Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
                   ],
                 ),
                 SizedBox(
-                  width: 20.0,
-                )
+                  width: 5.0,
+                ),
+                Stack(
+                  children: [
+                    CheckMark(height: 45, width: 45,),
+                    Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
+                  ],
+                ),
               ],
             ),
             SizedBox(
