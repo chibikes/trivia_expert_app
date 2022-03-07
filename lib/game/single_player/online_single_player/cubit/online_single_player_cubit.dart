@@ -37,20 +37,21 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
 
   void correctButtonSelected() {
     /// will the code be simpler without this cubit ? !
-    emit(state.copyWith(status: GameStatus.correct));
+    // emit(state.copyWith(gameStatus: GameStatus.correct));
   }
 
   void wrongButtonSelected() {
-    emit(state.copyWith(status: GameStatus.incorrect));
+    // emit(state.copyWith(gameStatus: GameStatus.incorrect));
   }
 
   Future<void> updateQuestion(int score) {
     List<Color> colors = List.filled(4, Colors.white);
     //TODO: make duration parameter smaller
     //TODO: each new question will have a time of 3 seconds
+    bool reachedQuestionsEnd = state.index == state.questions.length-1;
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
-          playerScore: score, colors: colors, index: state.index + 1));
+          playerScore: score, colors: colors, index: reachedQuestionsEnd ? state.index : state.index + 1, gameStatus: reachedQuestionsEnd? GameStatus.getQuestions : state.gameStatus));
     });
   }
 
@@ -85,8 +86,8 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     return super.close();
   }
 
-  void emitQuestions(List<Questions> questions, int index) {
-    emit(state.copyWith(questions: questions, index: index));
+  void emitQuestions(List<Questions> questions, int index, GameStatus status) {
+    emit(state.copyWith(questions: questions, index: index, gameStatus: status));
   }
 }
 

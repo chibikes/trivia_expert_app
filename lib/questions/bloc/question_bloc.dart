@@ -106,7 +106,8 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
 
 
   Future<QuestionState> _updateOffset(int offset)  async {
+    //TODO : check to see inProgress should be emitting
     await prefs.then((value) => value.setInt('offset', offset));
-    return state.copyWith(offset: offset);
+    return state.copyWith(offset: offset, status: QuestionStatus.inProgress);
   }
 }

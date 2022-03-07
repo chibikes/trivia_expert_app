@@ -13,7 +13,7 @@ class OnlineSinglePlayer extends StatelessWidget {
     return BlocBuilder<QuestionBloc, QuestionState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: state.status == QuestionStatus.inProgress ? Colors.lightBlueAccent : Colors.green,
+          backgroundColor: state.status == QuestionStatus.inProgress ? Color(0xff81d4fa) : Colors.green,
           body: Padding(
             padding: const EdgeInsets.all(0.0),
             child: BlocProvider(

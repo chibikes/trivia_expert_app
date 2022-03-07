@@ -93,8 +93,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         builder: (context, questionState) {
       switch (questionState.status) {
         case QuestionStatus.inProgress:
-          return SizedBox(
-              height: 50, width: 50, child: CircularProgressIndicator());
+          return Center(
+            child: SizedBox(
+                height: 50, width: 50, child: CircularProgressIndicator()),
+          );
         //TODO: add circular indicator for inProgress status
         case QuestionStatus.failure:
           return const Center(child: Text('failed to get questions'));
@@ -102,10 +104,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           //TODO: should usually emit from savedIndex
           context
               .read<OnlineSinglePlayerCubit>()
-              .emitQuestions(questionState.questions, 0);
+              .emitQuestions(questionState.questions, 0, GameStatus.inProgress);
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
-              if (gameState.index >= gameState.questions.length - 1) {
+              if (gameState.gameStatus == GameStatus.getQuestions) {
                 /// offset should be multiples of database limit parameter.
                 /// the question should be inclusive of the last question
                 //context.read<OnlineSinglePlayerCubit>().saveIndex(0);
@@ -202,9 +204,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                         AnimatedCustomButton(
                           onTap: () {
-                            context
-                                .read<OnlineSinglePlayerCubit>()
-                                .validateAnswer(0);
+                            if(gameState.gameStatus != GameStatus.getQuestions){
+                              context
+                                  .read<OnlineSinglePlayerCubit>()
+                                  .validateAnswer(0);
+                            }
                           },
                           color: gameState.colors[0],
                           interval: Interval(0.0, 1.0, curve: Curves.elasticIn),
@@ -218,9 +222,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         SizedBox(height: question.answers![1] == '' ? 0 : 10),
                         AnimatedCustomButton(
                           onTap: () {
-                            context
-                                .read<OnlineSinglePlayerCubit>()
-                                .validateAnswer(1);
+                            if(gameState.gameStatus != GameStatus.getQuestions){
+                              context
+                                  .read<OnlineSinglePlayerCubit>()
+                                  .validateAnswer(1);
+                            }
                           },
                           color: gameState.colors[1],
                           interval:
@@ -237,9 +243,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         SizedBox(height: question.answers![2] == '' ? 0 : 10),
                         AnimatedCustomButton(
                           onTap: () {
-                            context
-                                .read<OnlineSinglePlayerCubit>()
-                                .validateAnswer(2);
+                            if(gameState.gameStatus != GameStatus.getQuestions){
+                              context
+                                  .read<OnlineSinglePlayerCubit>()
+                                  .validateAnswer(2);
+                            }
                           },
                           color: gameState.colors[2],
                           interval:
@@ -256,9 +264,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         SizedBox(height: question.answers![3] == '' ? 0 : 10),
                         AnimatedCustomButton(
                           onTap: () {
-                            context
-                                .read<OnlineSinglePlayerCubit>()
-                                .validateAnswer(3);
+                            if(gameState.gameStatus != GameStatus.getQuestions){
+                              context
+                                  .read<OnlineSinglePlayerCubit>()
+                                  .validateAnswer(3);
+                            }
                           },
                           color: gameState.colors[3],
                           interval:

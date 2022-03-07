@@ -4,7 +4,7 @@ import 'package:trivia_expert_app/const.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 
-enum GameStatus { correct, incorrect, inprogress, timeout }
+enum GameStatus {getQuestions, inProgress, timeout}
 
 /// should correct and incorrect be states? let's find out.
 
@@ -13,7 +13,7 @@ class OnlineSinglePlayerState extends Equatable {
     this.colors = const [Colors.white, Colors.white, Colors.white, Colors.white,],
     this.index = 0,
     this.questions = const [],
-    this.gameStatus = GameStatus.inprogress,
+    this.gameStatus = GameStatus.inProgress,
     this.playerScore = 0,
     this.time = kTotalGameTime,
     this.gameStats = const {},
@@ -28,7 +28,7 @@ class OnlineSinglePlayerState extends Equatable {
   final Map<String, int> gameStats;
 
   OnlineSinglePlayerState copyWith({
-    GameStatus? status,
+    GameStatus? gameStatus,
     int? playerScore,
     List<Questions>? questions,
     int? index,
@@ -36,7 +36,7 @@ class OnlineSinglePlayerState extends Equatable {
     int? time,
   }) {
     return OnlineSinglePlayerState(
-      gameStatus: status ?? this.gameStatus,
+      gameStatus: gameStatus ?? this.gameStatus,
       playerScore: playerScore ?? this.playerScore,
       index: index ?? this.index,
       colors: colors ?? this.colors,
@@ -46,5 +46,5 @@ class OnlineSinglePlayerState extends Equatable {
   }
 
   @override
-  List<Object> get props => [playerScore, questions, colors, index, time];
+  List<Object> get props => [gameStatus, playerScore, questions, colors, index, time];
 }
