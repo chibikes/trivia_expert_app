@@ -1,20 +1,20 @@
 import 'package:equatable/equatable.dart';
 
 class ShopState extends Equatable {
-  final int blueDiamonds;
-  final int redDiamonds;
+  final int blueCrystals;
+  final int redCrystals;
   final int rightAnswers;
 
-  ShopState({this.blueDiamonds = 0, this.redDiamonds = 0, this.rightAnswers = 0});
+  ShopState({this.blueCrystals = 0, this.redCrystals = 0, this.rightAnswers = 0});
 
   ShopState copyWith({int? blueDiamonds, int? redDiamonds, int? rightAnswers}) {
     return ShopState(
-      blueDiamonds: blueDiamonds ?? this.blueDiamonds,
-      redDiamonds: redDiamonds ?? this.redDiamonds,
+      blueCrystals: blueDiamonds ?? this.blueCrystals,
+      redCrystals: redDiamonds ?? this.redCrystals,
       rightAnswers: rightAnswers ?? this.rightAnswers,
     );
 }
   @override
-  List<Object?> get props => [blueDiamonds, redDiamonds, rightAnswers];
+  List<Object?> get props => [blueCrystals, redCrystals, rightAnswers];
 
 }

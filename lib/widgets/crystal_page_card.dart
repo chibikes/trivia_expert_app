@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
+enum ItemType{redCrystal, blueCrystal, rightAnswer}
 class PaYInfoWidget extends StatelessWidget {
   final RotationStack rotationStack;
   final Widget? currencyIcon;
@@ -12,7 +15,8 @@ class PaYInfoWidget extends StatelessWidget {
   final void Function() onTap;
   final positions;
   final rotations;
-  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.amount = 0, required this.onTap, this.positions, this.rotations, this.itemType = '', this.currency = '', this.currencyIcon, this.widgetItem,}) : super(key: key);
+  final ItemType itemTypes;
+  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.amount = 0, required this.onTap, this.positions, this.rotations, this.itemType = '', this.currency = '', this.currencyIcon, this.widgetItem, this.itemTypes = ItemType.blueCrystal,}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +34,9 @@ class PaYInfoWidget extends StatelessWidget {
           ],
         ),
         ElevatedButton(
-          onPressed: onTap,
+          onPressed: () {
+            context.read<ShopCubit>().buyItem(noOfItems, amount, itemTypes);
+          },
           child: Text('Buy'),
         )
       ],
