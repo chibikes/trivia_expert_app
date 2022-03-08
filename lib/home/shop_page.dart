@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
+import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import 'dart:math' as math;
@@ -16,27 +18,26 @@ class ShopPage extends StatefulWidget {
 class ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShopCubit, ShopState>(
-      builder: (context, state) {
-        return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: Colors.deepPurple,
-            appBar: AppBar(
-              bottom: TabBar(
-                tabs: [Text('POWERUPS'), Text('CRYSTALS')],
-              ),
-            ),
-            body: TabBarView(
-              children: [
-                PowerUpPage(),
-                CrystalsPage(),
-              ],
+    return BlocBuilder<ShopCubit, ShopState>(builder: (context, state) {
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          backgroundColor: Colors.deepPurple,
+          appBar: AppBar(
+            toolbarHeight: 0.0,
+            bottom: TabBar(
+              tabs: [Text('POWERUPS'), Text('BLUE CRYSTALS')],
             ),
           ),
-        );
-      }
-    );
+          body: TabBarView(
+            children: [
+              PowerUpPage(),
+              CrystalsPage(),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -62,240 +63,181 @@ class CrystalPageState extends State<CrystalsPage> {
             color: Colors.white,
             border: Border(bottom: BorderSide(color: Colors.black38)),
           ),
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      Crystal(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                RedLifeCrystal(
+                  height: 30,
+                  width: 30,
+                ),
+                BlueCrystal(
+                  width: 30,
+                  height: 30,
+                ),
+                CheckMark(
+                  width: 30,
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(bottom: BorderSide(color: Colors.black38)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    PaYInfoWidget(
+                      onTap: () {},
+                      widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 8,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0, left: 50),
-                        child: Shine(
-                          height: 20,
-                          width: 20,
-                          shineExtra: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text('5 Crystals'),
-                  Text('\$0.99'),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Buy'),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 0.10 * MediaQuery.of(context).size.width,
-              ),
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      Crystal(
+                      rotations: [0.0, math.pi / 8],
+                      positions: [Position(), Position(top: 3.0, left: 18.0)],
+                      noOfItems: 5,
+                      amount: 0.99,
+                      currency: '\$',
+                      itemType: 'crystals',
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    PaYInfoWidget(
+                      onTap: () {},
+                      rotations: [0.0, math.pi / 8, math.pi / 4],
+                      positions: [
+                        Position(),
+                        Position(top: 3.0, left: 18.0),
+                        Position(top: 10.0, left: 30.0)
+                      ],
+                      noOfItems: 10,
+                      amount: 1.99,
+                      currency: '\$',
+                      widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 8,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
+                      itemType: 'crystals',
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    PaYInfoWidget(
+                      onTap: () {},
+                      rotations: [
+                        -math.pi / 8,
+                        math.pi / 8,
+                        -math.pi / 15,
+                        math.pi / 15
+                      ],
+                      positions: [
+                        Position(),
+                        Position(top: 3.0, left: 25.0),
+                        Position(top: 3.0, left: 0.0),
+                        Position(top: 3, left: 18)
+                      ],
+                      noOfItems: 15,
+                      amount: 5.99,
+                      currency: '\$',
+                      widgetItem: BlueCrystal(
+                        width: 50,
+                        height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30.0, top: 10.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 4,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0, left: 50),
-                        child: Shine(
-                          height: 20,
-                          width: 20,
-                          shineExtra: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text('10 Crystals'),
-                  Text('\$1.99'),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Buy'),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 0.10 * MediaQuery.of(context).size.width,
-              ),
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      Transform.rotate(
-                        angle: -math.pi / 8,
-                        child: Crystal(
-                          width: 50,
-                          height: 70,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 8,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: -math.pi / 15,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 15,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text('15 Crystals'),
-                  Text('\$2.99'),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Buy'),
-                  ),
-                ],
-              ),
-            ],
+                      itemType: 'crystals',
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         Container(
           color: Colors.white,
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      Crystal(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    PaYInfoWidget(
+                      onTap: () {},
+                      rotations: [0.0, math.pi / 8],
+                      positions: [Position(), Position(top: 3.0, left: 18.0)],
+                      noOfItems: 20,
+                      amount: 7.99,
+                      currency: '\$',
+                      widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 8,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0, left: 50),
-                        child: Shine(
-                          height: 20,
-                          width: 20,
-                          shineExtra: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text('20 Crystals'),
-                  Text('\$0.99'),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Buy'),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 0.10 * MediaQuery.of(context).size.width,
-              ),
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      Crystal(
+                      itemType: 'crystals',
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    PaYInfoWidget(
+                      onTap: () {},
+                      rotations: [
+                        -math.pi / 15,
+                        -math.pi / 8,
+                        0.0,
+                        math.pi / 8,
+                        math.pi / 15
+                      ],
+                      positions: [
+                        Position(),
+                        Position(top: 3.0, left: 18.0),
+                        Position(top: 3.0, left: 30.0),
+                        Position(top: 3.0, left: 35.0),
+                        Position(top: 3.0, left: 35.0),
+                      ],
+                      noOfItems: 25,
+                      amount: 9.00,
+                      currency: '\$',
+                      widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0, top: 3.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 8,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
+                      itemType: 'crystals',
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    PaYInfoWidget(
+                      onTap: () {},
+                      rotations: [0.0, math.pi / 8],
+                      positions: [
+                        Position(top: 0.0, left: 3.0),
+                        Position(top: 0.0, left: 18.0)
+                      ],
+                      noOfItems: 30,
+                      amount: 12.00,
+                      currency: '\$',
+                      widgetItem: BlueCrystal(
+                        width: 50,
+                        height: 70,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30.0, top: 10.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 4,
-                          child: Crystal(
-                            width: 50,
-                            height: 70,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0, left: 50),
-                        child: Shine(
-                          height: 20,
-                          width: 20,
-                          shineExtra: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text('25 Crystals'),
-                  Text('\$1.99'),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Buy'),
-                  ),
-                ],
-              ),
-            ],
+                      itemType: 'crystals',
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -321,120 +263,82 @@ class PowerUpPageState extends State<PowerUpPage> {
       children: [
         Container(
           color: Colors.white,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        CheckMark(
-                          width: widthCheckMark,
-                          height: heightCheckMark,
-                          smallSize: false,
-                        ),
-                      ],
-                    ),
-                    Text('1-right answer'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      CheckMark(
-                        width: widthCheckMark,
-                        height: heightCheckMark,
-                        smallSize: false,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Transform.rotate(
-                          angle: math.pi / 8,
-                          child: CheckMark(
-                            width: widthCheckMark,
-                            height: heightCheckMark,
-                            smallSize: false,
-                          ),
-                        ),
-                      ),
-                    ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                PaYInfoWidget(
+                  onTap: () {},
+                  widgetItem: CheckMark(
+                    width: widthCheckMark,
+                    height: heightCheckMark,
+                    smallSize: false,
                   ),
-                  Text('2-right answers'),
-                  Row(
-                    children: [
-                      Crystal(
-                        width: widthCrystal,
-                        height: heightCrystal,
-                      ),
-                      Text('5'),
-                    ],
-                  ),
-                  ElevatedButton(onPressed: () {}, child: Text('BUY'))
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        CheckMark(
-                          width: widthCheckMark,
-                          height: heightCheckMark,
-                          smallSize: false,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Transform.rotate(
-                            angle: math.pi / 8,
-                            child: CheckMark(
-                              width: widthCheckMark,
-                              height: heightCheckMark,
-                              smallSize: false,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 0.0),
-                          child: Transform.rotate(
-                            angle: -math.pi / 8,
-                            child: CheckMark(
-                              width: widthCheckMark,
-                              height: heightCheckMark,
-                              smallSize: false,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text('4-right answers'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
+                  rotations: [
+                    0.0
                   ],
+                  positions: [
+                    Position(),
+                  ],
+                  noOfItems: 1,
+                  itemType: 'right answer',
+                  amount: 20,
+                  currencyIcon: BlueCrystal(
+                    height: 10,
+                    width: 10,
+                  ),
                 ),
-              ),
-            ],
+                PaYInfoWidget(
+                  onTap: () {},
+                  widgetItem: CheckMark(
+                    width: widthCheckMark,
+                    height: heightCheckMark,
+                    smallSize: false,
+                  ),
+                  rotations: [
+                    0.0,
+                    math.pi/8
+                  ],
+                  positions: [
+                    Position(),
+                    Position(left: 16.0)
+                  ],
+                  noOfItems: 5,
+                  itemType: 'right answers',
+                  amount: 40,
+                  currencyIcon: BlueCrystal(
+                    height: 10,
+                    width: 10,
+                  ),
+                ),
+                PaYInfoWidget(
+                  onTap: () {},
+                  widgetItem: CheckMark(
+                    width: widthCheckMark,
+                    height: heightCheckMark,
+                    smallSize: false,
+                  ),
+                  rotations: [
+                    0.0,
+                    math.pi/8,
+                    -math.pi/8
+                  ],
+                  positions: [
+                    Position(),
+                    Position(left: 10),
+                    Position(),
+                  ],
+                  noOfItems: 10,
+                  itemType: 'right answer',
+                  amount: 60,
+                  currencyIcon: BlueCrystal(
+                    height: 10,
+                    width: 10,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         SizedBox(
@@ -442,156 +346,81 @@ class PowerUpPageState extends State<PowerUpPage> {
         ),
         Container(
           color: Colors.white,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    FirstAidBox(
-                      width: widthCheckMark,
-                      height: heightCheckMark,
-                      color: Color(0xfff5f5f5),
-                    ),
-                    Text('1-white card'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                PaYInfoWidget(
+                  onTap: () {},
+                  widgetItem: RedLifeCrystal(
+                    height: 70,
+                    width: 50,
+                  ),
+                  rotations: [0.0],
+                  positions: [Position()],
+                  noOfItems: 1,
+                  itemType: 'red crystals',
+                  amount: 5,
+                  currencyIcon: BlueCrystal(
+                    height: 10,
+                    width: 10,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    FirstAidBox(
-                      width: widthCheckMark,
-                      height: heightCheckMark,
-                      color: Colors.green,
-                    ),
-                    Text('1-green card'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
+                PaYInfoWidget(
+                  onTap: () {},
+                  widgetItem: RedLifeCrystal(
+                    height: 70,
+                    width: 50,
+                  ),
+                  rotations: [
+                    -math.pi / 8,
+                    math.pi / 8,
+                    -math.pi / 15,
+                    math.pi / 15
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    RedLifeCrystal(
-                      width: 70,
-                      height: 70,
-                    ),
-                    Text('1-orange card'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
+                  positions: [
+                    Position(),
+                    Position(top: 3.0, left: 25.0),
+                    Position(top: 3.0, left: 0.0),
+                    Position(top: 3, left: 18)
                   ],
+                  noOfItems: 5,
+                  itemType: 'red crystals',
+                  amount: 20,
+                  currencyIcon: BlueCrystal(
+                    height: 10,
+                    width: 10,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 0.05 * MediaQuery.of(context).size.height,
-        ),
-        Container(
-          color: Colors.white,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    FirstAidBox(
-                      width: widthCheckMark,
-                      height: heightCheckMark,
-                      color: Color(0xfff5f5f5),
-                    ),
-                    Text('1-white card'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
+                PaYInfoWidget(
+                  onTap: () {},
+                  widgetItem: RedLifeCrystal(
+                    height: 70,
+                    width: 50,
+                  ),
+                  rotations: [
+                    -math.pi / 8,
+                    math.pi / 8,
+                    -math.pi / 15,
+                    math.pi / 15
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    FirstAidBox(
-                      width: widthCheckMark,
-                      height: heightCheckMark,
-                      color: Colors.green,
-                    ),
-                    Text('1-green card'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
+                  positions: [
+                    Position(),
+                    Position(top: 3.0, left: 25.0),
+                    Position(top: 3.0, left: 0.0),
+                    Position(top: 3, left: 18)
                   ],
+                  noOfItems: 12,
+                  itemType: 'red crystals',
+                  amount: 40,
+                  currencyIcon: BlueCrystal(
+                    height: 10,
+                    width: 10,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    FirstAidBox(
-                      width: widthCheckMark,
-                      height: heightCheckMark,
-                      color: Colors.orange,
-                    ),
-                    Text('1-orange card'),
-                    Row(
-                      children: [
-                        Crystal(
-                          width: widthCrystal,
-                          height: heightCrystal,
-                        ),
-                        Text('5'),
-                      ],
-                    ),
-                    ElevatedButton(onPressed: () {}, child: Text('BUY'))
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

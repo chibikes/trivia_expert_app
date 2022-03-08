@@ -49,14 +49,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   Result? results;
 
-  Artboard? _artboard;
+  Artboard? _artBoard;
   final landscapeFile = 'assets/landscape.riv';
 
   void _loadRiveFile() async {
     await rootBundle.load(landscapeFile).then((data) {
       final file = RiveFile.import(data);
 
-      setState(() => _artboard = file.mainArtboard
+      setState(() => _artBoard = file.mainArtboard
         ..addController(
           SimpleAnimation('moving_clouds'),
         ));
@@ -95,7 +95,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         case QuestionStatus.inProgress:
           return Center(
             child: SizedBox(
-                height: 50, width: 50, child: CircularProgressIndicator()),
+                height: 50, width: 50, child: CircularProgressIndicator(),
+            ),
           );
         //TODO: add circular indicator for inProgress status
         case QuestionStatus.failure:
@@ -104,7 +105,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           //TODO: should usually emit from savedIndex
           context
               .read<OnlineSinglePlayerCubit>()
-              .emitQuestions(questionState.questions, 0, GameStatus.inProgress);
+              .emitQuestions(questionState.questions);
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
               if (gameState.gameStatus == GameStatus.getQuestions) {
@@ -117,15 +118,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               }
               var question = gameState.questions[gameState.index];
               if (gameState.time == 0) {
-                //TODO: verify that it's close(); that you need
-                context.read<OnlineSinglePlayerCubit>().close();
                 return FinishedGame();
               } else
                 return Stack(
                   children: [
-                    _artboard != null
+                    _artBoard != null
                         ? Rive(
-                            artboard: _artboard!,
+                            artboard: _artBoard!,
                             fit: BoxFit.cover,
                           )
                         : Container(),

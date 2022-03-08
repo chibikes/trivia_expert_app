@@ -33,9 +33,11 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Text('TRIVIA EXPERT', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                SizedBox(width: 20.0,),
                 Stack(
                   children: [
-                    Crystal(height: 45, width: 45,),
+                    BlueCrystal(height: 45, width: 45,),
                     Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
                   ],
                 ),

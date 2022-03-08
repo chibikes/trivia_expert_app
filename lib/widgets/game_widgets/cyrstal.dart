@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-class Crystal extends StatelessWidget {
+class BlueCrystal extends StatelessWidget {
   final double? height;
   final double? width;
 
-  const Crystal({Key? key, this.height, this.width}) : super(key: key);
+  const BlueCrystal({Key? key, this.height, this.width}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

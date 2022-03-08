@@ -146,7 +146,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         SizedBox(
                           width: 0.05 * MediaQuery.of(context).size.width,
                         ),
-                        Crystal(
+                        BlueCrystal(
                           height: 30,
                           width: 30,
                         ),

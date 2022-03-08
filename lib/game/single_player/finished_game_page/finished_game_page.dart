@@ -22,6 +22,7 @@ class FinishedGamePage extends StatefulWidget {
 }
 
 class FinishedGamePageState extends State<FinishedGamePage> {
+
   @override
   Widget build(BuildContext context) {
     var gameStats = GameStats.gameStats;
@@ -32,7 +33,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
         child: Text(
           'Category Stats',
           style: GoogleFonts.droidSans(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.w900),
+              fontSize: 20, color: Colors.blueGrey, fontWeight: FontWeight.w900,),
         ),
       ),
     );
@@ -89,7 +90,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
                             'Game Stats',
                             style: GoogleFonts.droidSans(
                                 fontSize: 20,
-                                color: Colors.black,
+                                color: Colors.blueGrey,
                                 fontWeight: FontWeight.w900),
                           ),
                           SizedBox(
@@ -164,7 +165,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
                             'Proficiency',
                             style: GoogleFonts.droidSans(
                                 fontSize: 20,
-                                color: Colors.black,
+                                color: Colors.blueGrey,
                                 fontWeight: FontWeight.w900),
                           ),
                           SizedBox(height: 15,),
@@ -197,6 +198,13 @@ class FinishedGamePageState extends State<FinishedGamePage> {
         );
       }
     );
+  }
+
+  @override
+  void deactivate() {
+    GameStats.gameStats.clear();
+    // context.read<GameEndCubit>().close();
+    super.deactivate();
   }
 }
 
