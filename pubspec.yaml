@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^0.22.0
   image_picker: 0.8.4
   shared_preferences: ^2.0.13
+  in_app_purchase: ^2.0.1
   repo_packages:
     path: repo_packakges #don't forget to indent
   questions_repository:

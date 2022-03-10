@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:trivia_expert_app/const.dart';
+import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
@@ -97,7 +98,8 @@ class CrystalPageState extends State<CrystalsPage> {
                 Column(
                   children: [
                     PaYInfoWidget(
-                      onTap: () {},
+                      
+                      productId: blueCrystalConsumable,
                       widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
@@ -105,8 +107,8 @@ class CrystalPageState extends State<CrystalsPage> {
                       rotations: [0.0, math.pi / 8],
                       positions: [Position(), Position(top: 3.0, left: 18.0)],
                       noOfItems: 5,
-                      amount: 0.99,
-                      currency: '\$',
+                      
+                      
                       itemType: 'crystals',
                     ),
                   ],
@@ -114,7 +116,7 @@ class CrystalPageState extends State<CrystalsPage> {
                 Column(
                   children: [
                     PaYInfoWidget(
-                      onTap: () {},
+                      productId: blueCrystalConsumable,
                       rotations: [0.0, math.pi / 8, math.pi / 4],
                       positions: [
                         Position(),
@@ -122,8 +124,6 @@ class CrystalPageState extends State<CrystalsPage> {
                         Position(top: 10.0, left: 30.0)
                       ],
                       noOfItems: 10,
-                      amount: 1.99,
-                      currency: '\$',
                       widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
@@ -135,7 +135,7 @@ class CrystalPageState extends State<CrystalsPage> {
                 Column(
                   children: [
                     PaYInfoWidget(
-                      onTap: () {},
+                      productId: blueCrystalConsumable,
                       rotations: [
                         -math.pi / 8,
                         math.pi / 8,
@@ -149,8 +149,8 @@ class CrystalPageState extends State<CrystalsPage> {
                         Position(top: 3, left: 18)
                       ],
                       noOfItems: 15,
-                      amount: 5.99,
-                      currency: '\$',
+                      
+                      
                       widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
@@ -173,12 +173,10 @@ class CrystalPageState extends State<CrystalsPage> {
                 Column(
                   children: [
                     PaYInfoWidget(
-                      onTap: () {},
+                      productId: blueCrystalConsumable,
                       rotations: [0.0, math.pi / 8],
                       positions: [Position(), Position(top: 3.0, left: 18.0)],
                       noOfItems: 20,
-                      amount: 7.99,
-                      currency: '\$',
                       widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
@@ -190,7 +188,7 @@ class CrystalPageState extends State<CrystalsPage> {
                 Column(
                   children: [
                     PaYInfoWidget(
-                      onTap: () {},
+                      productId: blueCrystalConsumable,
                       rotations: [
                         -math.pi / 15,
                         -math.pi / 8,
@@ -206,8 +204,6 @@ class CrystalPageState extends State<CrystalsPage> {
                         Position(top: 3.0, left: 35.0),
                       ],
                       noOfItems: 25,
-                      amount: 9.00,
-                      currency: '\$',
                       widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
@@ -219,15 +215,13 @@ class CrystalPageState extends State<CrystalsPage> {
                 Column(
                   children: [
                     PaYInfoWidget(
-                      onTap: () {},
+                      productId: blueCrystalConsumable,
                       rotations: [0.0, math.pi / 8],
                       positions: [
                         Position(top: 0.0, left: 3.0),
                         Position(top: 0.0, left: 18.0)
                       ],
                       noOfItems: 30,
-                      amount: 12.00,
-                      currency: '\$',
                       widgetItem: BlueCrystal(
                         width: 50,
                         height: 70,
@@ -269,7 +263,7 @@ class PowerUpPageState extends State<PowerUpPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PaYInfoWidget(
-                  onTap: () {},
+                  productId: rightAnswerConsumable,
                   widgetItem: CheckMark(
                     width: widthCheckMark,
                     height: heightCheckMark,
@@ -283,14 +277,14 @@ class PowerUpPageState extends State<PowerUpPage> {
                   ],
                   noOfItems: 1,
                   itemType: 'right answer',
-                  amount: 20,
+                  
                   currencyIcon: BlueCrystal(
                     height: 10,
                     width: 10,
                   ),
                 ),
                 PaYInfoWidget(
-                  onTap: () {},
+                  productId: rightAnswerConsumable,
                   widgetItem: CheckMark(
                     width: widthCheckMark,
                     height: heightCheckMark,
@@ -306,14 +300,14 @@ class PowerUpPageState extends State<PowerUpPage> {
                   ],
                   noOfItems: 5,
                   itemType: 'right answers',
-                  amount: 40,
+                  
                   currencyIcon: BlueCrystal(
                     height: 10,
                     width: 10,
                   ),
                 ),
                 PaYInfoWidget(
-                  onTap: () {},
+                  productId: redCrystalConsumable,
                   widgetItem: CheckMark(
                     width: widthCheckMark,
                     height: heightCheckMark,
@@ -331,7 +325,7 @@ class PowerUpPageState extends State<PowerUpPage> {
                   ],
                   noOfItems: 10,
                   itemType: 'right answer',
-                  amount: 60,
+                  
                   currencyIcon: BlueCrystal(
                     height: 10,
                     width: 10,
@@ -352,7 +346,7 @@ class PowerUpPageState extends State<PowerUpPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PaYInfoWidget(
-                  onTap: () {},
+                  productId: redCrystalConsumable,
                   widgetItem: RedLifeCrystal(
                     height: 70,
                     width: 50,
@@ -361,14 +355,13 @@ class PowerUpPageState extends State<PowerUpPage> {
                   positions: [Position()],
                   noOfItems: 1,
                   itemType: 'red crystals',
-                  amount: 5,
                   currencyIcon: BlueCrystal(
                     height: 10,
                     width: 10,
                   ),
                 ),
                 PaYInfoWidget(
-                  onTap: () {},
+                  productId: redCrystalConsumable,
                   widgetItem: RedLifeCrystal(
                     height: 70,
                     width: 50,
@@ -387,14 +380,14 @@ class PowerUpPageState extends State<PowerUpPage> {
                   ],
                   noOfItems: 5,
                   itemType: 'red crystals',
-                  amount: 20,
+                  
                   currencyIcon: BlueCrystal(
                     height: 10,
                     width: 10,
                   ),
                 ),
                 PaYInfoWidget(
-                  onTap: () {},
+                  productId: redCrystalConsumable,
                   widgetItem: RedLifeCrystal(
                     height: 70,
                     width: 50,
@@ -413,7 +406,7 @@ class PowerUpPageState extends State<PowerUpPage> {
                   ],
                   noOfItems: 12,
                   itemType: 'red crystals',
-                  amount: 40,
+                  
                   currencyIcon: BlueCrystal(
                     height: 10,
                     width: 10,

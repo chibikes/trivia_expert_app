@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:trivia_expert_app/const.dart';
+import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';

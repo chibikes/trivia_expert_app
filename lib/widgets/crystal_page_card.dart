@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/home/shop_page.dart';
+import 'package:trivia_expert_app/main_models/purchase_product.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 enum ItemType{redCrystal, blueCrystal, rightAnswer}
+//TODO: able to return a widget based on itemType
+/// productId is only required for crystals
 class PaYInfoWidget extends StatelessWidget {
+  final String productId;
   final RotationStack rotationStack;
   final Widget? currencyIcon;
   final Widget? widgetItem;
   final int noOfItems;
-  final double amount;
   final String itemType;
-  final String currency;
-  final void Function() onTap;
   final positions;
   final rotations;
   final ItemType itemTypes;
-  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.amount = 0, required this.onTap, this.positions, this.rotations, this.itemType = '', this.currency = '', this.currencyIcon, this.widgetItem, this.itemTypes = ItemType.blueCrystal,}) : super(key: key);
+  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, this.itemTypes = ItemType.blueCrystal, required this.productId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var product = context.read<ShopCubit>().state.products[productId];
+    var amount = noOfItems * double.tryParse(product!.price)!;
+    var currency = product.productDetails.currencySymbol;
     return Column(
       children: [
         RotationStack(
@@ -29,13 +34,14 @@ class PaYInfoWidget extends StatelessWidget {
         Text('$noOfItems $itemType'),
         Row(
           children: [
+            //TODO: handle case for redcrystal and rightanswers
             currencyIcon ?? Text(''),
             Text('$currency$amount'),
           ],
         ),
         ElevatedButton(
           onPressed: () {
-            context.read<ShopCubit>().buyItem(noOfItems, amount, itemTypes);
+            context.read<ShopCubit>().buyItem(noOfItems, itemTypes, product);
           },
           child: Text('Buy'),
         )

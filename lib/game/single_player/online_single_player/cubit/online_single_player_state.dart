@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:trivia_expert_app/const.dart';
+import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 
