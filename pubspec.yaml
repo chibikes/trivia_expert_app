@@ -43,6 +43,8 @@ dependencies:
     path: repo_packakges #don't forget to indent
   questions_repository:
     path: questions_repository
+  in_app_repo:
+    path: in_app_payment_repo
 
 
 

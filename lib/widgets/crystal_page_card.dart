@@ -13,17 +13,18 @@ class PaYInfoWidget extends StatelessWidget {
   final RotationStack rotationStack;
   final Widget? currencyIcon;
   final Widget? widgetItem;
+  final int amount;
   final int noOfItems;
   final String itemType;
   final positions;
   final rotations;
   final ItemType itemTypes;
-  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, this.itemTypes = ItemType.blueCrystal, required this.productId}) : super(key: key);
+  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, this.itemTypes = ItemType.blueCrystal, this.productId = '', this.amount = 0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var product = context.read<ShopCubit>().state.products[productId];
-    var amount = noOfItems * double.tryParse(product!.price)!;
-    var currency = product.productDetails.currencySymbol;
+    var price = amount !=0 ? amount : double.tryParse(product!.price)!;
+    var currency = product!.productDetails.currencySymbol;
     return Column(
       children: [
         RotationStack(
@@ -36,12 +37,12 @@ class PaYInfoWidget extends StatelessWidget {
           children: [
             //TODO: handle case for redcrystal and rightanswers
             currencyIcon ?? Text(''),
-            Text('$currency$amount'),
+            Text('$currency$price'),
           ],
         ),
         ElevatedButton(
           onPressed: () {
-            context.read<ShopCubit>().buyItem(noOfItems, itemTypes, product);
+            context.read<ShopCubit>().buyItem(noOfItems, itemTypes, product, amount);
           },
           child: Text('Buy'),
         )
