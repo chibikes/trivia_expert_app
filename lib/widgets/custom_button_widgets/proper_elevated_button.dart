@@ -10,8 +10,11 @@ class ProperElevatedButton extends StatelessWidget {
   final function;
   final tapDownFunction;
   final tapUpFunction;
+  final Color bottomShade;
+  final Color topShade;
+  final Color textColor;
 
-  const ProperElevatedButton({Key? key, this.buttonWidth, this.buttonHeight, this.text, this.position, this.function, this.tapDownFunction, this.tapUpFunction}) : super(key: key);
+  const ProperElevatedButton({Key? key, this.buttonWidth, this.buttonHeight, this.text, this.position, this.function, this.tapDownFunction, this.tapUpFunction, this.bottomShade = const Color(0xffd45500), this.textColor = Colors.white, this.topShade = const Color(0xffd45500),}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,8 @@ class ProperElevatedButton extends StatelessWidget {
             height: buttonHeight,
             width: buttonWidth * MediaQuery.of(context).size.width,
             child: RawMaterialButton(
-              fillColor: Color(0xffd45500),
+              fillColor: bottomShade,
+              // Color(0xffd45500),
               onPressed: () {},
               child: Text(''),
               shape: RoundedRectangleBorder(
@@ -43,9 +47,9 @@ class ProperElevatedButton extends StatelessWidget {
               onLongPressEnd: tapUpFunction,
               onLongPress: tapDownFunction,
               child: RawMaterialButton(
-                fillColor: Color(0xffd45500),
+                fillColor: topShade,
                 onPressed: function,
-                child: Text(text, style: GoogleFonts.blackHanSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700,)),
+                child: Text(text, style: GoogleFonts.blackHanSans(color: textColor, fontSize: 20, fontWeight: FontWeight.w700,)),
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Color(0xb1ffffff), width: 0.5),
                   borderRadius: BorderRadius.circular(8.0),

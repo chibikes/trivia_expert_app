@@ -7,6 +7,7 @@ import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
+import '../../widgets/power_up_container.dart';
 import 'online_single_player/view/online_single_player.dart';
 
 class SinglePlayerPage extends StatefulWidget {
@@ -30,35 +31,36 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
         child: Column(
           children: [
             CircleAvatar(),
+            Text('TRIVIA EXPERT', style: TextStyle(color: Colors.indigo, fontSize: 20, fontWeight: FontWeight.bold),),
+            SizedBox(height: 8.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('TRIVIA EXPERT', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
                 SizedBox(width: 20.0,),
-                Stack(
+                PowerUpContainer(
+                  powerUpQty: '6',powerUpIcon: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    BlueCrystal(height: 45, width: 45,),
-                    Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
+                    BlueCrystal(height: 20, width: 20,),
                   ],
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Stack(
+                ), height: 0.045 * MediaQuery.of(context).size.height, width: 0.20 * MediaQuery.of(context).size.width,),
+                PowerUpContainer(
+                  powerUpQty: '6',powerUpIcon: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    RedLifeCrystal(height: 45, width: 45,),
-                    Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
+                    BlueCrystal(height: 20, width: 20,),
                   ],
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Stack(
+                ), height: 0.045 * MediaQuery.of(context).size.height, width: 0.20 * MediaQuery.of(context).size.width,),
+                PowerUpContainer(
+                  powerUpQty: '6',powerUpIcon: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CheckMark(height: 45, width: 45,),
-                    Positioned(left: 15.0,child: Text('2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.purple),)),
+                    BlueCrystal(height: 20, width: 20,),
                   ],
-                ),
+                ), height: 0.045 * MediaQuery.of(context).size.height, width: 0.20 * MediaQuery.of(context).size.width,),
               ],
             ),
             SizedBox(

@@ -187,7 +187,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(height: 20.0,),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: Row(

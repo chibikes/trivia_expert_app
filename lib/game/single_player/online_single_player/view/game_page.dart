@@ -32,7 +32,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
-  final prefs = SharedPreferences.getInstance();
+  late final AnimationController? _buttonTapController;
   late final AnimationController? _multiButtonMotionController =
       AnimationController(
     /// controls all motions  of all the  buttons
@@ -73,6 +73,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     //       _questionBloc,
     //     );
     _multiButtonMotionController?.reset();
+    _buttonTapController = AnimationController(vsync: this);
     context.read<OnlineSinglePlayerCubit>().startTimer();
     context.read<OnlineSinglePlayerCubit>().retrieveIndex();
     super.initState();
@@ -201,25 +202,30 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         SizedBox(
                           height: 50,
                         ),
-                        AnimatedCustomButton(
-                          onTap: () {
-                            if(gameState.gameStatus != GameStatus.getQuestions){
-                              context
-                                  .read<OnlineSinglePlayerCubit>()
-                                  .validateAnswer(0);
-                            }
-                          },
-                          color: gameState.colors[0],
-                          interval: Interval(0.0, 1.0, curve: Curves.elasticIn),
-                          multiButtonMotionController:
-                              _multiButtonMotionController,
-                          isAnswerEmpty: question.answers![0] == '',
-                          animationController: AnimationHelper.controllerOne,
-                          child: Text(question.answers![0],
-                              style: MyTextStyle.style),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: AnimatedCustomButton(
+                            buttonController: _buttonTapController!,
+                            onTap: () {
+                              if(gameState.gameStatus != GameStatus.getQuestions){
+                                context
+                                    .read<OnlineSinglePlayerCubit>()
+                                    .validateAnswer(0);
+                              }
+                            },
+                            color: gameState.colors[0],
+                            interval: Interval(0.0, 1.0, curve: Curves.elasticIn),
+                            multiButtonMotionController:
+                                _multiButtonMotionController,
+                            isAnswerEmpty: question.answers![0] == '',
+                            animationController: AnimationHelper.controllerOne,
+                            child: Text(question.answers![0],
+                                style: MyTextStyle.style),
+                          ),
                         ),
                         SizedBox(height: question.answers![1] == '' ? 0 : 10),
                         AnimatedCustomButton(
+                          buttonController: _buttonTapController!,
                           onTap: () {
                             if(gameState.gameStatus != GameStatus.getQuestions){
                               context
@@ -241,6 +247,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                         SizedBox(height: question.answers![2] == '' ? 0 : 10),
                         AnimatedCustomButton(
+                          buttonController: _buttonTapController!,
                           onTap: () {
                             if(gameState.gameStatus != GameStatus.getQuestions){
                               context
@@ -262,6 +269,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                         SizedBox(height: question.answers![3] == '' ? 0 : 10),
                         AnimatedCustomButton(
+                          buttonController: _buttonTapController!,
                           onTap: () {
                             if(gameState.gameStatus != GameStatus.getQuestions){
                               context

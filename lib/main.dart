@@ -17,8 +17,12 @@ void main() async {
   await Firebase.initializeApp();
   await FileStorage.instance;
   EquatableConfig.stringify = kDebugMode;
+  initIndex();
   runApp(App(authenticationRepository: AuthenticationRepository()));
   // HttpOverrides.global = new MyHttpOverrides();
+}
+void initIndex() async {
+  await FileStorage.instance.then((value) => value.setInt('index', 0));
 }
 
 // class MyHttpOverrides extends HttpOverrides{
