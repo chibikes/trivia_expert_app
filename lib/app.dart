@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
-import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/splash/view/splash_page.dart';
 import 'package:trivia_expert_app/theme.dart';
 import 'authentication/authentication.dart';

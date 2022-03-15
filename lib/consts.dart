@@ -5,3 +5,10 @@ const blueCrystalConsumableFifteen = 'blue_crystal_fifteen';
 const blueCrystalConsumableTwenty = 'blue_crystal_twenty';
 const blueCrystalConsumableTwentyFive = 'blue_crystal_twenty_five';
 const blueCrystalConsumableThirty = 'blue_crystal_thirty';
+
+// recent stats
+const accuracyStat = 'Accuracy';
+const scienceStat = 'Science';
+const historyStat = 'History';
+const geographyStat = 'Geography';
+const entertainmentStat = 'Entertainment';

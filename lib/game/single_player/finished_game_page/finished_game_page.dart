@@ -11,6 +11,8 @@ import 'package:trivia_expert_app/widgets/finished_game_card.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../file_storage.dart';
+
 class FinishedGamePage extends StatefulWidget {
   const FinishedGamePage({
     Key? key,
@@ -202,6 +204,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
 
   @override
   void deactivate() {
+    RecentStats.setRecentStats(context.read<GameEndCubit>().state.proficiency/100);
     GameStats.gameStats.clear();
     // context.read<GameEndCubit>().close();
     super.deactivate();

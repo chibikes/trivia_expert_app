@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:path/path.dart';
 import 'package:repo_packages/repo_packakges.dart';
+import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 import 'app.dart';
 import 'main_models/questions.dart';
@@ -14,6 +15,7 @@ import 'main_models/questions.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FileStorage.instance;
   EquatableConfig.stringify = kDebugMode;
   runApp(App(authenticationRepository: AuthenticationRepository()));
   // HttpOverrides.global = new MyHttpOverrides();

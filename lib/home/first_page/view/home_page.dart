@@ -1,20 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/consts.dart';
+import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/game/game.dart';
-import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
-import 'package:trivia_expert_app/game/single_player/online_single_player/view/game_page.dart';
-import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_cubit.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trivia_expert_app/home/first_page/profile_page/view/profile_page.dart';
 import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
+import 'package:trivia_expert_app/widgets/power_up_container.dart';
+import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
-import 'package:repo_packages/src/models/gamestate.dart';
 
 class Home extends StatefulWidget {
   Home();
@@ -28,22 +27,24 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController? _bounceController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-  void gameSess(String id) {}
+  late AnimationController _circularProgressController = AnimationController(lowerBound: 0.0, upperBound: RecentStats.recentStats[accuracyStat] ?? 0.0, vsync: this, duration: Duration(seconds: 3),);
+  @override
+  void initState() {
+    _circularProgressController.addListener(() {
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
+
+  Future<void> startAnimation() async{
+    await Future.delayed(Duration(seconds: 5)).then((value) => _circularProgressController.forward());
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainBloc, MainState>(builder: (context, state) {
-      List sessionIDs = [];
-      // if(state.gameStates.isEmpty) {
-      // state.gameStates.forEach((element) {
-      //   sessionIDs.add(element.sessionID);
-      // });
-      // }
-      // final Stream<QuerySnapshot> _gameStates = FirebaseFirestore.instance
-      //     .collection('gameStates')
-      //     .where('sessionID', arrayContains: sessionIDs)
-      //     .snapshots();
-
       switch (state.homeStatus) {
         case HomeStatus.failure_update:
           return Text('remove me later');
@@ -65,19 +66,23 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ],
           );
         case HomeStatus.fetched:
+          var recentStats = RecentStats.recentStats;
+          startAnimation();
           return BlocListener<FirstPageCubit, FirstPageState>(
             listener: (context, state) {},
             child: ListView(
               // mainAxisSize: MainAxisSize.min,
               children: [
+                Center(child: Text('TRIVIA EXPERT', style: GoogleFonts.aBeeZee(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
+                SizedBox(height: 16.0,),
                 Card(
                   elevation: 8.0,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: Color(0xffffd700)),
-                      borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0))),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3.0),
+                      borderRadius: BorderRadius.circular(40.0),
                       gradient:
                           LinearGradient(begin: Alignment(0.2, 0.0), colors: [
                         Color(0xff1e4b7a),
@@ -131,6 +136,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         //           color: Colors.white,
                         //           fontSize: 20)),
                         // ),
+                        SizedBox(width: 50.0,),
                         CheckMark(
                           height: 30,
                           width: 30,
@@ -141,7 +147,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w800,
-                              fontSize: 17.0),
+                              fontSize: 10.0),
                         ),
                         SizedBox(
                           width: 0.05 * MediaQuery.of(context).size.width,
@@ -155,7 +161,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w800,
-                              fontSize: 17.0),
+                              fontSize: 10.0),
                         ),
                         SizedBox(
                           width: 0.05 * MediaQuery.of(context).size.width,
@@ -174,73 +180,53 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w800,
-                                fontSize: 17.0),
+                                fontSize: 10.0),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Card(
-                    elevation: 16.0,
-                    // color: Colors.cyan,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.green, Colors.lightGreen],
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
+                SizedBox(height: 10.0,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: PowerUpContainer(
+                          powerUpQty: '6',powerUpIcon: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('HIGH SCORE : 20',
-                                style: TextStyle(
-                                    fontFamily: 'ShowCardGothic',
-                                    color: Colors.black,
-                                    fontSize: 20)),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              'Tasks',
-                              style: GoogleFonts.aleo(
-                                  fontSize: 20, fontWeight: FontWeight.w900),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.wine_bar_rounded,
-                                  color: Colors.orange,
-                                ),
-                                Text('Win a participation trophy'),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.wine_bar_rounded,
-                                  color: Colors.orange,
-                                ),
-                                Text('Win in all category')
-                              ],
-                            )
+                            BlueCrystal(height: 20, width: 20,),
                           ],
-                        ),
+                        ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
                       ),
-                    ),
+                      Expanded(
+                        child: PowerUpContainer(
+                          powerUpQty: '6',powerUpIcon: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            RedLifeCrystal(height: 20, width: 20,),
+                          ],
+                        ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                      ),
+                      Expanded(
+                        child: PowerUpContainer(
+                          powerUpQty: '6',powerUpIcon: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CheckMark(height: 20, width: 20,),
+                          ],
+                        ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                      ),
+                    ],
                   ),
                 ),
+                SizedBox(height: 16.0),
+                Center(child: Text('HIGH SCORE', style: GoogleFonts.gothicA1(color: Colors.indigo, fontSize: 25, fontWeight: FontWeight.bold),),),
                 SizedBox(
                   height: 10.0,
                 ),
@@ -265,6 +251,92 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+                SizedBox(height: 30.0,),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text('Recent Stats', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 16.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text('Accuracy'),
+                              SizedBox(height: 12.0,),
+                              SizedBox(
+                                width: 0.20 * MediaQuery.of(context).size.width,
+                                height: 0.10 * MediaQuery.of(context).size.height,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 16.0,
+                                  value: _circularProgressController.value,
+                                  // value: Tween<double>(begin: 0.0, end: 0.8).animate(CurvedAnimation(parent: _circularProgressController, curve: Curves.bounceOut)).value,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                                  backgroundColor: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 10.0,),
+                                  Text('Important Categories'),
+                                ],
+                              ),
+                              SizedBox(height: 5.0,),
+                              Align(child: Text(recentStats[scienceStat] == null ? 'science: no value' : 'science: ${recentStats[scienceStat]! * 100}'), alignment: Alignment.centerLeft,),
+                              SizedBox(
+                                width: 0.45 * MediaQuery.of(context).size.width,
+                                height: 0.02 * MediaQuery.of(context).size.height,
+                                child: RoundRectIndicator(
+                                  value: 0.5,
+                                  radius: 15.0,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                                ),
+                              ),
+                              SizedBox(height: 2.0,),
+                              Align(child: Text('History: 80%'), alignment: Alignment.centerLeft,),
+                              SizedBox(
+                                width: 0.45 * MediaQuery.of(context).size.width,
+                                height: 0.02 * MediaQuery.of(context).size.height,
+                                child: RoundRectIndicator(
+                                  value: 0.5,
+                                  radius: 15.0,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                                ),
+                              ),
+                              SizedBox(height: 2.0,),
+                              Align(child: Text('Geography: 80%'), alignment: Alignment.centerLeft,),
+                              SizedBox(
+                                width: 0.45 * MediaQuery.of(context).size.width,
+                                height: 0.02 * MediaQuery.of(context).size.height,
+                                child: RoundRectIndicator(
+                                  value: 0.5,
+                                  radius: 15.0,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                                ),
+                              ),
+                              Align(child: Text('Entertainment: 80%'), alignment: Alignment.centerLeft,),
+                              SizedBox(
+                                width: 0.45 * MediaQuery.of(context).size.width,
+                                height: 0.02 * MediaQuery.of(context).size.height,
+                                child: RoundRectIndicator(
+                                  value: 0.5,
+                                  radius: 15.0,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -275,7 +347,3 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   }
 }
 
-// SizedBox(
-// width: 5,
-// ),
-// BubbleButton(),

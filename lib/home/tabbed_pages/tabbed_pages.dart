@@ -41,12 +41,6 @@ class _TabbedState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: Colors.white,
-        appBar: AppBar(
-          toolbarHeight: 70,
-          backgroundColor: Color(0xff1e4b7a),
-          title: const Text('Trivia Expert'),
-        ),
         body: MainPageContainer(
           child: RepositoryProvider.value(
             value: widget.userRepository,
