@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class CheckMark extends StatelessWidget {
+class RightAnswer extends StatelessWidget {
   final double? height;
   final double? width;
 
   final bool smallSize;
 
-  const CheckMark({
+  const RightAnswer({
     Key? key,
     this.height,
     this.width,

@@ -12,10 +12,10 @@ class ShopState extends Equatable {
 
   ShopState({this.shopStatus = ShopStatus.unavailable, this.blueCrystals = 0, this.redCrystals = 0, this.rightAnswers = 0, this.products = const{}});
 
-  ShopState copyWith({int? blueCrystals, int? redDiamonds, int? rightAnswers, Map<String, PurchasableProduct>? products, ShopStatus? shopStatus}) {
+  ShopState copyWith({int? blueCrystals, int? redCrystals, int? rightAnswers, Map<String, PurchasableProduct>? products, ShopStatus? shopStatus}) {
     return ShopState(
       blueCrystals: blueCrystals ?? this.blueCrystals,
-      redCrystals: redDiamonds ?? this.redCrystals,
+      redCrystals: redCrystals ?? this.redCrystals,
       rightAnswers: rightAnswers ?? this.rightAnswers,
       products: products ?? this.products,
       shopStatus: shopStatus ?? this.shopStatus,

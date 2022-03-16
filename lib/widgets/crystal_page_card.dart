@@ -20,12 +20,13 @@ class PaYInfoWidget extends StatelessWidget {
   final positions;
   final rotations;
   final ItemType itemTypes;
-  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, this.itemTypes = ItemType.blueCrystal, this.productId = '', this.amount = 0}) : super(key: key);
+  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, required this.itemTypes, this.productId = '', this.amount = 0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var product = context.read<ShopCubit>().state.products[productId];
-    var price = amount !=0 ? amount : double.tryParse(product!.price)!;
-    var currency = product!.productDetails.currencySymbol;
+    var price =  0;
+    // amount !=0 ? amount : double.tryParse(product!.price)!;
+    var currency = product !=null ? product.productDetails.currencySymbol : '';
     return Column(
       children: [
         RotationStack(
@@ -38,7 +39,7 @@ class PaYInfoWidget extends StatelessWidget {
           children: [
             //TODO: handle case for redcrystal and rightanswers
             currencyIcon ?? Text(''),
-            Text('$currency$price'),
+            Text(product == null ? '$amount' : '$currency$price'),
           ],
         ),
         ElevatedButton(
@@ -56,7 +57,7 @@ class RotationStack extends StatelessWidget {
   /// [rotations] is a list of rotations in radians for each widget
   /// e.g [math.pi/2, math.pi,] will create two widgets with rotations math.pi/2 and math.pi
   final List<double> rotations;
-  /// [positions] is a list of positions for each crystal
+  /// [positions] is a list of positions for each widget
   final List<Position> positions;
   final Widget? child;
 

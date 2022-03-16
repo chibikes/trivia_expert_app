@@ -60,7 +60,7 @@ class CrystalPageState extends State<CrystalsPage> {
     return BlocBuilder<ShopCubit, ShopState>(
       builder: (context, state) {
         switch(state.shopStatus) {
-          case ShopStatus.unavailable: return Text('Shop unavailable');
+          case ShopStatus.unavailable: return Scaffold(backgroundColor: Colors.white, body: Center(child: Text('Shop is Unavailable'),),);
           case ShopStatus.available:
             return ListView(
           children: [
@@ -82,7 +82,7 @@ class CrystalPageState extends State<CrystalsPage> {
                       width: 30,
                       height: 30,
                     ),
-                    CheckMark(
+                    RightAnswer(
                       width: 30,
                       height: 30,
                     ),
@@ -103,7 +103,6 @@ class CrystalPageState extends State<CrystalsPage> {
                     Column(
                       children: [
                         PaYInfoWidget(
-
                           productId: blueCrystalConsumableFive,
                           widgetItem: BlueCrystal(
                             width: 50,
@@ -112,9 +111,7 @@ class CrystalPageState extends State<CrystalsPage> {
                           rotations: [0.0, math.pi / 8],
                           positions: [Position(), Position(top: 3.0, left: 18.0)],
                           noOfItems: 5,
-
-
-                          itemType: 'crystals',
+                          itemType: 'crystals', itemTypes: ItemType.blueCrystal,
                         ),
                       ],
                     ),
@@ -133,7 +130,7 @@ class CrystalPageState extends State<CrystalsPage> {
                             width: 50,
                             height: 70,
                           ),
-                          itemType: 'crystals',
+                          itemType: 'crystals', itemTypes: ItemType.blueCrystal,
                         ),
                       ],
                     ),
@@ -160,7 +157,7 @@ class CrystalPageState extends State<CrystalsPage> {
                             width: 50,
                             height: 70,
                           ),
-                          itemType: 'crystals',
+                          itemType: 'crystals', itemTypes: ItemType.blueCrystal,
                         ),
                       ],
                     ),
@@ -186,7 +183,7 @@ class CrystalPageState extends State<CrystalsPage> {
                             width: 50,
                             height: 70,
                           ),
-                          itemType: 'crystals',
+                          itemType: 'crystals', itemTypes: ItemType.blueCrystal,
                         ),
                       ],
                     ),
@@ -213,7 +210,7 @@ class CrystalPageState extends State<CrystalsPage> {
                             width: 50,
                             height: 70,
                           ),
-                          itemType: 'crystals',
+                          itemType: 'crystals', itemTypes: ItemType.blueCrystal,
                         ),
                       ],
                     ),
@@ -231,7 +228,7 @@ class CrystalPageState extends State<CrystalsPage> {
                             width: 50,
                             height: 70,
                           ),
-                          itemType: 'crystals',
+                          itemType: 'crystals', itemTypes: ItemType.blueCrystal,
                         ),
                       ],
                     ),
@@ -262,168 +259,218 @@ class PowerUpPageState extends State<PowerUpPage> {
   double heightCrystal = 10;
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                PaYInfoWidget(
-                  
-                  widgetItem: CheckMark(
-                    width: widthCheckMark,
-                    height: heightCheckMark,
-                    smallSize: false,
-                  ),
-                  rotations: [
-                    0.0
+    return BlocBuilder<ShopCubit, ShopState>(
+      builder: (context, state) {
+        return ListView(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(bottom: BorderSide(color: Colors.black38)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      children: [
+                        Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
+                        RedLifeCrystal(
+                          height: 30,
+                          width: 30,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
+                        BlueCrystal(
+                          width: 30,
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
+                        RightAnswer(
+                          width: 30,
+                          height: 30,
+                        ),
+                      ],
+                    ),
                   ],
-                  positions: [
-                    Position(),
-                  ],
-                  noOfItems: 1,
-                  itemType: 'right answer',
-                  
-                  currencyIcon: BlueCrystal(
-                    height: 10,
-                    width: 10,
-                  ),
                 ),
-                PaYInfoWidget(
-                  widgetItem: CheckMark(
-                    width: widthCheckMark,
-                    height: heightCheckMark,
-                    smallSize: false,
-                  ),
-                  rotations: [
-                    0.0,
-                    math.pi/8
-                  ],
-                  positions: [
-                    Position(),
-                    Position(left: 16.0)
-                  ],
-                  noOfItems: 5,
-                  itemType: 'right answers',
-                  
-                  currencyIcon: BlueCrystal(
-                    height: 10,
-                    width: 10,
-                  ),
-                ),
-                PaYInfoWidget(
-                  widgetItem: CheckMark(
-                    width: widthCheckMark,
-                    height: heightCheckMark,
-                    smallSize: false,
-                  ),
-                  rotations: [
-                    0.0,
-                    math.pi/8,
-                    -math.pi/8
-                  ],
-                  positions: [
-                    Position(),
-                    Position(left: 10),
-                    Position(),
-                  ],
-                  noOfItems: 10,
-                  itemType: 'right answer',
-                  
-                  currencyIcon: BlueCrystal(
-                    height: 10,
-                    width: 10,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-        SizedBox(
-          height: 0.05 * MediaQuery.of(context).size.height,
-        ),
-        Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                PaYInfoWidget(
-                  
-                  widgetItem: RedLifeCrystal(
-                    height: 70,
-                    width: 50,
-                  ),
-                  rotations: [0.0],
-                  positions: [Position()],
-                  noOfItems: 1,
-                  itemType: 'red crystals',
-                  currencyIcon: BlueCrystal(
-                    height: 10,
-                    width: 10,
-                  ),
+            SizedBox(height: 0.05 * MediaQuery.of(context).size.height,),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    PaYInfoWidget(
+
+                      widgetItem: RightAnswer(
+                        width: widthCheckMark,
+                        height: heightCheckMark,
+                        smallSize: false,
+                      ),
+                      rotations: [
+                        0.0
+                      ],
+                      positions: [
+                        Position(),
+                      ],
+                      noOfItems: 1,
+                      itemType: 'right answer',
+
+                      currencyIcon: BlueCrystal(
+                        height: 10,
+                        width: 10,
+                      ), itemTypes: ItemType.rightAnswer,
+                      amount: 5,
+                    ),
+                    PaYInfoWidget(
+                      widgetItem: RightAnswer(
+                        width: widthCheckMark,
+                        height: heightCheckMark,
+                        smallSize: false,
+                      ),
+                      rotations: [
+                        0.0,
+                        math.pi/8
+                      ],
+                      positions: [
+                        Position(),
+                        Position(left: 16.0)
+                      ],
+                      noOfItems: 5,
+                      itemType: 'right answers',
+                      amount: 25,
+
+                      currencyIcon: BlueCrystal(
+                        height: 10,
+                        width: 10,
+                      ), itemTypes: ItemType.rightAnswer,
+                    ),
+                    PaYInfoWidget(
+                      widgetItem: RightAnswer(
+                        width: widthCheckMark,
+                        height: heightCheckMark,
+                        smallSize: false,
+                      ),
+                      rotations: [
+                        0.0,
+                        math.pi/8,
+                        -math.pi/8
+                      ],
+                      positions: [
+                        Position(),
+                        Position(left: 10),
+                        Position(),
+                      ],
+                      noOfItems: 10,
+                      amount: 50,
+                      itemType: 'right answers',
+
+                      currencyIcon: BlueCrystal(
+                        height: 10,
+                        width: 10,
+                      ), itemTypes: ItemType.rightAnswer,
+                    ),
+                  ],
                 ),
-                PaYInfoWidget(
-                  
-                  widgetItem: RedLifeCrystal(
-                    height: 70,
-                    width: 50,
-                  ),
-                  rotations: [
-                    -math.pi / 8,
-                    math.pi / 8,
-                    -math.pi / 15,
-                    math.pi / 15
-                  ],
-                  positions: [
-                    Position(),
-                    Position(top: 3.0, left: 25.0),
-                    Position(top: 3.0, left: 0.0),
-                    Position(top: 3, left: 18)
-                  ],
-                  noOfItems: 5,
-                  itemType: 'red crystals',
-                  
-                  currencyIcon: BlueCrystal(
-                    height: 10,
-                    width: 10,
-                  ),
-                ),
-                PaYInfoWidget(
-                  
-                  widgetItem: RedLifeCrystal(
-                    height: 70,
-                    width: 50,
-                  ),
-                  rotations: [
-                    -math.pi / 8,
-                    math.pi / 8,
-                    -math.pi / 15,
-                    math.pi / 15
-                  ],
-                  positions: [
-                    Position(),
-                    Position(top: 3.0, left: 25.0),
-                    Position(top: 3.0, left: 0.0),
-                    Position(top: 3, left: 18)
-                  ],
-                  noOfItems: 12,
-                  itemType: 'red crystals',
-                  
-                  currencyIcon: BlueCrystal(
-                    height: 10,
-                    width: 10,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ],
+            SizedBox(
+              height: 0.05 * MediaQuery.of(context).size.height,
+            ),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    PaYInfoWidget(
+
+                      widgetItem: RedLifeCrystal(
+                        height: 70,
+                        width: 50,
+                      ),
+                      rotations: [0.0],
+                      positions: [Position()],
+                      noOfItems: 1,
+                      itemType: 'red crystal',
+                      currencyIcon: BlueCrystal(
+                        height: 10,
+                        width: 10,
+                      ), itemTypes: ItemType.redCrystal,
+                      amount: 10,
+                    ),
+                    PaYInfoWidget(
+                      widgetItem: RedLifeCrystal(
+                        height: 70,
+                        width: 50,
+                      ),
+                      rotations: [
+                        -math.pi / 8,
+                        math.pi / 8,
+                        -math.pi / 15,
+                        math.pi / 15
+                      ],
+                      positions: [
+                        Position(),
+                        Position(top: 3.0, left: 25.0),
+                        Position(top: 3.0, left: 0.0),
+                        Position(top: 3, left: 18)
+                      ],
+                      noOfItems: 5,
+                      itemType: 'red crystals',
+                      amount: 50,
+
+                      currencyIcon: BlueCrystal(
+                        height: 10,
+                        width: 10,
+                      ), itemTypes: ItemType.redCrystal,
+                    ),
+                    PaYInfoWidget(
+                      widgetItem: RedLifeCrystal(
+                        height: 70,
+                        width: 50,
+                      ),
+                      rotations: [
+                        -math.pi / 8,
+                        math.pi / 8,
+                        -math.pi / 15,
+                        math.pi / 15
+                      ],
+                      positions: [
+                        Position(),
+                        Position(top: 3.0, left: 25.0),
+                        Position(top: 3.0, left: 0.0),
+                        Position(top: 3, left: 18)
+                      ],
+                      noOfItems: 12,
+                      itemType: 'red crystals',
+                      amount: 120,
+
+                      currencyIcon: BlueCrystal(
+                        height: 10,
+                        width: 10,
+                      ), itemTypes: ItemType.redCrystal,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      }
     );
   }
 }

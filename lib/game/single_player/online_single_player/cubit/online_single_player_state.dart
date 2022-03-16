@@ -4,7 +4,7 @@ import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 
-enum GameStatus {getQuestions, inProgress, timeout}
+enum GameStatus {getQuestions, inProgress, timeout, checkingAnswer}
 
 /// should correct and incorrect be states? let's find out.
 

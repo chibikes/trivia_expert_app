@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:path/path.dart';
 import 'package:repo_packages/repo_packakges.dart';
+import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/questions/models/question.dart';
 import 'app.dart';
@@ -17,12 +18,14 @@ void main() async {
   await Firebase.initializeApp();
   await FileStorage.instance;
   EquatableConfig.stringify = kDebugMode;
-  initIndex();
+  setValues();
   runApp(App(authenticationRepository: AuthenticationRepository()));
   // HttpOverrides.global = new MyHttpOverrides();
 }
-void initIndex() async {
+//TODO: remove method
+void setValues() async {
   await FileStorage.instance.then((value) => value.setInt('index', 0));
+  await FileStorage.instance.then((value) => value.setInt(blueCrystals, 100));
 }
 
 // class MyHttpOverrides extends HttpOverrides{

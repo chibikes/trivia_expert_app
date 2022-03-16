@@ -56,6 +56,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
           answers = question.answers!;
           answers.add(question.correctAnswer!);
           answers.shuffle();
+          answers.removeWhere((element) => element.isEmpty);
           question.copyWith(answers: answers);
         }
 

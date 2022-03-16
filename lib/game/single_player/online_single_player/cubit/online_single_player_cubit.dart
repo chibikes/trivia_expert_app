@@ -38,15 +38,6 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     emit(state.copyWith(index: index));
   }
 
-  void correctButtonSelected() {
-    /// will the code be simpler without this cubit ? !
-    // emit(state.copyWith(gameStatus: GameStatus.correct));
-  }
-
-  void wrongButtonSelected() {
-    // emit(state.copyWith(gameStatus: GameStatus.incorrect));
-  }
-
   Future<void> updateQuestion(int score) {
     List<Color> colors = List.filled(4, Colors.white);
     //TODO: make duration parameter smaller
@@ -59,11 +50,12 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           index: reachedQuestionsEnd ? state.index : state.index + 1,
           gameStatus: reachedQuestionsEnd
               ? GameStatus.getQuestions
-              : state.gameStatus),);
+              : GameStatus.inProgress),);
     });
   }
 
   void validateAnswer(int buttonSelected) {
+    emit(state.copyWith(gameStatus: GameStatus.checkingAnswer));
     var question = state.questions[state.index];
     var score = state.playerScore;
     var answer = question.answers![buttonSelected];
@@ -86,12 +78,16 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           return Colors.red;
         }
       }
-      //TODO: correct answer should be indicated,
-      return Colors.white;
+      return state.questions[state.index].correctAnswer == state.questions[state.index].answers![index] ? Colors.teal : Colors.white;
     });
 
     emit(state.copyWith(colors: colors));
     updateQuestion(score);
+  }
+  void useRightAnswer() {
+    var question = state.questions[state.index];
+    var buttonSelected = question.answers!.indexWhere((element) => element == question.correctAnswer);
+    validateAnswer(buttonSelected);
   }
 
   @override

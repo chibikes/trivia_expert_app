@@ -10,6 +10,8 @@ import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trivia_expert_app/home/first_page/profile_page/view/profile_page.dart';
 import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/power_up_container.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
@@ -137,7 +139,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         //           fontSize: 20)),
                         // ),
                         SizedBox(width: 50.0,),
-                        CheckMark(
+                        RightAnswer(
                           height: 30,
                           width: 30,
                           smallSize: true,
@@ -190,39 +192,43 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 SizedBox(height: 20.0,),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: PowerUpContainer(
-                          powerUpQty: '6',powerUpIcon: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            BlueCrystal(height: 20, width: 20,),
-                          ],
-                        ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
-                      ),
-                      Expanded(
-                        child: PowerUpContainer(
-                          powerUpQty: '6',powerUpIcon: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            RedLifeCrystal(height: 20, width: 20,),
-                          ],
-                        ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
-                      ),
-                      Expanded(
-                        child: PowerUpContainer(
-                          powerUpQty: '6',powerUpIcon: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CheckMark(height: 20, width: 20,),
-                          ],
-                        ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
-                      ),
-                    ],
+                  child: BlocBuilder<ShopCubit, ShopState>(
+                    builder: (context, state) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: PowerUpContainer(
+                              powerUpQty: state.blueCrystals.toString(), powerUpIcon: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                BlueCrystal(height: 20, width: 20,),
+                              ],
+                            ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                          ),
+                          Expanded(
+                            child: PowerUpContainer(
+                              powerUpQty: state.redCrystals.toString(),powerUpIcon: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                RedLifeCrystal(height: 20, width: 20,),
+                              ],
+                            ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                          ),
+                          Expanded(
+                            child: PowerUpContainer(
+                              powerUpQty: state.rightAnswers.toString(),powerUpIcon: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                RightAnswer(height: 20, width: 20,),
+                              ],
+                            ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                          ),
+                        ],
+                      );
+                    }
                   ),
                 ),
                 SizedBox(height: 16.0),

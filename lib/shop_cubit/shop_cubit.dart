@@ -6,6 +6,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_repo/in_app_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/consts.dart';
+import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/in_app_payment.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
@@ -30,6 +31,12 @@ class ShopCubit extends Cubit<ShopState> {
       onError: _updateStreamOnError,
     );
     loadPurchases();
+  }
+
+  Future<void> getPowerUpsFromStorage() async {
+    await FileStorage.instance.then((value) {emit(state.copyWith(redCrystals: value.getInt(redCrystals) ?? state.redCrystals));});
+    await FileStorage.instance.then((value) {emit(state.copyWith(rightAnswers: value.getInt(rightAnswers) ?? state.rightAnswers));});
+    await FileStorage.instance.then((value) {emit(state.copyWith(blueCrystals: value.getInt(blueCrystals) ?? state.blueCrystals));});
   }
 
   Future<void> loadPurchases() async{
@@ -85,11 +92,16 @@ class ShopCubit extends Cubit<ShopState> {
         emit(state.copyWith(blueCrystals: noOfItems));
       } else if (itemType == ItemType.redCrystal) {
         if(state.blueCrystals >= amount) {
-          emit(state.copyWith(blueCrystals: state.blueCrystals - amount, redDiamonds: noOfItems));
+          emit(state.copyWith(blueCrystals: state.blueCrystals - amount, redCrystals: state.redCrystals + noOfItems));
+          FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals));
+          FileStorage.instance.then((value) => value.setInt(blueCrystals, state.blueCrystals));
+
         }
       } else if (itemType == ItemType.rightAnswer) {
         if(state.blueCrystals >= amount) {
-          emit(state.copyWith(rightAnswers: amount, blueCrystals: state.blueCrystals - amount));
+          emit(state.copyWith(rightAnswers: state.rightAnswers + noOfItems, blueCrystals: state.blueCrystals - amount));
+          FileStorage.instance.then((value) =>  value.setInt(rightAnswers, state.rightAnswers));
+          FileStorage.instance.then((value) =>  value.setInt(blueCrystals, state.blueCrystals));
         }
       }
     }catch(e) {
@@ -97,8 +109,19 @@ class ShopCubit extends Cubit<ShopState> {
       print('$e');
     }
   }
-  void useItem() {
-
+  void useItem(ItemType itemType) {
+    switch(itemType) {
+      case ItemType.rightAnswer:
+        emit(state.copyWith(rightAnswers: state.rightAnswers - 1));
+        FileStorage.instance.then((value) => value.setInt(rightAnswers, state.rightAnswers));
+        break;
+      case ItemType.redCrystal:
+        emit(state.copyWith(redCrystals: state.redCrystals - 1));
+        FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals));
+        break;
+      case ItemType.blueCrystal:
+        break;
+    }
   }
 
   void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {
