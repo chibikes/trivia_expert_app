@@ -22,26 +22,40 @@ class RecentStats {
   static void setRecentStats(double accuracy) async {
     var gameStats = GameStats.gameStats;
     var stats;
-    await FileStorage._instance?.setDouble('Accuracy', accuracy);
+    await FileStorage._instance?.setDouble(accuracyStat, calcAvg(accuracyStat, accuracy, totalGamePlayed));
     if (gameStats.containsKey(scienceStat)) {
       stats = gameStats[scienceStat]!;
       await FileStorage._instance
-          ?.setDouble(scienceStat, stats.score / stats.categoryFrequency);
+          ?.setDouble(scienceStat, calcAvg(scienceStat, stats.score / stats.categoryFrequency, totalSci));
     }
     if (gameStats.containsKey(historyStat)) {
       stats = gameStats[historyStat]!;
       await FileStorage._instance
-          ?.setDouble(historyStat, stats.score / stats.categoryFrequency);
+          ?.setDouble(historyStat, calcAvg(historyStat, stats.score / stats.categoryFrequency, totalHis));
     }
     if (gameStats.containsKey(geographyStat)) {
       stats = gameStats[geographyStat]!;
       await FileStorage._instance
-          ?.setDouble(historyStat, stats.score / stats.categoryFrequency);
+          ?.setDouble(historyStat, calcAvg(geographyStat, stats.score / stats.categoryFrequency, totalGeo));
     }
     if (gameStats.containsKey(entertainmentStat)) {
       stats = gameStats[entertainmentStat]!;
       await FileStorage._instance
-          ?.setDouble(historyStat, stats.score / stats.categoryFrequency);
+          ?.setDouble(entertainmentStat, calcAvg(entertainmentStat,stats.score / stats.categoryFrequency, totalEnt));
     }
+  }
+  static double calcAvg(String key, num newValue, String totalNKey) {
+    var prevValue = getPrevVal(key);
+    var n = getN(totalNKey) + 1;
+    FileStorage._instance?.setInt(totalNKey, n);
+    return (prevValue + newValue) / n;
+  }
+
+  static double getPrevVal(String key) {
+    return FileStorage._instance?.getDouble(key) ?? 0;
+  }
+
+  static int getN(String key) {
+    return FileStorage._instance?.getInt(key) ?? 0;
   }
 }

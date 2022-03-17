@@ -107,7 +107,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
               var question = gameState.questions[gameState.index];
-              if (gameState.time == 0) {
+              if (gameState.life == 0 || gameState.time == 0) {
                 context.read<OnlineSinglePlayerCubit>().close();
                 return FinishedGame();
               }
@@ -133,7 +133,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         Padding(
                           padding: EdgeInsets.only(top: 8.0),
                           child: BlocBuilder<ShopCubit, ShopState>(
-                            builder: (context, state) {
+                            builder: (context, shopState) {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -165,12 +165,24 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Column(
+                                  Row(
                                     children: [
-                                      PowerUpContainer(height: 30, width: 60,powerUpQty: context.read<ShopCubit>().state.redCrystals.toString(),powerUpIcon: RedLifeCrystal(height: 5, width: 5,)),
+                                      RedLifeCrystal(height: 5, width: 5,),
+                                      Text(gameState.life.toString()),
                                     ],
                                   ),
-                                  PowerUpContainer(height: 15, width: 30,powerUpQty: context.read<ShopCubit>().state.rightAnswers.toString(),powerUpIcon: RightAnswer(height: 10, width: 10,)),
+                                  Row(
+                                    children: [
+                                      RightAnswer(height: 10, width: 10,),
+                                      Text(shopState.rightAnswers.toString()),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      BlueCrystal(height: 10, width: 10,),
+                                      Text(shopState.blueCrystals.toString()),
+                                    ],
+                                  ),
                                 ],
                               );
                             }

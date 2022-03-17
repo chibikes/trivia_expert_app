@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
@@ -45,6 +46,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     bool reachedQuestionsEnd = state.index == state.questions.length - 1;
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
+          time: kTotalGameTime,
           playerScore: score,
           colors: colors,
           index: reachedQuestionsEnd ? state.index : state.index + 1,
@@ -59,7 +61,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     var question = state.questions[state.index];
     var score = state.playerScore;
     var answer = question.answers![buttonSelected];
-    List<Color> colors = List.generate(4, (index) {
+    List<Color> colors = List.generate(question.answers!.length, (index) {
       if (index == buttonSelected) {
         if (question.correctAnswer == answer) {
           GameStats.gameStats.update(question.category!,
@@ -70,6 +72,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           score++;
           return Colors.teal;
         } else {
+          emit(state.copyWith(life: state.life - 1));
           GameStats.gameStats.update(question.category!,
               (value) => Stats(value.score, value.categoryFrequency + 1),
               ifAbsent: () {

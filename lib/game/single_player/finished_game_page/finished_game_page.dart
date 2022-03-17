@@ -66,6 +66,49 @@ class FinishedGamePageState extends State<FinishedGamePage> {
                     height: 0.33 * MediaQuery.of(context).size.height,
                     // elevation: 8.0,
                     decoration:
+                    BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Proficiency',
+                            style: GoogleFonts.droidSans(
+                                fontSize: 20,
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          SizedBox(height: 15,),
+                          Stack(
+                            children: [
+                              SizedBox(
+                                height: 80,
+                                width: 80,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 8.0,
+                                  value: state.proficiency / 100,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                                  backgroundColor: Colors.blue,
+                                ),
+                              ),
+                              Positioned(top: 26.0, left: 14.0,child: Text('${state.proficiency}%', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),))
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Text(assessScore(state.proficiency), style: GoogleFonts.droidSans(
+                              fontSize: 16, color: Colors.black, fontWeight: FontWeight.w900),),
+                        ]
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    width: 0.80 * MediaQuery.of(context).size.width,
+                    height: 0.33 * MediaQuery.of(context).size.height,
+                    // elevation: 8.0,
+                    decoration:
                         BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
                     child: Column(
                       children: listStats,
@@ -147,49 +190,6 @@ class FinishedGamePageState extends State<FinishedGamePage> {
                             ],
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    width: 0.80 * MediaQuery.of(context).size.width,
-                    height: 0.33 * MediaQuery.of(context).size.height,
-                    // elevation: 8.0,
-                    decoration:
-                    BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Proficiency',
-                            style: GoogleFonts.droidSans(
-                                fontSize: 20,
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.w900),
-                          ),
-                          SizedBox(height: 15,),
-                          Stack(
-                            children: [
-                              SizedBox(
-                                height: 80,
-                                width: 80,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 8.0,
-                                  value: state.proficiency / 100,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-                                  backgroundColor: Colors.blue,
-                                ),
-                              ),
-                              Positioned(top: 26.0, left: 14.0,child: Text('${state.proficiency}%', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),))
-                            ],
-                          ),
-                          SizedBox(height: 15,),
-                          Text(assessScore(state.proficiency), style: GoogleFonts.droidSans(
-                              fontSize: 16, color: Colors.black, fontWeight: FontWeight.w900),),
-                        ]
                       ),
                     ),
                   ),

@@ -1,4 +1,5 @@
 const kTotalGameTime = 20;
+
 // google play purchase keys
 const blueCrystalConsumableFive = 'blue_crystal_five';
 const blueCrystalConsumableTen = 'blue_crystal_ten';
@@ -7,7 +8,12 @@ const blueCrystalConsumableTwenty = 'blue_crystal_twenty';
 const blueCrystalConsumableTwentyFive = 'blue_crystal_twenty_five';
 const blueCrystalConsumableThirty = 'blue_crystal_thirty';
 
-// recent stats
+// game stats
+const totalGamePlayed = 'totalGamePlayed';
+const totalSci = 'totalSci';
+const totalHis = 'totalHis';
+const totalGeo = 'totalGeo';
+const totalEnt = 'totalEnt';
 const accuracyStat = 'Accuracy';
 const scienceStat = 'Science';
 const historyStat = 'History';

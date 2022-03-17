@@ -25,10 +25,18 @@ class Clock extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.lightBlueAccent,
             shape: BoxShape.circle,
           ),
-          child: Center(child: Text(text, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),),),
+          child: Container(
+            height: 0.70 * height,
+            width: 0.70 * width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Center(child: Text(text, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),),),
+          ),
         ),
       ),
     );

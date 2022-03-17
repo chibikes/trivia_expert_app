@@ -16,8 +16,7 @@ class OnlineSinglePlayerState extends Equatable {
     this.gameStatus = GameStatus.inProgress,
     this.playerScore = 0,
     this.time = kTotalGameTime,
-    this.gameStats = const {},
-        /// for our offline the initial score is always the highest score.
+    this.life = 3,
   });
   final GameStatus gameStatus;
   final int playerScore;
@@ -25,7 +24,7 @@ class OnlineSinglePlayerState extends Equatable {
   final List<Color> colors;
   final int index;
   final int time;
-  final Map<String, int> gameStats;
+  final int life;
 
   OnlineSinglePlayerState copyWith({
     GameStatus? gameStatus,
@@ -34,6 +33,7 @@ class OnlineSinglePlayerState extends Equatable {
     int? index,
     List<Color>? colors,
     int? time,
+    int? life,
   }) {
     return OnlineSinglePlayerState(
       gameStatus: gameStatus ?? this.gameStatus,
@@ -42,9 +42,10 @@ class OnlineSinglePlayerState extends Equatable {
       colors: colors ?? this.colors,
       time: time ?? this.time,
       questions: questions ?? this.questions,
+      life: life ?? this.life,
     );
   }
 
   @override
-  List<Object> get props => [gameStatus, playerScore, questions, colors, index, time];
+  List<Object> get props => [gameStatus, playerScore, questions, colors, index, time, life];
 }
