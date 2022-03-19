@@ -13,14 +13,15 @@ class GameStatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('$category : $score%', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+        Text('$category : $score%', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
         SizedBox(
           width: 0.80 * MediaQuery.of(context).size.width,
           height: 0.015 * MediaQuery.of(context).size.height,
           child: RoundRectIndicator(
             value: ratio,
             radius: 24.0,
-            valueColor: AlwaysStoppedAnimation<Color>(ratio < 0.5 ? Colors.deepOrange : Colors.indigo),
+            backgroundColor: Colors.amber,
+            valueColor: AlwaysStoppedAnimation<Color>(ratio < 0.5 ? Colors.deepOrange : Colors.teal),
           ),
         ),
       ],

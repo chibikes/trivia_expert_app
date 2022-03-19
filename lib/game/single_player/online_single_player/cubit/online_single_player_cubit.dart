@@ -69,7 +69,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
       if (index == buttonSelected) {
         if (question.correctAnswer == answer) {
           //TODO: change to 10 co_ord with offset
-          4 % state.index == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged)) : null;
+          state.index % 4 == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged)) : null;
           GameStats.gameStats.update(question.category!,
               (value) => Stats(value.score + 1, value.categoryFrequency + 1),
               ifAbsent: () {

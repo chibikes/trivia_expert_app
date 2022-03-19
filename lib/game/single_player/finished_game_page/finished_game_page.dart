@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/consts.dart';
@@ -8,6 +7,7 @@ import 'package:trivia_expert_app/game/single_player/finished_game_page/finished
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
+import 'package:trivia_expert_app/widgets/game_widgets/chalkboard.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +24,6 @@ class FinishedGamePage extends StatefulWidget {
 }
 
 class FinishedGamePageState extends State<FinishedGamePage> {
-
   @override
   Widget build(BuildContext context) {
     var gameStats = GameStats.gameStats;
@@ -35,7 +34,10 @@ class FinishedGamePageState extends State<FinishedGamePage> {
         child: Text(
           'Category Stats',
           style: GoogleFonts.droidSans(
-              fontSize: 20, color: Colors.blueGrey, fontWeight: FontWeight.w900,),
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+          ),
         ),
       ),
     );
@@ -51,160 +53,142 @@ class FinishedGamePageState extends State<FinishedGamePage> {
         ));
       }
     });
-    return BlocBuilder<GameEndCubit, GameEndState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Color(0xffF8F0E3),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    width: 0.80 * MediaQuery.of(context).size.width,
-                    height: 0.33 * MediaQuery.of(context).size.height,
-                    // elevation: 8.0,
-                    decoration:
-                    BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Proficiency',
-                            style: GoogleFonts.droidSans(
-                                fontSize: 20,
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.w900),
-                          ),
-                          SizedBox(height: 15,),
-                          Stack(
-                            children: [
-                              SizedBox(
-                                height: 80,
-                                width: 80,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 8.0,
-                                  value: state.proficiency / 100,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-                                  backgroundColor: Colors.blue,
-                                ),
-                              ),
-                              Positioned(top: 26.0, left: 14.0,child: Text('${state.proficiency}%', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),))
-                            ],
-                          ),
-                          SizedBox(height: 15,),
-                          Text(assessScore(state.proficiency), style: GoogleFonts.droidSans(
-                              fontSize: 16, color: Colors.black, fontWeight: FontWeight.w900),),
-                        ]
+    return BlocBuilder<GameEndCubit, GameEndState>(builder: (context, state) {
+      return Scaffold(
+        backgroundColor: Color(0xffF8F0E3),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: [
+              ChalkBoard(
+                height: 0.33 * MediaQuery.of(context).size.height,
+                width: 0.80 * MediaQuery.of(context).size.width,
+                widget: Column(
+                    // if new level nice if not see if you can try better
+                    children: [
+                      Text(''),
+                      SizedBox(
+                        height: 30,
                       ),
-                    ),
-                  ),
+                      Text(
+                        'SCORE ${GamingStats.recentStats[highScore]}',
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                      Text(
+                        'LEVEL ${GamingStats.recentStats[gameLevel]}',
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      )
+                    ]),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              ChalkBoard(
+                width: 0.80 * MediaQuery.of(context).size.width,
+                height: 0.33 * MediaQuery.of(context).size.height,
+                // elevation: 8.0,
+                widget: Column(
+                  children: listStats,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    width: 0.80 * MediaQuery.of(context).size.width,
-                    height: 0.33 * MediaQuery.of(context).size.height,
-                    // elevation: 8.0,
-                    decoration:
-                        BoxDecoration(color: Colors.white, border: Border.all(width: 2.0)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 0.80 * MediaQuery.of(context).size.width,
+                  height: 0.33 * MediaQuery.of(context).size.height,
+                  // elevation: 8.0,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
-                      children: listStats,
+                      children: [
+                        Text(
+                          'Game Stats',
+                          style: GoogleFonts.droidSans(
+                              fontSize: 20,
+                              color: Colors.blueGrey,
+                              fontWeight: FontWeight.w900),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Text('TOTAL QUESTIONS ANSWERED: '),
+                            Text(
+                              '${state.totalQuestions}',
+                              style: TextStyle(
+                                  fontFamily: 'showCardGothic',
+                                  color: Colors.blue,
+                                  fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: [
+                            Text('TOTAL SCORE: '),
+                            Text(
+                              '${state.totalScores}',
+                              style: TextStyle(
+                                  fontFamily: 'showCardGothic',
+                                  color: Colors.blue,
+                                  fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Text('SPEED: '),
+                            Text(
+                              //TODO: remove hard code
+                              '${state.speed} Q/s',
+                              style: TextStyle(
+                                  fontFamily: 'showCardGothic',
+                                  color: Colors.blue,
+                                  fontSize: 18),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Text('ACCURACY: '),
+                            Text(
+                              '${state.accuracy}%',
+                              style: TextStyle(
+                                  fontFamily: 'showCardGothic',
+                                  color: Colors.blue,
+                                  fontSize: 18),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 0.80 * MediaQuery.of(context).size.width,
-                    height: 0.33 * MediaQuery.of(context).size.height,
-                    // elevation: 8.0,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        )),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Game Stats',
-                            style: GoogleFonts.droidSans(
-                                fontSize: 20,
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.w900),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              Text('TOTAL QUESTIONS ANSWERED: '),
-                              Text('${state.totalQuestions}', style: TextStyle(
-                                  fontFamily: 'showCardGothic',
-                                  color: Colors.blue,
-                                  fontSize: 18),),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Text('TOTAL SCORE: '),
-                              Text('${state.totalScores}', style: TextStyle(
-                                  fontFamily: 'showCardGothic',
-                                  color: Colors.blue,
-                                  fontSize: 18),),
-                            ],
-                          ),
-                          SizedBox(height: 15,),
-                          Row(
-                            children: [
-                              Text('SPEED: '),
-                              Text(
-                                //TODO: remove hard code
-                                '${state.speed} Q/s',
-                                style: TextStyle(
-                                    fontFamily: 'showCardGothic',
-                                    color: Colors.blue,
-                                    fontSize: 18),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              Text('ACCURACY: '),
-                              Text(
-                                '${state.accuracy}%',
-                                style: TextStyle(
-                                    fontFamily: 'showCardGothic',
-                                    color: Colors.blue,
-                                    fontSize: 18),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 
   @override
   void deactivate() {
-    GamingStats.setRecentStats(context.read<GameEndCubit>().state.proficiency/100);
+    GamingStats.setRecentStats(
+        context.read<GameEndCubit>().state.proficiency / 100);
     GameStats.gameStats.clear();
     // context.read<GameEndCubit>().close();
     super.deactivate();
@@ -212,8 +196,9 @@ class FinishedGamePageState extends State<FinishedGamePage> {
 }
 
 String assessScore(double score) {
-  if(score >= 90) return 'Excellent!';
-  else if(score >= 70) return 'Nice!';
-  else if(score >= 50) return 'Good!';
-  else return 'See if you can do better!';
+  // a score >= 10 definitely means a new level event!
+  if (score >= 10)
+    return 'NEW LEVEL UNLOCKED!';
+  else
+    return 'See if you can do better!';
 }
