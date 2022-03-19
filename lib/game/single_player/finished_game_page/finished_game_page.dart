@@ -204,7 +204,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
 
   @override
   void deactivate() {
-    RecentStats.setRecentStats(context.read<GameEndCubit>().state.proficiency/100);
+    GamingStats.setRecentStats(context.read<GameEndCubit>().state.proficiency/100);
     GameStats.gameStats.clear();
     // context.read<GameEndCubit>().close();
     super.deactivate();

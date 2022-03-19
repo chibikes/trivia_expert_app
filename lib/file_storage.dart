@@ -11,13 +11,14 @@ class FileStorage {
   }
 }
 
-class RecentStats {
-  static Map<String, double?> recentStats = {
+class GamingStats {
+  static Map<String, num?> recentStats = {
     accuracyStat: FileStorage._instance?.getDouble(accuracyStat),
     scienceStat: FileStorage._instance?.getDouble(scienceStat),
     historyStat: FileStorage._instance?.getDouble(historyStat),
     geographyStat: FileStorage._instance?.getDouble(geographyStat),
     entertainmentStat: FileStorage._instance?.getDouble(entertainmentStat),
+    highScore : FileStorage._instance?.getInt(highScore),
   };
   static void setRecentStats(double accuracy) async {
     var gameStats = GameStats.gameStats;

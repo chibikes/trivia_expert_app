@@ -24,3 +24,8 @@ const entertainmentStat = 'Entertainment';
 const redCrystals = 'redCrystals';
 const rightAnswers = 'rightAnswers';
 const blueCrystals = 'blueCrystals';
+
+// game states
+const gameIndex = 'index';
+const gameLevel = 'level';
+const highScore = 'highScore';

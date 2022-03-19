@@ -29,7 +29,7 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController? _bounceController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-  late AnimationController _circularProgressController = AnimationController(lowerBound: 0.0, upperBound: RecentStats.recentStats[accuracyStat] ?? 0.0, vsync: this, duration: Duration(seconds: 3),);
+  late AnimationController _circularProgressController = AnimationController(lowerBound: 0.0, upperBound: GamingStats.recentStats[accuracyStat]?.toDouble() ?? 0.0, vsync: this, duration: Duration(seconds: 3),);
   @override
   void initState() {
     _circularProgressController.addListener(() {
@@ -68,7 +68,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ],
           );
         case HomeStatus.fetched:
-          var recentStats = RecentStats.recentStats;
+          var recentStats = GamingStats.recentStats;
           startAnimation();
           return BlocListener<FirstPageCubit, FirstPageState>(
             listener: (context, state) {},

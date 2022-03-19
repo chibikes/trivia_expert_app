@@ -74,7 +74,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     _multiButtonMotionController?.reset();
     _buttonTapController = AnimationController(vsync: this);
     context.read<OnlineSinglePlayerCubit>().startTimer();
-    context.read<OnlineSinglePlayerCubit>().retrieveIndex();
+    context.read<OnlineSinglePlayerCubit>().retrieveGameState();
     super.initState();
   }
 
@@ -82,7 +82,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   void deactivate() {
     context
         .read<OnlineSinglePlayerCubit>()
-        .saveIndex(context.read<OnlineSinglePlayerCubit>().state.index);
+        .saveGameState(context.read<OnlineSinglePlayerCubit>().state.index);
     super.deactivate();
   }
 
@@ -156,7 +156,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                     text: gameState.time < 10 ? '00:0${gameState.time}':'00:${gameState.time}',
                                   ),
                                   Text(
-                                    '${gameState.playerScore}',
+                                    '${gameState.playerScore}  LV${gameState.level}',
                                     style: TextStyle(
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold,
@@ -269,6 +269,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
+                    Text(gameState.gameStatus == GameStatus.levelChanged ? 'LEVEL ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30),),
                   ],
                 );
             },

@@ -19,7 +19,6 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
       await _timeSubscription?.cancel();
     }
     _timeSubscription = _ticker.tick().listen((event) {
-      print('*************>>>>>>>>>>>>>>!!!!!!$event');
       emit(state.copyWith(time: state.time - 1));
     });
   }
@@ -28,14 +27,19 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     await _timeSubscription?.cancel();
   }
 
-  void retrieveIndex() async {
-    int? index;
-    await prefs.then((value) => index = value.getInt('index'));
-    emit(state.copyWith(index: index ?? state.index));
+  void retrieveGameState() async {
+    var level, score, index;
+
+    await prefs.then((value) => index = value.getInt(gameIndex));
+    await prefs.then((value) => level = value.getInt(gameLevel));
+    await prefs.then((value) => score = value.getInt(highScore));
+    emit(state.copyWith(index: index ?? state.index, level: level ?? state.level, highScore: score ?? state.highScore));
   }
 
-  void saveIndex(int index) async {
-    await prefs.then((value) => value.setInt('index', index));
+  void saveGameState(int index) async {
+    await prefs.then((value) => value.setInt(gameIndex, index));
+    await prefs.then((value) => value.setInt(gameLevel, state.level));
+    await prefs.then((value) => value.setInt(highScore, state.playerScore));
     emit(state.copyWith(index: index));
   }
 
@@ -64,12 +68,18 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     List<Color> colors = List.generate(question.answers!.length, (index) {
       if (index == buttonSelected) {
         if (question.correctAnswer == answer) {
+          //TODO: change to 10 co_ord with offset
+          4 % state.index == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged)) : null;
           GameStats.gameStats.update(question.category!,
               (value) => Stats(value.score + 1, value.categoryFrequency + 1),
               ifAbsent: () {
             return Stats(1, 1);
           });
           score++;
+          if(state.highScoreEvent == false && state.highScore != 0 && score > state.highScore) {
+            emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true),);
+            //TODO: save high_score here!
+          }
           return Colors.teal;
         } else {
           emit(state.copyWith(life: state.life - 1));
