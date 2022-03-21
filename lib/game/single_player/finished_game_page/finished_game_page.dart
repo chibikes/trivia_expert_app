@@ -8,6 +8,7 @@ import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/chalkboard.dart';
+import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +18,7 @@ class FinishedGamePage extends StatefulWidget {
   final int score;
   final bool newLevel;
   const FinishedGamePage({
-    Key? key, required this.score, required this.newLevel
+    Key? key, required this.score, required this.newLevel,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +26,35 @@ class FinishedGamePage extends StatefulWidget {
   }
 }
 
-class FinishedGamePageState extends State<FinishedGamePage> {
+class FinishedGamePageState extends State<FinishedGamePage> with TickerProviderStateMixin{
+  var reward = 0;
+  late AnimationController _rewardController = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late AnimationController _scaleCrystalController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    animation = Tween<double>(begin: 0, end: 5).animate(CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))..addListener(() {
+      setState(() {
+        reward = animation.value.toInt();
+      });
+    });
+    _rewardController.forward();
+
+    _scaleCrystalController.addListener(() {
+      if(reward == 5) {
+        _scaleCrystalController.stop();
+      }
+    });
+    _scaleCrystalController.forward();
+    _scaleCrystalController.repeat(reverse: true);
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _rewardController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var gameStats = GameStats.gameStats;
@@ -43,6 +72,20 @@ class FinishedGamePageState extends State<FinishedGamePage> {
         ),
       ),
     );
+    // TODO: show only four progress indicators
+    // for(int i=0; i < 3; i++) {
+    //   var stat = gameStats[i];
+    //   if (stat!.categoryFrequency != 0) {
+    //     listStats.add(Padding(
+    //       padding: const EdgeInsets.all(8.0),
+    //       child: GameStatsCard(
+    //         category: stat,
+    //         score: '${stat.score}/${stat.categoryFrequency}',
+    //         ratio: stat.score / stat.categoryFrequency,
+    //       ),
+    //     ));
+    //   }
+    // }
     gameStats.forEach((key, value) {
       if (value.categoryFrequency != 0) {
         listStats.add(Padding(
@@ -87,6 +130,13 @@ class FinishedGamePageState extends State<FinishedGamePage> {
                       Text(
                         'LEVEL ${GamingStats.recentStats[gameLevel]}',
                         style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(width: 0.37 * MediaQuery.of(context).size.width,),
+                          ScaleTransition(scale: Tween<double>(begin: 1.0, end: 0.75).animate(CurvedAnimation(parent: _scaleCrystalController, curve: Curves.bounceInOut)),child: BlueCrystal(height: 30, width: 30,)),
+                          Text('$reward', style: TextStyle(fontSize: 30, color: Colors.white),),
+                        ],
                       ),
                     ]),
               ),

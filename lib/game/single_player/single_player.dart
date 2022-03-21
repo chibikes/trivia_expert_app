@@ -39,7 +39,6 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
     });
     _fadeController.forward();
     _fadeController.repeat(reverse: true);
-
     super.initState();
   }
   @override
