@@ -115,7 +115,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 }
                 GamingStats.recentStats[gameLevel] = gameState.level;
                 context.read<OnlineSinglePlayerCubit>().close();
-                return FinishedGame(score: gameState.playerScore, newLevel: gameState.newLevelEvent,);
+                return FinishedGame(highScore: gameState.highScoreEvent,score: gameState.playerScore, newLevel: gameState.newLevelEvent, reward: gameState.reward,);
               }
               else if (gameState.gameStatus == GameStatus.getQuestions) {
                 /// offset should be multiples of database limit parameter.

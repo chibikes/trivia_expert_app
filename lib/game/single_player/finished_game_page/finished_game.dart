@@ -7,11 +7,13 @@ import 'package:trivia_expert_app/game/single_player/finished_game_page/finished
 class FinishedGame extends StatelessWidget {
   final int score;
   final bool newLevel;
+  final bool highScore;
+  final double reward;
 
-  const FinishedGame({Key? key, required this.score, required this.newLevel}) : super(key: key);
+  const FinishedGame({Key? key, required this.score, required this.newLevel, required this.reward, required this.highScore}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => GameEndCubit(GameEndState())..getGameStats(), child: FinishedGamePage(score: score, newLevel: newLevel,),);
+    return BlocProvider(create: (_) => GameEndCubit(GameEndState())..getGameStats(), child: FinishedGamePage(highScore: highScore,score: score, newLevel: newLevel, reward: reward,),);
   }
 
 }

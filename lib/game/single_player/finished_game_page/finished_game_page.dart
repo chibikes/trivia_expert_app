@@ -17,8 +17,14 @@ import '../../../file_storage.dart';
 class FinishedGamePage extends StatefulWidget {
   final int score;
   final bool newLevel;
+  final bool highScore;
+  final double reward;
   const FinishedGamePage({
-    Key? key, required this.score, required this.newLevel,
+    Key? key,
+    required this.score,
+    required this.newLevel,
+    required this.reward,
+    required this.highScore,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -26,35 +32,54 @@ class FinishedGamePage extends StatefulWidget {
   }
 }
 
-class FinishedGamePageState extends State<FinishedGamePage> with TickerProviderStateMixin{
+class FinishedGamePageState extends State<FinishedGamePage>
+    with TickerProviderStateMixin {
   var reward = 0;
-  late AnimationController _rewardController = AnimationController(vsync: this, duration: Duration(seconds: 1));
-  late AnimationController _scaleCrystalController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+  late AnimationController _rewardController =
+      AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late AnimationController _offsetAnimController = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late AnimationController _scaleCrystalController =
+      AnimationController(vsync: this, duration: Duration(milliseconds: 200));
   late Animation<double> animation;
+  late Animation<double> heightFirstItem;
+  late Animation<double> heightSecondItem;
 
   @override
   void initState() {
-    animation = Tween<double>(begin: 0, end: 5).animate(CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))..addListener(() {
-      setState(() {
-        reward = animation.value.toInt();
+    heightFirstItem = Tween<double>(begin: 500.0, end: 0.0).animate(CurvedAnimation(parent: _offsetAnimController, curve: Interval(0.0, 1.0, curve: Curves.easeInOut)));
+    heightSecondItem = Tween<double>(begin: 500.0, end: 0.0).animate(CurvedAnimation(parent: _offsetAnimController, curve: Interval(0.50, 1.0, curve: Curves.easeInOut)));
+    // Tween<Offset>(begin: Offset.zero, end: Offset(50, 100)).animate(parent);
+    animation = Tween<double>(begin: 0, end: widget.reward).animate(
+        CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))
+      ..addListener(() {
+        setState(() {
+          reward = animation.value.toInt();
+        });
       });
-    });
-    _rewardController.forward();
-
     _scaleCrystalController.addListener(() {
-      if(reward == 5) {
+      if (reward == widget.reward || widget.reward == 0) {
         _scaleCrystalController.stop();
       }
     });
-    _scaleCrystalController.forward();
-    _scaleCrystalController.repeat(reverse: true);
+    _playAnim();
+
     super.initState();
   }
+  _playAnim() async {
+    await _offsetAnimController.forward().then((value)  {
+      _rewardController.forward();
+      _scaleCrystalController.forward();
+      _scaleCrystalController.repeat(reverse: true);
+    });
+  }
+
   @override
   void dispose() {
     _rewardController.dispose();
+    _scaleCrystalController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var gameStats = GameStats.gameStats;
@@ -103,22 +128,32 @@ class FinishedGamePageState extends State<FinishedGamePage> with TickerProviderS
         backgroundColor: Color(0xffF8F0E3),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            children: [
-              Center(child: Text('TRIVIA EXPERT', style: GoogleFonts.aBeeZee(color: Colors.blueAccent, fontSize: 30, fontWeight: FontWeight.bold))),
-              ChalkBoard(
-                height: 0.33 * MediaQuery.of(context).size.height,
-                width: 0.80 * MediaQuery.of(context).size.width,
-                widget: Column(
-                    children: [
+              child: ListView(
+                children: [
+                  AnimatedBuilder(
+                    animation: _offsetAnimController,
+                    builder: (context, child) {
+                      return SizedBox(height: heightFirstItem.value,);
+                    }
+                  ),
+                  ChalkBoard(
+                    height: 0.33 * MediaQuery.of(context).size.height,
+                    width: 0.80 * MediaQuery.of(context).size.width,
+                    widget: Column(children: [
                       SizedBox(
                         height: 10,
                       ),
-                      Text(widget.score > GamingStats.recentStats[highScore]! ? 'NEW HIGH SCORE!' : widget.newLevel ? 'NEW LEVEL UNLOCKED!' : 'SEE IF YOU CAN DO BETTER!', style: GoogleFonts.droidSans(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      Text(
+                        widget.highScore
+                            ? 'NEW HIGH SCORE!'
+                            : widget.newLevel
+                                ? 'NEW LEVEL UNLOCKED!'
+                                : 'SEE IF YOU CAN DO BETTER!',
+                        style: GoogleFonts.droidSans(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                       SizedBox(
                         height: 10,
@@ -133,26 +168,44 @@ class FinishedGamePageState extends State<FinishedGamePage> with TickerProviderS
                       ),
                       Row(
                         children: [
-                          SizedBox(width: 0.37 * MediaQuery.of(context).size.width,),
-                          ScaleTransition(scale: Tween<double>(begin: 1.0, end: 0.75).animate(CurvedAnimation(parent: _scaleCrystalController, curve: Curves.bounceInOut)),child: BlueCrystal(height: 30, width: 30,)),
-                          Text('$reward', style: TextStyle(fontSize: 30, color: Colors.white),),
+                          SizedBox(
+                            width: 0.37 * MediaQuery.of(context).size.width,
+                          ),
+                          ScaleTransition(
+                              scale: Tween<double>(begin: 1.0, end: 0.75).animate(
+                                  CurvedAnimation(
+                                      parent: _scaleCrystalController,
+                                      curve: Curves.bounceInOut)),
+                              child: BlueCrystal(
+                                height: 30,
+                                width: 30,
+                              )),
+                          Text(
+                            '$reward',
+                            style: TextStyle(fontSize: 30, color: Colors.white),
+                          ),
                         ],
                       ),
                     ]),
+                  ),
+                  AnimatedBuilder(
+                    builder: (context, child) {
+                      return SizedBox(height: heightSecondItem.value,);
+                    }, animation: _offsetAnimController,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  ChalkBoard(
+                    width: 0.80 * MediaQuery.of(context).size.width,
+                    height: 0.40 * MediaQuery.of(context).size.height,
+                    // elevation: 8.0,
+                    widget: Column(
+                      children: listStats,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 20.0,
-              ),
-              ChalkBoard(
-                width: 0.80 * MediaQuery.of(context).size.width,
-                height: 0.40 * MediaQuery.of(context).size.height,
-                // elevation: 8.0,
-                widget: Column(
-                  children: listStats,
-                ),
-              ),
-            ],
-          ),
         ),
       );
     });
