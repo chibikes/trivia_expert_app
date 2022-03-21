@@ -60,7 +60,7 @@ class CrystalPageState extends State<CrystalsPage> {
     return BlocBuilder<ShopCubit, ShopState>(
       builder: (context, state) {
         switch(state.shopStatus) {
-          case ShopStatus.unavailable: return Scaffold(backgroundColor: Colors.white, body: Center(child: Text('Shop is Unavailable'),),);
+          // case ShopStatus.unavailable: return Scaffold(backgroundColor: Colors.white, body: Center(child: Text('Shop is Unavailable'),),);
           case ShopStatus.available:
             return ListView(
           children: [
@@ -238,7 +238,7 @@ class CrystalPageState extends State<CrystalsPage> {
             ),
           ],
         );
-          default: return CircularProgressIndicator();
+          default: return Scaffold(backgroundColor: Colors.white, body: Center(child: Text('Shop is Unavailable'),),);
         }
       }
     );
@@ -252,15 +252,39 @@ class PowerUpPage extends StatefulWidget {
   }
 }
 
-class PowerUpPageState extends State<PowerUpPage> {
+class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
   double widthCheckMark = 50;
   double heightCheckMark = 50;
   double widthCrystal = 10;
   double heightCrystal = 10;
+  late AnimationController _redCrystalAnimController, _blueCrystalAnimController, _rightAnswerAnimCont;
+  @override
+  void initState() {
+    _redCrystalAnimController = AnimationController(vsync: this, duration: Duration(milliseconds: 300), lowerBound: 0.6, upperBound: 1.0);
+    _blueCrystalAnimController = AnimationController(vsync: this, duration: Duration(milliseconds: 300), lowerBound: 0.6, upperBound: 1.0);
+    _rightAnswerAnimCont = AnimationController(vsync: this, duration: Duration(milliseconds: 300), lowerBound: 0.6, upperBound: 1.0);
+    super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _redCrystalAnimController.dispose();
+    _blueCrystalAnimController.dispose();
+    _rightAnswerAnimCont.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShopCubit, ShopState>(
       builder: (context, state) {
+        if(state.buyStatus == BuyStatus.redCrystalBought) {
+          _redCrystalAnimController.forward().then((value)  {
+          _redCrystalAnimController.reverse(); context.read<ShopCubit>().emit(state.copyWith(buyStatus: BuyStatus.noItemBought));
+        });
+        }  else if(state.buyStatus == BuyStatus.rightAnswerBought) {
+          _rightAnswerAnimCont.forward().then((value)
+          {_rightAnswerAnimCont.reverse(); context.read<ShopCubit>().emit(state.copyWith(buyStatus: BuyStatus.noItemBought));});
+        }
         return ListView(
           children: [
             Container(
@@ -273,32 +297,50 @@ class PowerUpPageState extends State<PowerUpPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                      children: [
-                        Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
-                        RedLifeCrystal(
-                          height: 30,
-                          width: 30,
-                        ),
-                      ],
+                    ScaleTransition(
+                      scale: CurvedAnimation(
+                        parent: _redCrystalAnimController,
+                        curve: Curves.bounceInOut,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
+                          RedLifeCrystal(
+                            height: 30,
+                            width: 30,
+                          ),
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
-                        BlueCrystal(
-                          width: 30,
-                          height: 30,
-                        ),
-                      ],
+                    ScaleTransition(
+                      scale: CurvedAnimation(
+                        parent: _blueCrystalAnimController,
+                        curve: Curves.bounceInOut
+                      ),
+                      child: Row(
+                        children: [
+                          Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
+                          BlueCrystal(
+                            width: 30,
+                            height: 30,
+                          ),
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
-                        RightAnswer(
-                          width: 30,
-                          height: 30,
-                        ),
-                      ],
+                    ScaleTransition(
+                      scale: CurvedAnimation(
+                        parent: _rightAnswerAnimCont,
+                        curve: Curves.bounceInOut
+                      ),
+                      child: Row(
+                        children: [
+                          Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
+                          RightAnswer(
+                            width: 30,
+                            height: 30,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

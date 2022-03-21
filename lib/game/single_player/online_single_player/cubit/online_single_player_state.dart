@@ -18,10 +18,9 @@ class OnlineSinglePlayerState extends Equatable {
     this.time = kTotalGameTime,
     this.life = 3,
     this.level = 0,
-    this.highScore = 0,
     this.highScoreEvent = false,
+    this.newLevelEvent = false,
   });
-  final int highScore;
   final GameStatus gameStatus;
   final int playerScore;
   final List<Questions> questions;
@@ -31,6 +30,8 @@ class OnlineSinglePlayerState extends Equatable {
   final int life;
   final int level;
   final bool highScoreEvent;
+  final bool newLevelEvent;
+
 
   OnlineSinglePlayerState copyWith({
     GameStatus? gameStatus,
@@ -43,6 +44,7 @@ class OnlineSinglePlayerState extends Equatable {
     int? level,
     int? highScore,
     bool? highScoreEvent,
+    bool? newLevelEvent,
   }) {
     return OnlineSinglePlayerState(
       gameStatus: gameStatus ?? this.gameStatus,
@@ -53,11 +55,11 @@ class OnlineSinglePlayerState extends Equatable {
       questions: questions ?? this.questions,
       life: life ?? this.life,
       level: level ?? this.level,
-      highScore: highScore ?? this.highScore,
       highScoreEvent: highScoreEvent ?? this.highScoreEvent,
+      newLevelEvent: newLevelEvent ?? this.newLevelEvent,
     );
   }
 
   @override
-  List<Object> get props => [gameStatus, playerScore, questions, colors, index, time, life, level, highScoreEvent, highScore,];
+  List<Object> get props => [gameStatus, playerScore, questions, colors, index, time, life, level, highScoreEvent,];
 }

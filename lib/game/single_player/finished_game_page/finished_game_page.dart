@@ -14,8 +14,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../file_storage.dart';
 
 class FinishedGamePage extends StatefulWidget {
+  final int score;
+  final bool newLevel;
   const FinishedGamePage({
-    Key? key,
+    Key? key, required this.score, required this.newLevel
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -47,7 +49,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
           padding: const EdgeInsets.all(8.0),
           child: GameStatsCard(
             category: key,
-            score: ((value.score / value.categoryFrequency) * 100).toInt(),
+            score: '${value.score}/${value.categoryFrequency}',
             ratio: value.score / value.categoryFrequency,
           ),
         ));
@@ -60,24 +62,32 @@ class FinishedGamePageState extends State<FinishedGamePage> {
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: [
+              Center(child: Text('TRIVIA EXPERT', style: GoogleFonts.aBeeZee(color: Colors.blueAccent, fontSize: 30, fontWeight: FontWeight.bold))),
               ChalkBoard(
                 height: 0.33 * MediaQuery.of(context).size.height,
                 width: 0.80 * MediaQuery.of(context).size.width,
                 widget: Column(
-                    // if new level nice if not see if you can try better
                     children: [
-                      Text(''),
                       SizedBox(
-                        height: 30,
+                        height: 10,
+                      ),
+                      Text(widget.score > GamingStats.recentStats[highScore]! ? 'NEW HIGH SCORE!' : widget.newLevel ? 'NEW LEVEL UNLOCKED!' : 'SEE IF YOU CAN DO BETTER!', style: GoogleFonts.droidSans(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Text(
-                        'SCORE ${GamingStats.recentStats[highScore]}',
+                        'SCORE ${widget.score}',
                         style: TextStyle(fontSize: 30, color: Colors.white),
                       ),
                       Text(
                         'LEVEL ${GamingStats.recentStats[gameLevel]}',
                         style: TextStyle(fontSize: 30, color: Colors.white),
-                      )
+                      ),
                     ]),
               ),
               SizedBox(
@@ -85,97 +95,10 @@ class FinishedGamePageState extends State<FinishedGamePage> {
               ),
               ChalkBoard(
                 width: 0.80 * MediaQuery.of(context).size.width,
-                height: 0.33 * MediaQuery.of(context).size.height,
+                height: 0.40 * MediaQuery.of(context).size.height,
                 // elevation: 8.0,
                 widget: Column(
                   children: listStats,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 0.80 * MediaQuery.of(context).size.width,
-                  height: 0.33 * MediaQuery.of(context).size.height,
-                  // elevation: 8.0,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 2.0,
-                      )),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Game Stats',
-                          style: GoogleFonts.droidSans(
-                              fontSize: 20,
-                              color: Colors.blueGrey,
-                              fontWeight: FontWeight.w900),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            Text('TOTAL QUESTIONS ANSWERED: '),
-                            Text(
-                              '${state.totalQuestions}',
-                              style: TextStyle(
-                                  fontFamily: 'showCardGothic',
-                                  color: Colors.blue,
-                                  fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Text('TOTAL SCORE: '),
-                            Text(
-                              '${state.totalScores}',
-                              style: TextStyle(
-                                  fontFamily: 'showCardGothic',
-                                  color: Colors.blue,
-                                  fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            Text('SPEED: '),
-                            Text(
-                              //TODO: remove hard code
-                              '${state.speed} Q/s',
-                              style: TextStyle(
-                                  fontFamily: 'showCardGothic',
-                                  color: Colors.blue,
-                                  fontSize: 18),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            Text('ACCURACY: '),
-                            Text(
-                              '${state.accuracy}%',
-                              style: TextStyle(
-                                  fontFamily: 'showCardGothic',
-                                  color: Colors.blue,
-                                  fontSize: 18),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -187,7 +110,7 @@ class FinishedGamePageState extends State<FinishedGamePage> {
 
   @override
   void deactivate() {
-    GamingStats.setRecentStats(
+    GamingStats.saveGamingStats(
         context.read<GameEndCubit>().state.proficiency / 100);
     GameStats.gameStats.clear();
     // context.read<GameEndCubit>().close();

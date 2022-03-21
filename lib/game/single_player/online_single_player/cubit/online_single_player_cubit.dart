@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/consts.dart';
+import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
@@ -28,18 +29,16 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   void retrieveGameState() async {
-    var level, score, index;
+    var level, index;
 
     await prefs.then((value) => index = value.getInt(gameIndex));
     await prefs.then((value) => level = value.getInt(gameLevel));
-    await prefs.then((value) => score = value.getInt(highScore));
-    emit(state.copyWith(index: index ?? state.index, level: level ?? state.level, highScore: score ?? state.highScore));
+    emit(state.copyWith(index: index ?? state.index, level: level ?? state.level,));
   }
 
   void saveGameState(int index) async {
     await prefs.then((value) => value.setInt(gameIndex, index));
     await prefs.then((value) => value.setInt(gameLevel, state.level));
-    await prefs.then((value) => value.setInt(highScore, state.playerScore));
     emit(state.copyWith(index: index));
   }
 
@@ -69,14 +68,14 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
       if (index == buttonSelected) {
         if (question.correctAnswer == answer) {
           //TODO: change to 10 co_ord with offset
-          state.index % 4 == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged)) : null;
+          state.index == 4 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged, newLevelEvent: true)) : null;
           GameStats.gameStats.update(question.category!,
               (value) => Stats(value.score + 1, value.categoryFrequency + 1),
               ifAbsent: () {
             return Stats(1, 1);
           });
           score++;
-          if(state.highScoreEvent == false && state.highScore != 0 && score > state.highScore) {
+          if(state.highScoreEvent == false && score > GamingStats.recentStats[highScore]!) {
             emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true),);
             //TODO: save high_score here!
           }

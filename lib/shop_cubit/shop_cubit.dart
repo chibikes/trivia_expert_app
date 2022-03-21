@@ -89,17 +89,17 @@ class ShopCubit extends Cubit<ShopState> {
         //TODO: handle case for correct purchase or failed transaction
         //TODO: create repository for purchase details
         _inAppRepo.updatePurchaseDetails();
-        emit(state.copyWith(blueCrystals: noOfItems));
+        emit(state.copyWith(blueCrystals: noOfItems, buyStatus: BuyStatus.blueCrystalBought));
       } else if (itemType == ItemType.redCrystal) {
         if(state.blueCrystals >= amount) {
-          emit(state.copyWith(blueCrystals: state.blueCrystals - amount, redCrystals: state.redCrystals + noOfItems));
+          emit(state.copyWith(blueCrystals: state.blueCrystals - amount, redCrystals: state.redCrystals + noOfItems, buyStatus: BuyStatus.redCrystalBought));
           FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals));
           FileStorage.instance.then((value) => value.setInt(blueCrystals, state.blueCrystals));
 
         }
       } else if (itemType == ItemType.rightAnswer) {
         if(state.blueCrystals >= amount) {
-          emit(state.copyWith(rightAnswers: state.rightAnswers + noOfItems, blueCrystals: state.blueCrystals - amount));
+          emit(state.copyWith(rightAnswers: state.rightAnswers + noOfItems, blueCrystals: state.blueCrystals - amount, buyStatus: BuyStatus.rightAnswerBought));
           FileStorage.instance.then((value) =>  value.setInt(rightAnswers, state.rightAnswers));
           FileStorage.instance.then((value) =>  value.setInt(blueCrystals, state.blueCrystals));
         }

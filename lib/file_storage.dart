@@ -21,10 +21,11 @@ class GamingStats {
     highScore : FileStorage._instance?.getInt(highScore) ?? 0,
     gameLevel: FileStorage._instance?.getInt(gameLevel) ?? 0,
   };
-  static void setRecentStats(double accuracy) async {
+  static void saveGamingStats(double accuracy) async {
     var gameStats = GameStats.gameStats;
     var stats;
     await FileStorage._instance?.setDouble(accuracyStat, calcAvg(accuracyStat, accuracy, totalGamePlayed));
+    await FileStorage._instance?.setInt(highScore, recentStats[highScore]!.toInt());
     if (gameStats.containsKey(scienceStat)) {
       stats = gameStats[scienceStat]!;
       await FileStorage._instance

@@ -126,6 +126,7 @@ class _LinearProgressIndicatorPainter extends CustomPainter {
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
     // canvas.drawRect(Offset.zero & size, paint);
+    // background roundrect
     canvas.drawRRect(
         RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius)),
         paint);
@@ -146,13 +147,14 @@ class _LinearProgressIndicatorPainter extends CustomPainter {
           left = x;
           break;
       }
-      // canvas.drawRect(Offset(left, 0.0) & Size(width, size.height), paint);
 
-      canvas.drawRRect(
+      value! <= 0.99 ? canvas.drawRRect(RRect.fromRectAndCorners(Offset(left, 0.0) & Size(width, size.height), topLeft: Radius.circular(radius), bottomLeft: Radius.circular(radius)), paint) : canvas.drawRRect(
           RRect.fromRectAndRadius(Offset(left, 0.0) & Size(width, size.height),
-              Radius.circular(radius)),
+            Radius.circular(radius),),
           paint);
+
     }
+
 
     if (value != null) {
       // drawBar(lowerLimit, value!.clamp(0.0, 1.0) * size.width);

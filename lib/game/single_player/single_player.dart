@@ -21,48 +21,39 @@ class SinglePlayerPage extends StatefulWidget {
 
 class SinglePlayerPageState extends State<SinglePlayerPage>
     with TickerProviderStateMixin {
+  List<String> tips = ['Answering 10 Successive questions unlocks a new level with some reward', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
+  var tipIndex = 0;
   late AnimationController _buttonController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 50));
+  late AnimationController _fadeController = AnimationController(vsync: this, duration: Duration(seconds: 5));
 
+  @override
+  void initState() {
+
+    _fadeController.addStatusListener((status) {
+      if(status == AnimationStatus.reverse) {
+        setState(() {
+          tipIndex == tips.length - 1 ? tipIndex = 0 : tipIndex++;
+        });
+      }
+    });
+    _fadeController.forward();
+    _fadeController.repeat(reverse: true);
+
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _buttonController.dispose();
+    _fadeController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           children: [
-            CircleAvatar(),
-            Text('TRIVIA EXPERT', style: TextStyle(color: Colors.indigo, fontSize: 20, fontWeight: FontWeight.bold),),
-            SizedBox(height: 8.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(width: 20.0,),
-                PowerUpContainer(
-                  powerUpQty: '6',powerUpIcon: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    BlueCrystal(height: 20, width: 20,),
-                  ],
-                ), height: 0.045 * MediaQuery.of(context).size.height, width: 0.20 * MediaQuery.of(context).size.width,),
-                PowerUpContainer(
-                  powerUpQty: '6',powerUpIcon: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    BlueCrystal(height: 20, width: 20,),
-                  ],
-                ), height: 0.045 * MediaQuery.of(context).size.height, width: 0.20 * MediaQuery.of(context).size.width,),
-                PowerUpContainer(
-                  powerUpQty: '6',powerUpIcon: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    BlueCrystal(height: 20, width: 20,),
-                  ],
-                ), height: 0.045 * MediaQuery.of(context).size.height, width: 0.20 * MediaQuery.of(context).size.width,),
-              ],
-            ),
             SizedBox(
               height: 100,
             ),
@@ -80,18 +71,16 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
             ),
             Container(
               decoration: BoxDecoration(
+                boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 8.0),],
                 color: Color(0xff008080),
-                border: Border.all(),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               height: 0.40 * MediaQuery.of(context).size.height,
               width: 0.70 * MediaQuery.of(context).size.width,
-              child: Card(
-                color: Color(0xff008080),
-                shape: Border.all(style: BorderStyle.none),
-                child: Column(
-                  children: [],
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FadeTransition(opacity: Tween<double>(begin: 1.0, end: 0.30).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn)),
+                child: Text(tips[tipIndex], style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),)),
               ),
             ),
             SizedBox(
@@ -109,15 +98,6 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
                           parent: _buttonController, curve: Curves.linear)),
             ),
             Text('TRIVIA'),
-            //     ElevatedButton(
-            //         onPressed: () {Navigator.push(
-            //         context, MaterialPageRoute(builder: (context){
-            //           return OnlineSinglePlayer();
-            //         })
-            //   );
-            // },
-            //         child: Text('Start')
-            //     )
           ],
         ),
       ),
@@ -131,7 +111,6 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
       return OnlineSinglePlayer();
     }));
   }
-
   _longPressButton() {
     _buttonController.forward();
   }

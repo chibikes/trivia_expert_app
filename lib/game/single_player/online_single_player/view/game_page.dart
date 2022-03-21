@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trivia_expert_app/consts.dart';
+import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game.dart';
@@ -108,8 +110,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             builder: (context, gameState) {
               var question = gameState.questions[gameState.index];
               if (gameState.life == 0 || gameState.time == 0) {
+                if(gameState.highScoreEvent){
+                  GamingStats.recentStats[highScore] = gameState.playerScore;
+                }
+                GamingStats.recentStats[gameLevel] = gameState.level;
                 context.read<OnlineSinglePlayerCubit>().close();
-                return FinishedGame();
+                return FinishedGame(score: gameState.playerScore, newLevel: gameState.newLevelEvent,);
               }
               else if (gameState.gameStatus == GameStatus.getQuestions) {
                 /// offset should be multiples of database limit parameter.
@@ -198,7 +204,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                             child: Column(
                               children: [
-                                gameState.index % 4 == 0 ? BlueCrystal(height: 10, width: 10,) : Text(''),
+                                gameState.index % 4 == 0 ? BlueCrystal(height: 10, width: 10,) : SizedBox(height: 0,),
                                 Text(
                                   questionState
                                       .questions[gameState.index].question!,
