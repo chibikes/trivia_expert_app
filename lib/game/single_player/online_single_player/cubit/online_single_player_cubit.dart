@@ -29,11 +29,13 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   void retrieveGameState() async {
-    var level, index;
+    var level, index, life;
 
     await prefs.then((value) => index = value.getInt(gameIndex));
     await prefs.then((value) => level = value.getInt(gameLevel));
-    emit(state.copyWith(index: index ?? state.index, level: level ?? state.level,));
+    await prefs.then((value) => life = value.getInt(redCrystals) ?? 0);
+    life += state.life;
+    emit(state.copyWith(index: index ?? state.index, level: level ?? state.level, life: life));
   }
 
   void saveGameState(int index) async {
@@ -43,13 +45,15 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   Future<void> updateQuestion(int score) {
+
     List<Color> colors = List.filled(4, Colors.white);
-    //TODO: make duration parameter smaller
-    //TODO: each new question will have a time of 3 seconds
     bool reachedQuestionsEnd = state.index == state.questions.length - 1;
+    var question  = reachedQuestionsEnd ? state.questions[state.index] : state.questions[state.index + 1];
+    bool isHardQuestion = question.question!.length >= 60 || question.difficulty == 'hard';
+    score % 4 == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged, newLevelEvent: true, reward: state.reward + 5)) : null;
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
-          time: kTotalGameTime,
+          time: isHardQuestion ? kTotalGameTime : 10,
           playerScore: score,
           colors: colors,
           index: reachedQuestionsEnd ? state.index : state.index + 1,
@@ -67,8 +71,6 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     List<Color> colors = List.generate(question.answers!.length, (index) {
       if (index == buttonSelected) {
         if (question.correctAnswer == answer) {
-          //TODO: change to 10 co_ord with offset
-          state.index == 4 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged, newLevelEvent: true, reward: state.reward + 5)) : null;
           GameStats.gameStats.update(question.category!,
               (value) => Stats(value.score + 1, value.categoryFrequency + 1),
               ifAbsent: () {
@@ -76,7 +78,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           });
           score++;
           if(state.highScoreEvent == false && score > GamingStats.recentStats[highScore]!) {
-            emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true),);
+            emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 3),);
             //TODO: save high_score here!
           }
           return Colors.teal;

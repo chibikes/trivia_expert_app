@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -77,6 +78,71 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
               children: [
                 Center(child: Text('TRIVIA EXPERT', style: GoogleFonts.aBeeZee(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
                 SizedBox(height: 16.0,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: BlocBuilder<ShopCubit, ShopState>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: PowerUpContainer(
+                                powerUpQty: state.blueCrystals.toString(), powerUpIcon: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  BlueCrystal(height: 20, width: 20,),
+                                ],
+                              ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                            ),
+                            Expanded(
+                              child: PowerUpContainer(
+                                powerUpQty: state.redCrystals.toString(),powerUpIcon: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  RedLifeCrystal(height: 20, width: 20,),
+                                ],
+                              ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                            ),
+                            Expanded(
+                              child: PowerUpContainer(
+                                powerUpQty: state.rightAnswers.toString(),powerUpIcon: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  RightAnswer(height: 20, width: 20,),
+                                ],
+                              ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                            ),
+                          ],
+                        );
+                      }
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 42.0,
+                          backgroundImage: NetworkImage(context
+                              .read<MainBloc>()
+                              .state
+                              .user!
+                              .photo!),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Row(children: [SizedBox(width: 0.70 * MediaQuery.of(context).size.width,),Text('Edit', style: TextStyle(color: Colors.white),), Icon(Icons.edit, color: Colors.white,)],),
                 Card(
                   elevation: 8.0,
@@ -138,48 +204,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(height: 20.0,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: BlocBuilder<ShopCubit, ShopState>(
-                    builder: (context, state) {
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: PowerUpContainer(
-                              powerUpQty: state.blueCrystals.toString(), powerUpIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                BlueCrystal(height: 20, width: 20,),
-                              ],
-                            ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
-                          ),
-                          Expanded(
-                            child: PowerUpContainer(
-                              powerUpQty: state.redCrystals.toString(),powerUpIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                RedLifeCrystal(height: 20, width: 20,),
-                              ],
-                            ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
-                          ),
-                          Expanded(
-                            child: PowerUpContainer(
-                              powerUpQty: state.rightAnswers.toString(),powerUpIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                RightAnswer(height: 20, width: 20,),
-                              ],
-                            ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
-                          ),
-                        ],
-                      );
-                    }
-                  ),
-                ),
-                SizedBox(height: 20.0),
                 Center(child: Text('HIGH SCORE ${GamingStats.recentStats[highScore]}', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),),
                 SizedBox(height: 20.0,),
                 Center(child: Text('LEVEL ${GamingStats.recentStats[gameLevel]}', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),),

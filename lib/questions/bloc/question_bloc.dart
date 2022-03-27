@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:questions_repository/questions_repository.dart';
+
+import '../../consts.dart';
 part 'question_event.dart';
 part 'question_state.dart';
 
@@ -105,9 +108,9 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     return state.copyWith(offset: offset ?? state.offset);
   }
 
-
   Future<QuestionState> _updateOffset(int offset)  async {
-    //TODO : check to see inProgress should be emitting
+    debugPrint('******** offset is ${offset.toString()}');
+    offset = offset > countRow ? 0 : offset;
     await prefs.then((value) => value.setInt('offset', offset));
     return state.copyWith(offset: offset, status: QuestionStatus.inProgress);
   }

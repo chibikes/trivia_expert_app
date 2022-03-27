@@ -11,7 +11,6 @@ class DatabaseQuestionsRepository implements QuestionRepository {
     await initDatabase();
     final List<Map<String, dynamic>> maps = await _database!
         .query('trivia_questions', limit: limit, offset: offset);
-
     return List.generate(maps.length, (i) {
       return TriviaQuestion(
         id: maps[i]['id'],

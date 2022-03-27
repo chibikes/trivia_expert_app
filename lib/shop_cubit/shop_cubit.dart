@@ -109,14 +109,14 @@ class ShopCubit extends Cubit<ShopState> {
       print('$e');
     }
   }
-  void useItem(ItemType itemType) {
+  void useItem(ItemType itemType, {int numberUsed = 0}) {
     switch(itemType) {
       case ItemType.rightAnswer:
         emit(state.copyWith(rightAnswers: state.rightAnswers - 1));
         FileStorage.instance.then((value) => value.setInt(rightAnswers, state.rightAnswers));
         break;
       case ItemType.redCrystal:
-        emit(state.copyWith(redCrystals: state.redCrystals - 1));
+        emit(state.copyWith(redCrystals: numberUsed));
         FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals));
         break;
       case ItemType.blueCrystal:

@@ -1,4 +1,8 @@
+// database constants
+const countRow = 3000; //TODO: countRow should be runtime constant
+// game states
 const kTotalGameTime = 20;
+const gameLife = 3;
 
 // google play purchase keys
 const blueCrystalConsumableFive = 'blue_crystal_five';

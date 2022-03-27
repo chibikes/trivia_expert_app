@@ -6,6 +6,7 @@ import 'package:trivia_expert_app/game/single_player/finished_game_page/finished
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
+import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/chalkboard.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
@@ -79,6 +80,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
     _scaleCrystalController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +181,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                               child: BlueCrystal(
                                 height: 30,
                                 width: 30,
-                              )),
+                              ),),
                           Text(
                             '$reward',
                             style: TextStyle(fontSize: 30, color: Colors.white),
@@ -213,10 +215,12 @@ class FinishedGamePageState extends State<FinishedGamePage>
 
   @override
   void deactivate() {
-    GamingStats.saveGamingStats(
-        context.read<GameEndCubit>().state.proficiency / 100);
+    var shopCubit = context.read<ShopCubit>();
+    shopCubit.emit(shopCubit.state.copyWith(blueCrystals: shopCubit.state.blueCrystals + widget.reward.toInt()));
+    FileStorage.instance.then((value) => value.setInt(blueCrystals, (widget.reward + shopCubit.state.blueCrystals).toInt()));
+    // GamingStats.saveGamingStats(
+    //     context.read<GameEndCubit>().state.proficiency / 100);
     GameStats.gameStats.clear();
-    // context.read<GameEndCubit>().close();
     super.deactivate();
   }
 }

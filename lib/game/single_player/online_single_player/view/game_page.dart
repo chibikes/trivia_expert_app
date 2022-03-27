@@ -85,6 +85,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     context
         .read<OnlineSinglePlayerCubit>()
         .saveGameState(context.read<OnlineSinglePlayerCubit>().state.index);
+    deductExtraLife();
     super.deactivate();
   }
 
@@ -202,20 +203,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           width: chalkBoardWidth,
                           widget: Padding(
                             padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                            child: Column(
-                              children: [
-                                gameState.index % 4 == 0 ? BlueCrystal(height: 10, width: 10,) : SizedBox(height: 0,),
-                                Text(
-                                  questionState
-                                      .questions[gameState.index].question!,
-                                  style: GoogleFonts.aleo(
-                                      textStyle: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),),
-                                ),
-                              ],
+                            child: Text(
+                              questionState
+                                  .questions[gameState.index].question!,
+                              style: GoogleFonts.aleo(
+                                  textStyle: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),),
                             ),
                           ),
                         ),
@@ -241,10 +237,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                 multiButtonMotionController:
                                 _multiButtonMotionController,
                                 animationController: AnimationHelper.controllerTwo,
-                                child: Text(
-                                  question.answers![index],
-                                  style: MyTextStyle.style,
-                                ),
+                                text: question.answers![index],
                               ),
                               SizedBox(height: 10),
                             ],
@@ -275,7 +268,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
-                    Text(gameState.gameStatus == GameStatus.levelChanged ? 'LEVEL ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30),),
+                    Positioned(top: 20.0,left: 0.40 * MediaQuery.of(context).size.width, child: Text(gameState.gameStatus == GameStatus.levelChanged ? 'LEVEL ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30, fontFamily: 'ShowCardGothic', color: Colors.green),)),
                   ],
                 );
             },
@@ -294,5 +287,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     _buttonTapController?.dispose();
     AnimationHelper.disposeControllers();
     super.dispose();
+  }
+  void deductExtraLife() {
+    var gameCubit = context.read<OnlineSinglePlayerCubit>();
+    var shopCubit = context.read<ShopCubit>();
+    var remainingRedCrystals = gameCubit.state.life - gameLife;
+    shopCubit.useItem(ItemType.redCrystal, numberUsed: remainingRedCrystals >= 0 ? remainingRedCrystals : 0);
   }
 }

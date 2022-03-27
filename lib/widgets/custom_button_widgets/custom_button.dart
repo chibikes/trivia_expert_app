@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
+import 'package:trivia_expert_app/widgets/other_widgets/styles.dart';
 
 class AnimatedCustomButton extends StatelessWidget  {
   final AnimationController buttonController;
@@ -11,8 +12,9 @@ class AnimatedCustomButton extends StatelessWidget  {
   final Interval interval;
   final Color color;
   final Function()? onTap;
+  final String text;
 
-  const AnimatedCustomButton({Key? key, required this.animationController, this.child, required this.multiButtonMotionController, required this.interval, required this.color, required this.onTap, required this.buttonController}) : super(key: key);
+  const AnimatedCustomButton({Key? key, required this.animationController, this.child, required this.multiButtonMotionController, required this.interval, required this.color, required this.onTap, required this.buttonController, this.text = ''}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,13 @@ class AnimatedCustomButton extends StatelessWidget  {
       child: GestureDetector(
         onTap: onTap,
         child: AnimatedContainer(
-            child: child,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(text, style: MyTextStyle.style,),
+            ),
             alignment: Alignment.center,
-            height: 40.0,
-            width: MediaQuery.of(context).size.width * 0.85,
+            height: text.length >= 34 ? 70 : 50.0,
+            width: MediaQuery.of(context).size.width * 0.90,
             duration: Duration(milliseconds: 300),
             decoration: BoxDecoration(
               color: color,
