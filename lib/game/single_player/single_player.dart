@@ -62,7 +62,7 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
               child: Transform.rotate(
                 angle: -0.5,
                 child: Text(
-                  'TIP',
+                  'TIPS',
                   style: GoogleFonts.droidSans(
                       fontSize: 20, fontWeight: FontWeight.w800),
                 ),
@@ -70,6 +70,7 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
             ),
             Container(
               decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 4.0),
                 boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 8.0),],
                 color: Color(0xff008080),
                 borderRadius: BorderRadius.circular(8.0),
