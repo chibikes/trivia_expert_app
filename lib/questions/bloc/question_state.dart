@@ -10,8 +10,7 @@ class QuestionState extends Equatable {
   final int limit;
 
   const QuestionState({
-    //TODO: change limit. limit should be a constant
-    this.limit = 5,
+    this.limit = databaseLimit,
     this.offset = 0,
     this.status = QuestionStatus.inProgress,
     this.questions = const <Questions>[],
