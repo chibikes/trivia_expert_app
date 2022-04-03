@@ -12,13 +12,7 @@ class QuestionsFetched extends QuestionEvent {
 
 
 }
-class RetrieveOffset extends QuestionEvent {
 
-}
-
-
-class UpdateOffset extends QuestionEvent {
-}
 
 class FetchingQuestions extends QuestionEvent {
 

@@ -122,7 +122,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 /// offset should be multiples of database limit parameter.
                 /// the question should be inclusive of the last question
                 context.read<QuestionBloc>().add(FetchingQuestions());
-                context.read<QuestionBloc>().add(UpdateOffset());
               }
                 return Stack(
                   children: [

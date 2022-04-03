@@ -33,7 +33,7 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
-          BlocProvider(create: (_)=> QuestionBloc(questionRepository: DatabaseQuestionsRepository())..add(RetrieveOffset()), lazy: false,),
+          BlocProvider(create: (_)=> QuestionBloc(questionRepository: DatabaseQuestionsRepository())..add(QuestionsFetched()), lazy: false,),
           BlocProvider(create: (_)=> ShopCubit(inAppRepo: InAppRepo())..getPowerUpsFromStorage(),),
         ],
         child: AppView(),

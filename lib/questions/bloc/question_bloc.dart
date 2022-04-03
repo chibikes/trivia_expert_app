@@ -36,17 +36,10 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     if (event is QuestionsFetched) {
       yield await _mapQuestionFetchedToState(state);
     }
-    else if(event is RetrieveOffset) {
-      yield await _retrieveOffset();
-      add(QuestionsFetched());
-    }
 
-    else if(event is UpdateOffset) {
-      yield await _updateOffset();
-      add(QuestionsFetched());
-    }
     else if(event is FetchingQuestions) {
       yield state.copyWith(status: QuestionStatus.inProgress);
+      add(QuestionsFetched());
     }
   }
 
@@ -109,11 +102,4 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     return state.copyWith(offset: offset ?? state.offset);
   }
 
-  Future<QuestionState> _updateOffset()  async {
-    FileStorage.row ??= await DatabaseQuestionsRepository.getRow();
-    int offset = FileStorage.row! - state.offset < state.limit ? 0 : state.offset + state.limit;
-    debugPrint('******** offset is ${offset.toString()}');
-    await prefs.then((value) => value.setInt('offset', offset));
-    return state.copyWith(offset: offset, status: QuestionStatus.inProgress);
-  }
 }
