@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:questions_repository/questions_repository.dart';
 
@@ -41,7 +42,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     }
 
     else if(event is UpdateOffset) {
-      yield await _updateOffset(event.offset);
+      yield await _updateOffset();
       add(QuestionsFetched());
     }
     else if(event is FetchingQuestions) {
@@ -108,9 +109,10 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     return state.copyWith(offset: offset ?? state.offset);
   }
 
-  Future<QuestionState> _updateOffset(int offset)  async {
+  Future<QuestionState> _updateOffset()  async {
+    FileStorage.row ??= await DatabaseQuestionsRepository.getRow();
+    int offset = FileStorage.row! - state.offset < state.limit ? 0 : state.offset + state.limit;
     debugPrint('******** offset is ${offset.toString()}');
-    offset = offset > countRow ? 0 : offset;
     await prefs.then((value) => value.setInt('offset', offset));
     return state.copyWith(offset: offset, status: QuestionStatus.inProgress);
   }

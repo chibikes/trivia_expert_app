@@ -18,9 +18,6 @@ class RetrieveOffset extends QuestionEvent {
 
 
 class UpdateOffset extends QuestionEvent {
-  final int offset;
-
-  UpdateOffset(this.offset);
 }
 
 class FetchingQuestions extends QuestionEvent {

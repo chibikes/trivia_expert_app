@@ -4,6 +4,7 @@ import 'package:trivia_expert_app/game_stats.dart';
 
 class FileStorage {
   static SharedPreferences? _instance;
+  static int? row;
 
   static Future<SharedPreferences> get instance async {
     _instance ??= await SharedPreferences.getInstance();

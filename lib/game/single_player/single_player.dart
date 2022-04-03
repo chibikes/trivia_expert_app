@@ -80,7 +80,12 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FadeTransition(opacity: Tween<double>(begin: 1.0, end: 0.30).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn)),
-                child: Text(tips[tipIndex], style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),)),
+                child: Column(
+                  children: [
+                    Text(tips[tipIndex], style: GoogleFonts.balooDa(color: Colors.white, fontSize: 15)),
+                    BlueCrystal(height: 30, width: 30,)
+                  ],
+                )),
               ),
             ),
             SizedBox(

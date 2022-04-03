@@ -15,7 +15,6 @@ class QuestionState extends Equatable {
     this.status = QuestionStatus.inProgress,
     this.questions = const <Questions>[],
     this.hasReachedMax = false,
-
   });
 
   QuestionState copyWith({

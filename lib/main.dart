@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:path/path.dart';
+import 'package:questions_repository/questions_repository.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/file_storage.dart';
@@ -24,6 +25,7 @@ void main() async {
 }
 //TODO: remove method
 void setValues() async {
+  await FileStorage.instance.then((value) => value.setInt('offset', 0));
   await FileStorage.instance.then((value) => value.setInt('index', 0));
   await FileStorage.instance.then((value) => value.setInt(blueCrystals, 100));
 }

@@ -1,6 +1,7 @@
 // database constants
-const countRow = 3000; //TODO: countRow should be runtime constant
+final countRow = 3000; //TODO: countRow should be runtime constant
 const databaseLimit = 10;
+const databaseOffset = 'offset';
 // game states
 const kTotalGameTime = 20;
 const gameLife = 3;

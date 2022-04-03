@@ -45,12 +45,11 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   Future<void> updateQuestion(int score) {
-
     List<Color> colors = List.filled(4, Colors.white);
     bool reachedQuestionsEnd = state.index == state.questions.length - 1;
-    var question  = reachedQuestionsEnd ? state.questions[state.index] : state.questions[state.index + 1];
-    bool isHardQuestion = question.question!.length >= 60 || question.difficulty == 'hard';
-    score % 4 == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged, newLevelEvent: true, reward: state.reward + 5)) : null;
+    var nextQuestion  = reachedQuestionsEnd ? state.questions[state.index] : state.questions[state.index + 1];
+    bool isHardQuestion = nextQuestion.question!.length >= 60 || nextQuestion.difficulty == 'hard';
+    score % databaseLimit == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged, newLevelEvent: true, reward: state.reward + 5)) : null;
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
           time: isHardQuestion ? kTotalGameTime : 10,

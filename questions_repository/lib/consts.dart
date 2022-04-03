@@ -1,0 +1,1 @@
+const triviaDBaseTable = 'trivia_questions';

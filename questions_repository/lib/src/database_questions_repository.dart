@@ -1,16 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
+import 'package:questions_repository/consts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'models/questions.dart';
 import 'questions_repository.dart';
 
 class DatabaseQuestionsRepository implements QuestionRepository {
-  Database? _database;
+  static Database? _database;
 
   @override
   Future<List<TriviaQuestion>> fetchQuestions(int offset, int limit) async {
     await initDatabase();
     final List<Map<String, dynamic>> maps = await _database!
         .query('trivia_questions', limit: limit, offset: offset);
+    debugPrint('************************************************************row beelow');
+    debugPrint(getRow().toString());
     return List.generate(maps.length, (i) {
       return TriviaQuestion(
         id: maps[i]['id'],
@@ -24,6 +28,9 @@ class DatabaseQuestionsRepository implements QuestionRepository {
         incorrectThree: maps[i]['incorrect_three'],
       );
     });
+  }
+  static Future<int?> getRow() async {
+    return Sqflite.firstIntValue(await _database!.rawQuery('SELECT COUNT(*) FROM $triviaDBaseTable'));
   }
 
   Future<void> initDatabase() async {
