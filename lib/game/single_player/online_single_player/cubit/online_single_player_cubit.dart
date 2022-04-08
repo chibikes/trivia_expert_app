@@ -7,7 +7,7 @@ import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
-import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   OnlineSinglePlayerCubit(OnlineSinglePlayerState state) : super(state);
@@ -80,8 +80,10 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
             emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 3),);
             //TODO: save high_score here!
           }
+          playWinSound();
           return Colors.teal;
         } else {
+          playFailSound();
           emit(state.copyWith(life: state.life - 1));
           GameStats.gameStats.update(question.category!,
               (value) => Stats(value.score, value.categoryFrequency + 1),
@@ -118,6 +120,15 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           index: 0,
           gameStatus: GameStatus.inProgress));
     }
+  }
+  void playWinSound(){
+    AudioCache audioPlayer = AudioCache();
+    audioPlayer.play('win_sound.mp3');
+  }
+
+  void playFailSound() {
+    AudioCache audioPlayer = AudioCache();
+    audioPlayer.play('fail_sound.mp3');
   }
 }
 

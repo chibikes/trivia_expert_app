@@ -54,8 +54,24 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
         child: Column(
           children: [
             SizedBox(
-              height: 100,
+              height: 30,
             ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: FloatingActionButton(backgroundColor: Colors.pinkAccent,onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(Icons.close)),
+                ),
+              ),
+            ),
+            SizedBox(height: 50,),
+            Icon(Icons.style),
             Padding(
               padding: EdgeInsets.only(
                   right: 0.70 * MediaQuery.of(context).size.width),

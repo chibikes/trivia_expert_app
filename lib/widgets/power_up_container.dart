@@ -6,6 +6,7 @@ class PowerUpContainer extends StatelessWidget {
   final double width;
   final String powerUpQty;
   final Widget powerUpIcon;
+  final radius = 5.0;
 
   const PowerUpContainer({Key? key, this.height = 0, this.width = 0, this.powerUpQty = '', required this.powerUpIcon}) : super(key: key);
   @override
@@ -15,20 +16,20 @@ class PowerUpContainer extends StatelessWidget {
       children: [
         Container(
           height: height,
-          width: 0.40 * width,
+          width: 0.80 * width,
           decoration: BoxDecoration(
-            color: Colors.indigoAccent,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0)),
+            color: Colors.blue,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(radius), bottomLeft: Radius.circular(radius)),
             border: Border(),
           ),
           child: Center(child: Text(powerUpQty,style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
         ),
         Container(
           height: height,
-          width: 0.60 * width,
+          width: 0.20 * width,
           decoration: BoxDecoration(
-            color: Colors.indigo,
-            borderRadius: BorderRadius.only(topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)),
+            color: Color(0xff23395d),
+            borderRadius: BorderRadius.only(topRight: Radius.circular(radius), bottomRight: Radius.circular(radius)),
             border: Border(),
           ),
           child: powerUpIcon,

@@ -132,6 +132,14 @@ class FinishedGamePageState extends State<FinishedGamePage>
           padding: const EdgeInsets.all(8.0),
               child: ListView(
                 children: [
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: FloatingActionButton(backgroundColor: Colors.pinkAccent,onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                        child: Icon(Icons.close)),
+                  ),
                   AnimatedBuilder(
                     animation: _offsetAnimController,
                     builder: (context, child) {

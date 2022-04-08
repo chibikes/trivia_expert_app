@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/consts.dart';
@@ -304,10 +304,13 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ),
                       child: Row(
                         children: [
-                          Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
-                          RedLifeCrystal(
-                            height: 30,
-                            width: 30,
+                          Badge(
+                            badgeContent: Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
+                            child: RedLifeCrystal(
+                              height: 30,
+                              width: 30,
+                            ),
+                            badgeColor: Colors.cyan,
                           ),
                         ],
                       ),
@@ -319,10 +322,13 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ),
                       child: Row(
                         children: [
-                          Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
-                          BlueCrystal(
-                            width: 30,
-                            height: 30,
+                          Badge(
+                            badgeContent: Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
+                            child: BlueCrystal(
+                              width: 30,
+                              height: 30,
+                            ),
+                            badgeColor: Colors.cyan,
                           ),
                         ],
                       ),
@@ -334,10 +340,13 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ),
                       child: Row(
                         children: [
-                          Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),),
-                          RightAnswer(
-                            width: 30,
-                            height: 30,
+                          Badge(
+                            badgeContent: Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
+                            child: RightAnswer(
+                              width: 30,
+                              height: 30,
+                            ),
+                            badgeColor: Colors.cyan,
                           ),
                         ],
                       ),

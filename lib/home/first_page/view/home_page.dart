@@ -1,5 +1,7 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/consts.dart';
@@ -89,9 +91,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  BlueCrystal(height: 20, width: 20,),
+                                  BlueCrystal(height: 12, width: 12,),
                                 ],
-                              ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                              ), height: 0.04 * MediaQuery.of(context).size.height, width: 0.25 * MediaQuery.of(context).size.width,),
                             ),
                             Expanded(
                               child: PowerUpContainer(
@@ -99,9 +101,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  RedLifeCrystal(height: 20, width: 20,),
+                                  RedLifeCrystal(height: 12, width: 12,),
                                 ],
-                              ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                              ), height: 0.04 * MediaQuery.of(context).size.height, width: 0.25 * MediaQuery.of(context).size.width,),
                             ),
                             Expanded(
                               child: PowerUpContainer(
@@ -109,9 +111,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  RightAnswer(height: 20, width: 20,),
+                                  RightAnswer(height: 12, width: 12,),
                                 ],
-                              ), height: 0.05 * MediaQuery.of(context).size.height, width: 0.30 * MediaQuery.of(context).size.width,),
+                              ), height: 0.04 * MediaQuery.of(context).size.height, width: 0.25 * MediaQuery.of(context).size.width,),
                             ),
                           ],
                         );
@@ -119,95 +121,85 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 42.0,
-                          backgroundImage: NetworkImage(context
-                              .read<MainBloc>()
-                              .state
-                              .user!
-                              .photo!),
+                Align(
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          boxShadow: [BoxShadow(blurRadius: 8.0, color: Colors.black38)],
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(children: [SizedBox(width: 0.70 * MediaQuery.of(context).size.width,),Text('Edit', style: TextStyle(color: Colors.white),), Icon(Icons.edit, color: Colors.white,)],),
-                Card(
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Color(0xffffd700)),
-                      borderRadius: BorderRadius.all(Radius.circular(40.0))),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                      gradient:
-                          LinearGradient(begin: Alignment(0.2, 0.0), colors: [
-                        Color(0xff1e4b7a),
-                        Color(0xff1e66ae),
-                      ]),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
+                        child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Stack(
+                          child: Column(
                             children: [
                               CircleAvatar(
+                                radius: 42.0,
                                 backgroundImage: NetworkImage(context
                                     .read<MainBloc>()
                                     .state
                                     .user!
                                     .photo!),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 20, left: 20),
-                                child: GestureDetector(
-                                  // onTap: () =>
-                                  //     context.read<FirstPageCubit>().goToPage(
-                                  //           context,
-                                  //           BlocProvider.value(
-                                  //             value: BlocProvider.of<MainBloc>(
-                                  //                 context),
-                                  //             child: ProfilePage(
-                                  //               context: context,
-                                  //             ),
-                                  //           ),
-                                  //       GamePlayState(),
-                                  //         ),
-                                  child: Icon(
-                                    Icons.photo_camera_rounded,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
-                        SizedBox(width: 10.0,),
-                        Text(context.read<MainBloc>().user.name ?? context.read<MainBloc>().user.email ?? 'User Name', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
-                      ],
-                    ),
+                      ),
+                      Positioned(top: 70.0, left: 70.0,child: Icon(Icons.camera_alt, color: Colors.cyan,)),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 30,),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(left: BorderSide(color: Color(0xffffd700), width: 2.0)),
+                    // borderRadius: BorderRadius.circular(0.0),
+                    gradient:
+                        LinearGradient(begin: Alignment(0.2, 0.0), colors: [
+                      Color(0xff1e4b7a),
+                      Color(0xff1e66ae),
+                    ]),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Badge(badgeContent: Icon(Icons.edit, color: Colors.white, size: 10,),child: Text(context.read<MainBloc>().user.name ?? context.read<MainBloc>().user.email ?? 'User Name', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),)),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 20.0,),
-                Center(child: Text('HIGH SCORE ${GamingStats.recentStats[highScore]}', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),),
-                SizedBox(height: 20.0,),
-                Center(child: Text('LEVEL ${GamingStats.recentStats[gameLevel]}', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Icon(FontAwesomeIcons.trophy, color: Colors.orange,),
+                          Text('HIGH SCORE', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+                          Text('${GamingStats.recentStats[highScore]}'),
+                        ],
+                      ),
+                      SizedBox(width: 10,),
+                      Column(
+                        children: [
+                          Icon(FontAwesomeIcons.trophy, color: Colors.blue,),
+                          Text('LEVEL', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+                          Text('${GamingStats.recentStats[gameLevel]}'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
                 SizedBox(
-                  height: 50.0,
+                  height: 150.0,
                 ),
                 ScaleTransition(
                   scale: Tween<double>(begin: 1.0, end: 0.70).animate(

@@ -25,7 +25,6 @@ void main() async {
 }
 //TODO: remove method
 void setValues() async {
-  await FileStorage.instance.then((value) => value.setInt('offset', 0));
   await FileStorage.instance.then((value) => value.setInt('index', 0));
   await FileStorage.instance.then((value) => value.setInt(blueCrystals, 100));
 }

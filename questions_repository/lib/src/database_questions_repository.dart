@@ -19,7 +19,7 @@ class DatabaseQuestionsRepository implements QuestionRepository {
     final List<Map<String, dynamic>> maps = await _database!
         .query('trivia_questions', limit: rowsRetrieved, offset: offsetX);
     debugPrint('************************************************************row beelow');
-    debugPrint(getRow().toString());
+    debugPrint(databaseRows.toString());
     return List.generate(maps.length, (i) {
       return TriviaQuestion(
         id: maps[i]['id'],

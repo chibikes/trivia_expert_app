@@ -96,10 +96,4 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     );
   }
 
-  Future<QuestionState> _retrieveOffset() async {
-    int? offset;
-    await prefs.then((value) => offset = value.getInt('offset'));
-    return state.copyWith(offset: offset ?? state.offset);
-  }
-
 }

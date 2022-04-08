@@ -51,7 +51,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   );
   late double chalkBoardWidth = 0.85 * MediaQuery.of(context).size.width;
   late double chalkBoardHeight = chalkBoardWidth / 1.6180;
-  late QuestionBloc _questionBloc;
 
   Result? results;
 
