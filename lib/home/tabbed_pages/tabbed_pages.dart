@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:trivia_expert_app/widgets/game_widgets/check_mark_widget.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
 import 'package:trivia_expert_app/widgets/other_widgets/first_aid_box.dart';
 import 'package:trivia_expert_app/widgets/other_widgets/mainpage_container.dart';
+import '../../settings_page.dart';
 import '../leaderboardpage.dart';
 import '../shop_page.dart';
 
@@ -35,8 +37,8 @@ class _TabbedState extends State<HomePage> {
     Home(),
     ShopPage(),
     LeaderBoardPage(),
-    MultiPlayer(),
-    Text('Last Experiment'),
+    SettingsPage(),
+    // MultiPlayer(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -64,9 +66,11 @@ class _TabbedState extends State<HomePage> {
               icon: Icon(Icons.home),
               label: 'Home',
               backgroundColor: Colors.lightBlue,
-              activeIcon: Text('womp'),
+              activeIcon: Icon(FontAwesomeIcons.home),
             ),
             BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
+            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.trophy), label: 'LeaderBoard'),
+            // BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.trophy), label: 'LeaderBoard'),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.lightBlue,
