@@ -13,8 +13,8 @@ class LeaderBoardPage extends StatefulWidget{
 class LeaderBoardPageState extends State<LeaderBoardPage> {
   final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
       .collection('highScores')
-      // .orderBy('dailyScore', descending: true)
-      .limit(1)
+      .orderBy('highScore', descending: true)
+      .limit(50)
       .snapshots();
 
   @override

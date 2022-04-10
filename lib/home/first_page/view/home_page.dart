@@ -178,78 +178,88 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                SizedBox(height: 20.0,),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Stack(
-                            children: [
-                              Icon(FontAwesomeIcons.trophy, color: Colors.orange, size: 55,),
-                              Positioned(
-                                top: 3.0,
-                                left: 8.0,
-                                child: CustomPaint(
-                                  painter: TrophyLayerPainter(),
-                                  size: Size(45, 40),
-                                ),
-                              ),
-                              Positioned(
-                                top: 8.0,
-                                left: 20.0,
-                                child: Container(
-                                  height: 3,
-                                  width: 3,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white24,
-                                    shape: BoxShape.circle
-                                  ),
-                                ),
-                              ),
-                              Positioned(top: 3.0,left:  18.0,child: Text('${GamingStats.recentStats[highScore]}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black54),)),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text('HIGH SCORE', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
-                        ],
+                SizedBox(height: 30.0,),
+                Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Color(0xff8b5a2b)
                       ),
-                      SizedBox(width: 10,),
-                      Column(
-                        children: [
-                          Stack(
-                            children: [
-                              Icon(FontAwesomeIcons.trophy, color: Colors.blue, size: 55,),
-                              Positioned(
-                                top: 3.0,
-                                left: 8.0,
-                                child: CustomPaint(
-                                  painter: TrophyLayerPainter(),
-                                  size: Size(45, 40),
-                                ),
-                              ),
-                              Positioned(
-                                top: 8.0,
-                                left: 20.0,
-                                child: Container(
-                                  height: 3,
-                                  width: 3,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white24,
-                                      shape: BoxShape.circle
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                              Stack(
+                                children: [
+                                  Icon(FontAwesomeIcons.trophy, color: Colors.orange, size: 30,),
+                                  Positioned(
+                                    top: 3.0,
+                                    left: 8.0,
+                                    child: CustomPaint(
+                                      painter: TrophyLayerPainter(),
+                                      size: Size(20, 15),
+                                    ),
                                   ),
-                                ),
+                                  Positioned(
+                                    top: 8.0,
+                                    left: 20.0,
+                                    child: Container(
+                                      height: 3,
+                                      width: 3,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white24,
+                                          shape: BoxShape.circle
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Positioned(top: 3.0,left:  14.0,child: Text('${GamingStats.recentStats[gameLevel]}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black54),)),
+                              Text('${GamingStats.recentStats[highScore]}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),),
                             ],
-                          ),
-                          SizedBox(height: 10),
-                          Text('LEVEL', style: GoogleFonts.gothicA1(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
-                        ],
+                            ),
+                            Divider(thickness: 2.0, color: Colors.white,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Stack(
+                                  children: [
+                                    Icon(FontAwesomeIcons.trophy, color: Colors.blue, size: 30,),
+                                    Positioned(
+                                      top: 3.0,
+                                      left: 8.0,
+                                      child: CustomPaint(
+                                        painter: TrophyLayerPainter(),
+                                        size: Size(20, 15),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 8.0,
+                                      left: 20.0,
+                                      child: Container(
+                                        height: 3,
+                                        width: 3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white24,
+                                            shape: BoxShape.circle
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text('${GamingStats.recentStats[gameLevel]}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 100.0,

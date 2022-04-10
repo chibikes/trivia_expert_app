@@ -1,26 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 class HighScoreRepo {
-  final highScores = FirebaseFirestore.instance.collection('highScores');
-  Future<void> updateScore(
+  static final highScores = FirebaseFirestore.instance.collection('highScores');
+  static Future<void> updateScore(
     String id,
     String highScore,
     String photoUrl,
     String userName,
   ) {
-    try {
       return highScores.doc(id).update({
         'highScore': highScore,
         'avatarUrl': photoUrl,
-      });
-    } catch (e) {
-      return highScores.add({
+      }).onError((error, stackTrace) => highScores.doc(id).set({
         'highScore': highScore,
         'avatarUrl': photoUrl,
         'id': id,
         'userName': userName,
-      });
-    }
+      }));
+
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_p
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../file_storage.dart';
+import '../../../high_score_repo/high_score_repo.dart';
 
 class FinishedGamePage extends StatefulWidget {
   final int score;
@@ -224,8 +226,10 @@ class FinishedGamePageState extends State<FinishedGamePage>
   @override
   void deactivate() {
     var shopCubit = context.read<ShopCubit>();
+    var user = context.read<AuthenticationBloc>().state.user;
     shopCubit.emit(shopCubit.state.copyWith(blueCrystals: shopCubit.state.blueCrystals + widget.reward.toInt()));
     FileStorage.instance.then((value) => value.setInt(blueCrystals, (widget.reward + shopCubit.state.blueCrystals).toInt()));
+    HighScoreRepo.updateScore(user!.id!, GamingStats.recentStats[highScore].toString(), user.photo!, user.name!);
     // GamingStats.saveGamingStats(
     //     context.read<GameEndCubit>().state.proficiency / 100);
     GameStats.gameStats.clear();
