@@ -5,7 +5,7 @@ class HighScoreRepo {
   static final highScores = FirebaseFirestore.instance.collection('highScores');
   static Future<void> updateScore(
     String id,
-    String highScore,
+    int highScore,
     String photoUrl,
     String userName,
   ) {

@@ -71,7 +71,6 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
               ),
             ),
             SizedBox(height: 50,),
-            Icon(Icons.style),
             Padding(
               padding: EdgeInsets.only(
                   right: 0.70 * MediaQuery.of(context).size.width),
@@ -86,7 +85,7 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
             ),
             Container(
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 4.0),
+                border: Border.all(color: Colors.white, width: 3.0),
                 boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 8.0),],
                 color: Color(0xff008080),
                 borderRadius: BorderRadius.circular(8.0),

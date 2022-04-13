@@ -19,7 +19,9 @@ import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/power_up_container.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
+import 'package:trivia_expert_app/widgets/xp_icon.dart';
 
+import '../../../widgets/camera_widget.dart';
 import '../../../widgets/trophy_cup_layer.dart';
 
 class Home extends StatefulWidget {
@@ -132,7 +134,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         height: 100,
                         width: 100,
                         decoration: BoxDecoration(
-                          boxShadow: [BoxShadow(blurRadius: 8.0, color: Colors.black38)],
+                          gradient: LinearGradient(colors: [Colors.blue, Colors.deepPurple], end: Alignment.bottomRight),
+                          boxShadow: [BoxShadow(blurRadius: 2.0, color: Colors.black38)],
                           color: Colors.blue,
                           shape: BoxShape.circle,
                         ),
@@ -152,7 +155,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      Positioned(top: 70.0, left: 70.0,child: Icon(Icons.camera_alt, color: Colors.cyan,)),
+                      Positioned(top: 70.0, left: 73.0,child: CustomPaint(size: Size(25, 20),painter: CameraIcon(),)),
                     ],
                   ),
                 ),
@@ -182,8 +185,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 Column(
                   children: [
                     Container(
-                      height: 100,
-                      width: 100,
+                      height: 115,
+                      width: 115,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         color: Color(0xff8b5a2b)
@@ -200,10 +203,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                   Icon(FontAwesomeIcons.trophy, color: Colors.orange, size: 30,),
                                   Positioned(
                                     top: 3.0,
-                                    left: 8.0,
+                                    left: 5.5,
                                     child: CustomPaint(
                                       painter: TrophyLayerPainter(),
-                                      size: Size(20, 15),
+                                      size: Size(23, 20),
                                     ),
                                   ),
                                   Positioned(
@@ -220,39 +223,28 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
-                              Text('${GamingStats.recentStats[highScore]}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),),
+                              Column(
+                                children: [
+                                  Text('${GamingStats.recentStats[highScore]}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),),
+                                  Text('High Score', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black54),)
+                                ],
+                              ),
                             ],
                             ),
                             Divider(thickness: 2.0, color: Colors.white,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Stack(
+                                CustomPaint(
+                                  painter: XPPainter(Colors.blue, Colors.lightBlue, ),
+                                  size: Size(28, 35)
+                                ),
+                                Column(
                                   children: [
-                                    Icon(FontAwesomeIcons.trophy, color: Colors.blue, size: 30,),
-                                    Positioned(
-                                      top: 3.0,
-                                      left: 8.0,
-                                      child: CustomPaint(
-                                        painter: TrophyLayerPainter(),
-                                        size: Size(20, 15),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 8.0,
-                                      left: 20.0,
-                                      child: Container(
-                                        height: 3,
-                                        width: 3,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white24,
-                                            shape: BoxShape.circle
-                                        ),
-                                      ),
-                                    ),
+                                    Text('${GamingStats.recentStats[gameLevel]}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),),
+                                    Text('XP', style: GoogleFonts.alegreyaSans(fontWeight: FontWeight.bold, color: Colors.black54),),
                                   ],
                                 ),
-                                Text('${GamingStats.recentStats[gameLevel]}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),),
                               ],
                             ),
                           ],
@@ -262,7 +254,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: 100.0,
+                  height: 60.0,
                 ),
                 ScaleTransition(
                   scale: Tween<double>(begin: 1.0, end: 0.70).animate(
@@ -280,7 +272,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                             context.read<FirstPageCubit>().goToPage(
                                   context,
                                   SinglePlayerPage(),
+                              buttonController: _bounceController,
                                 ),
+
                       ),
                     ),
                   ),

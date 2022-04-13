@@ -229,7 +229,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
     var user = context.read<AuthenticationBloc>().state.user;
     shopCubit.emit(shopCubit.state.copyWith(blueCrystals: shopCubit.state.blueCrystals + widget.reward.toInt()));
     FileStorage.instance.then((value) => value.setInt(blueCrystals, (widget.reward + shopCubit.state.blueCrystals).toInt()));
-    HighScoreRepo.updateScore(user!.id!, GamingStats.recentStats[highScore].toString(), user.photo!, user.name!);
+    HighScoreRepo.updateScore(user!.id!, GamingStats.recentStats[highScore]!.toInt(), user.photo!, user.name!);
     // GamingStats.saveGamingStats(
     //     context.read<GameEndCubit>().state.proficiency / 100);
     GameStats.gameStats.clear();

@@ -8,15 +8,10 @@ import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 class FirstPageCubit extends Cubit<FirstPageState> {
   FirstPageCubit(FirstPageState initialState) : super(initialState);
 
-  // void animateButton(BuildContext context, AnimationController? controller,
-  //     Widget widget, GamePlayState gamePlayState) async {
-  //   await controller!
-  //       .forward()
-  //       .whenComplete(() => controller.reverse());
-  //   goToPage(context, widget, gamePlayState);
-  // }
 
-  void goToPage(BuildContext context, Widget widget) {
+  void goToPage(BuildContext context, Widget widget,
+      {AnimationController? buttonController}) async{
+    if(buttonController != null) await buttonController.forward().whenComplete(() => buttonController.reverse());
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return widget;
     }));
