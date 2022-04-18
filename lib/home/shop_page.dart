@@ -305,7 +305,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       child: Row(
                         children: [
                           Badge(
-                            position: BadgePosition.bottomEnd(end: -20),
+                            position: BadgePosition.bottomEnd(end: -15),
                             badgeContent: Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: RedLifeCrystal(
                               height: 30,

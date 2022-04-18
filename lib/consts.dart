@@ -31,7 +31,7 @@ const redCrystals = 'redCrystals';
 const rightAnswers = 'rightAnswers';
 const blueCrystals = 'blueCrystals';
 
-// game states
+// game states also saved preferences key
 const gameIndex = 'index';
 const gameLevel = 'level';
 const highScore = 'highScore';

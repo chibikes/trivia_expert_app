@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -92,6 +93,7 @@ class ShopCubit extends Cubit<ShopState> {
         emit(state.copyWith(blueCrystals: noOfItems, buyStatus: BuyStatus.blueCrystalBought));
       } else if (itemType == ItemType.redCrystal) {
         if(state.blueCrystals >= amount) {
+          playNotif();
           emit(state.copyWith(blueCrystals: state.blueCrystals - amount, redCrystals: state.redCrystals + noOfItems, buyStatus: BuyStatus.redCrystalBought));
           FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals));
           FileStorage.instance.then((value) => value.setInt(blueCrystals, state.blueCrystals));
@@ -99,6 +101,7 @@ class ShopCubit extends Cubit<ShopState> {
         }
       } else if (itemType == ItemType.rightAnswer) {
         if(state.blueCrystals >= amount) {
+          playNotif();
           emit(state.copyWith(rightAnswers: state.rightAnswers + noOfItems, blueCrystals: state.blueCrystals - amount, buyStatus: BuyStatus.rightAnswerBought));
           FileStorage.instance.then((value) =>  value.setInt(rightAnswers, state.rightAnswers));
           FileStorage.instance.then((value) =>  value.setInt(blueCrystals, state.blueCrystals));
@@ -168,5 +171,10 @@ class ShopCubit extends Cubit<ShopState> {
     if (purchaseDetails.pendingCompletePurchase) {
       inAppPaymentInstance.completePurchase(purchaseDetails);
     }
+  }
+
+  void playNotif() {
+    final audioPlayer = AudioCache();
+    audioPlayer.play('high_score.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 }

@@ -267,7 +267,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
-                    Positioned(top: 20.0,left: 0.40 * MediaQuery.of(context).size.width, child: Text(gameState.gameStatus == GameStatus.levelChanged ? 'LEVEL ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30, fontFamily: 'ShowCardGothic', color: Colors.green),)),
+                    Positioned(top: 20.0,left: 0.40 * MediaQuery.of(context).size.width, child: Text(gameState.gameStatus == GameStatus.levelChanged ? 'XP ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30, fontFamily: 'ShowCardGothic', color: Colors.green),)),
                   ],
                 );
             },

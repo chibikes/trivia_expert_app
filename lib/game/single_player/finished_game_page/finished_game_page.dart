@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
@@ -68,6 +69,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
     _scaleCrystalController.addListener(() {
       if (reward == widget.reward || widget.reward == 0) {
         _scaleCrystalController.stop();
+        playWinOrLose();
       }
     });
     _playAnim();
@@ -130,14 +132,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
           padding: const EdgeInsets.all(8.0),
               child: ListView(
                 children: [
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: FloatingActionButton(backgroundColor: Colors.pinkAccent,onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                        child: Icon(Icons.close)),
-                  ),
+                  SizedBox(height: 10,),
                   AnimatedBuilder(
                     animation: _offsetAnimController,
                     builder: (context, child) {
@@ -155,7 +150,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         widget.highScore
                             ? 'NEW HIGH SCORE!'
                             : widget.newLevel
-                                ? 'NEW LEVEL UNLOCKED!'
+                                ? 'XP POINTS EARNED!'
                                 : 'SEE IF YOU CAN DO BETTER!',
                         style: GoogleFonts.droidSans(
                           fontSize: 20,
@@ -200,6 +195,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                                 height: 30,
                                 width: 30,
                               ),),
+                          SizedBox(width: 0.10 * MediaQuery.of(context).size.width,),
                           Text(
                             '$reward',
                             style: TextStyle(fontSize: 30, color: Colors.white),
@@ -263,19 +259,31 @@ class FinishedGamePageState extends State<FinishedGamePage>
   }
 
   _pressButton() async {
+    buttonClick();
     await _buttonController.forward();
     await _buttonController.reverse();
     Navigator.of(context).pop();
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SinglePlayerPage();
-    }));
+  }
+
+  void buttonClick() {
+    final audioPlayer = AudioCache();
+    audioPlayer.play('button_click.mp3', mode: PlayerMode.LOW_LATENCY);
+  }
+
+  void playWinOrLose() {
+    final audioPlayer = AudioCache();
+    if(widget.highScore || widget.newLevel) {
+      audioPlayer.play('well_done.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.2);
+    } else {
+      audioPlayer.play('try_again.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.2);
+    }
   }
 }
 
 String assessScore(double score) {
   // a score >= 10 definitely means a new level event!
   if (score >= 10)
-    return 'NEW LEVEL UNLOCKED!';
+    return 'NEW XP POINTS EARNED!';
   else
-    return 'See if you can do better!';
+    return 'SEE IF YOU CAN DO BETTER!';
 }

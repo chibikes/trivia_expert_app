@@ -75,10 +75,13 @@ flutter:
     - assets/trivia_expert.riv
     - assets/landscape.riv
     - assets/trivia_ex.json
+    - assets/button_click.mp3
     - assets/fail_sound.mp3
     - assets/win_sound.mp3
+    - assets/try_again.mp3
+    - assets/well_done.mp3
+    - assets/high_score.mp3
     - assets/profile_avatar.svg
-    - assets/avatars/
   fonts:
     - family: ShowCardGothic
       fonts:

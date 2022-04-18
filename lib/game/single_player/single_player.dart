@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class SinglePlayerPage extends StatefulWidget {
 
 class SinglePlayerPageState extends State<SinglePlayerPage>
     with TickerProviderStateMixin {
-  List<String> tips = ['Answering 10  questions correctly unlocks a new level with some reward', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
+  List<String> tips = ['Answering 10  successive questions correctly unlocks a new level with some reward', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
   var tipIndex = 0;
   late AnimationController _buttonController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 50));
@@ -56,19 +57,23 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
             SizedBox(
               height: 30,
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: FloatingActionButton(backgroundColor: Colors.pinkAccent,onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(Icons.close)),
+            Row(
+              children: [
+                SizedBox(width: 0.30 * MediaQuery.of(context).size.width,),
+                Text('CLASSIC TRIVIA', style: TextStyle(color: Colors.blueGrey,fontSize: 20, fontWeight: FontWeight.bold),),
+                SizedBox(width: 0.10 * MediaQuery.of(context).size.width,),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: FloatingActionButton(backgroundColor: Colors.cyan,onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(Icons.close), elevation: 3.0,),
+                  ),
                 ),
-              ),
+              ],
             ),
             SizedBox(height: 50,),
             Padding(
@@ -95,12 +100,7 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FadeTransition(opacity: Tween<double>(begin: 1.0, end: 0.30).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn)),
-                child: Column(
-                  children: [
-                    Text(tips[tipIndex], style: GoogleFonts.balooDa(color: Colors.white, fontSize: 15)),
-                    BlueCrystal(height: 30, width: 30,)
-                  ],
-                )),
+                child: Text(tips[tipIndex], style: GoogleFonts.balooDa(color: Colors.white, fontSize: 15))),
               ),
             ),
             SizedBox(
@@ -117,7 +117,6 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
                       .animate(CurvedAnimation(
                           parent: _buttonController, curve: Curves.linear)),
             ),
-            Text('TRIVIA'),
           ],
         ),
       ),
@@ -125,17 +124,16 @@ class SinglePlayerPageState extends State<SinglePlayerPage>
   }
 
   _pressButton() async {
+    pressButtonSound();
     await _buttonController.forward();
     await _buttonController.reverse();
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return OnlineSinglePlayer();
     }));
   }
-  _longPressButton() {
-    _buttonController.forward();
-  }
 
-  _longPressStop() {
-    _buttonController.reverse();
+  void pressButtonSound() {
+    final audioPlayer = AudioCache();
+    audioPlayer.play('button_click.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 }

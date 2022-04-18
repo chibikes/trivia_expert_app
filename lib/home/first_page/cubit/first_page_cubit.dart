@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -15,6 +16,7 @@ class FirstPageCubit extends Cubit<FirstPageState> {
 
   void goToPage(BuildContext context, Widget widget,
       {AnimationController? buttonController}) async{
+    buttonClick();
     if(buttonController != null) await buttonController.forward().whenComplete(() => buttonController.reverse());
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return widget;
@@ -24,6 +26,11 @@ class FirstPageCubit extends Cubit<FirstPageState> {
     ImageSelector imageSelector = ImageSelector();
     var imagePath = imageSelector.getImageFromGallery();
     return imagePath;
+  }
+
+  void buttonClick() {
+    final audioPlayer = AudioCache();
+    audioPlayer.play('button_click.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 }
 

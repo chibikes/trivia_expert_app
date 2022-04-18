@@ -49,7 +49,12 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     bool reachedQuestionsEnd = state.index == state.questions.length - 1;
     var nextQuestion  = reachedQuestionsEnd ? state.questions[state.index] : state.questions[state.index + 1];
     bool isHardQuestion = nextQuestion.question!.length >= 60 || nextQuestion.difficulty == 'hard';
-    score % databaseLimit == 0 ? emit(state.copyWith(level: state.level + 1, gameStatus: GameStatus.levelChanged, newLevelEvent: true, reward: state.reward + 5)) : null;
+    if (score % databaseLimit == 0) {
+      emit(state.copyWith(level: state.level + 1,
+          gameStatus: GameStatus.levelChanged,
+          newLevelEvent: true,
+          reward: state.reward + 5));
+    }
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
           time: isHardQuestion ? kTotalGameTime : 10,
@@ -77,8 +82,9 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           });
           score++;
           if(state.highScoreEvent == false && score > GamingStats.recentStats[highScore]!) {
+            playHighScoreSound();
             emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 3),);
-            //TODO: save high_score here!
+            prefs.then((value) => value.setInt(highScore, index));
           }
           playWinSound();
           return Colors.teal;
@@ -122,13 +128,18 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     }
   }
   void playWinSound(){
-    AudioCache audioPlayer = AudioCache();
-    audioPlayer.play('win_sound.mp3');
+    final audioPlayer = AudioCache();
+    audioPlayer.play('win_sound.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.2);
   }
 
   void playFailSound() {
-    AudioCache audioPlayer = AudioCache();
-    audioPlayer.play('fail_sound.mp3');
+    final audioPlayer = AudioCache();
+    audioPlayer.play('fail_sound.mp3', mode: PlayerMode.LOW_LATENCY);
+  }
+
+  void playHighScoreSound() {
+    final audioPlayer = AudioCache();
+    audioPlayer.play('high_score.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 }
 
