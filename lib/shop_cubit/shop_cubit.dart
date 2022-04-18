@@ -117,7 +117,7 @@ class ShopCubit extends Cubit<ShopState> {
         break;
       case ItemType.redCrystal:
         emit(state.copyWith(redCrystals: numberUsed));
-        FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals));
+        FileStorage.instance.then((value) => value.setInt(redCrystals, state.redCrystals <=0 ? 0 : state.redCrystals));
         break;
       case ItemType.blueCrystal:
         break;

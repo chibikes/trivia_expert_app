@@ -305,6 +305,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       child: Row(
                         children: [
                           Badge(
+                            position: BadgePosition.bottomEnd(end: -20),
                             badgeContent: Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: RedLifeCrystal(
                               height: 30,
@@ -323,6 +324,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       child: Row(
                         children: [
                           Badge(
+                            position: BadgePosition.bottomEnd(end: -20),
                             badgeContent: Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: BlueCrystal(
                               width: 30,
@@ -341,6 +343,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       child: Row(
                         children: [
                           Badge(
+                            position: BadgePosition.bottomEnd(),
                             badgeContent: Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: RightAnswer(
                               width: 30,

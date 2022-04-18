@@ -35,3 +35,5 @@ const blueCrystals = 'blueCrystals';
 const gameIndex = 'index';
 const gameLevel = 'level';
 const highScore = 'highScore';
+
+const altImage = 'https://firebasestorage.googleapis.com/v0/b/flutter-trivia-ex.appspot.com/o/users%2Favatar10.png?alt=media&token=9190b47f-7220-4a40-8d88-e2c2bc99f138';

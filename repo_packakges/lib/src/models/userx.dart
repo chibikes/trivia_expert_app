@@ -20,9 +20,8 @@ class User extends Equatable {
     this.age,
     this.country,
     this.email,
-    this.photo,
+    this.photoUrl,
     this.achievements,
-    this.gameIds =  const ['', '', '', '', '',],
     this.lastOnlineInteraction,
     this.maxGamesReached,
   });
@@ -32,15 +31,14 @@ class User extends Equatable {
   final String? name, firstName, lastName;
   final String? age;
   final String? country;
-  final String? photo;
+  final String? photoUrl;
   final String? email;
   final List<dynamic>? achievements;
-  final List<dynamic> gameIds;
   final String? lastOnlineInteraction;
   final bool? maxGamesReached;
 
   static const empty =
-      User(id: '', name: null, photo: ''); // photo should be null
+      User(id: '', name: null, photoUrl: ''); // photo should be null
 
   Map<String, dynamic> toMap() {
     return {
@@ -50,10 +48,9 @@ class User extends Equatable {
       'last_name': lastName,
       'age': age,
       'country': country,
-      'photo': photo,
+      'photo': photoUrl,
       'email': email,
       'achievements': achievements,
-      'gameIds': gameIds,
       'lastOnlineInteraction' : lastOnlineInteraction,
       'maxGamesReached' : maxGamesReached,
     };
@@ -66,7 +63,7 @@ class User extends Equatable {
     String? lastName,
     String? age,
     String? country,
-    String? photo,
+    String? photoUrl,
     String? email,
     List<dynamic>? achievements,
     List<dynamic>? gameIds,}
@@ -78,10 +75,9 @@ class User extends Equatable {
       lastName: lastName ?? this.lastName,
       age: age ?? this.age,
       country: country ?? this.country,
-      photo: photo ?? this.photo,
+      photoUrl: photoUrl ?? this.photoUrl,
       email: email ?? this.email,
       achievements: achievements,
-      gameIds: gameIds!,
     );
   }
 
@@ -93,14 +89,13 @@ class User extends Equatable {
       lastName: data['last_name'],
       age: data['age'],
       country: data['country'],
-      photo: data['photo'],
+      photoUrl: data['photo'],
       achievements: data['achievements'],
-      gameIds: data['gameIds'],
     );
   }
 
   @override
-  List<Object?> get props => [name, photo, gameIds, achievements, country, age];
+  List<Object?> get props => [name, photoUrl,  achievements, country, age];
 
 
 }

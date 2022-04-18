@@ -2,27 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:repo_packages/repo_packakges.dart';
-import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
-import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_cubit.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:trivia_expert_app/home/first_page/view/home_page.dart';
-import 'package:trivia_expert_app/home/multi_player.dart';
-import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
-import 'package:trivia_expert_app/widgets/game_widgets/check_mark_widget.dart';
-import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
-import 'package:trivia_expert_app/widgets/other_widgets/first_aid_box.dart';
 import 'package:trivia_expert_app/widgets/other_widgets/mainpage_container.dart';
 import '../../settings_page.dart';
 import '../leaderboardpage.dart';
 import '../shop_page.dart';
 
 class HomePage extends StatefulWidget {
-  final UserRepository? userRepository;
+  final FirebaseUserRepository? userRepository;
 
-  const HomePage({Key? key, this.userRepository = const UserRepository()}) : super(key: key);
+  const HomePage({Key? key, this.userRepository,}) : super(key: key);
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage());
+    return MaterialPageRoute<void>(builder: (_) => HomePage(userRepository: FirebaseUserRepository(),));
   }
 
   @override
@@ -42,43 +35,45 @@ class _TabbedState extends State<HomePage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: MainPageContainer(
-          child: RepositoryProvider.value(
-            value: widget.userRepository,
-            child: MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (_) => FirstPageCubit(
-                      FirstPageState(),
+    return SafeArea(
+      child: Scaffold(
+          body: MainPageContainer(
+            child: RepositoryProvider.value(
+              value: widget.userRepository,
+              child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (_) => FirstPageCubit(
+                        FirstPageState(),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
 
-                // create: (_) =>
-                //     MainPageBloc(MainPageState(homeStatus: HomeStatus.idle)),
-                child: _widgetOptions.elementAt(_selectedIndex)),
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: Colors.lightBlue,
-              activeIcon: Icon(FontAwesomeIcons.home),
+                  // create: (_) =>
+                  //     MainPageBloc(MainPageState(homeStatus: HomeStatus.idle)),
+                  child: _widgetOptions.elementAt(_selectedIndex)),
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.trophy), label: 'LeaderBoard'),
-            // BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.trophy), label: 'LeaderBoard'),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.lightBlue,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ));
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+                backgroundColor: Colors.lightBlue,
+                activeIcon: Icon(FontAwesomeIcons.home),
+              ),
+              BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.trophy), label: 'LeaderBoard'),
+              // BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.trophy), label: 'LeaderBoard'),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.lightBlue,
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          )),
+    );
   }
 }

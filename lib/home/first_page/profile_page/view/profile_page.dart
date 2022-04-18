@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/home/first_page/profile_page/view/edit_profile/edit_profile.dart';
-import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
 import 'package:trivia_expert_app/widgets/decorated_avatar.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../user_bloc/cubit/user_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   final BuildContext? context;
@@ -62,7 +63,7 @@ class ProfilePageState extends State<ProfilePage> {
 
                           Text(
                             widget.context!
-                                .read<MainBloc>()
+                                .read<UserBloc>()
                                 .state
                                 .user!
                                 .name!,
@@ -88,8 +89,7 @@ class ProfilePageState extends State<ProfilePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return EditProfile(
-                                        widget.context!.read<MainBloc>().state.user);
+                                    return EditProfile();
                                   },
                                 ),
                               );

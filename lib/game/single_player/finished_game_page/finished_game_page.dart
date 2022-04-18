@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/consts.dart';
+import 'package:trivia_expert_app/game/game.dart';
 import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
+import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/chalkboard.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
@@ -16,6 +18,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../file_storage.dart';
 import '../../../high_score_repo/high_score_repo.dart';
+import '../../../widgets/xp_icon.dart';
+import '../online_single_player/view/online_single_player.dart';
 
 class FinishedGamePage extends StatefulWidget {
   final int score;
@@ -46,6 +50,8 @@ class FinishedGamePageState extends State<FinishedGamePage>
   late Animation<double> animation;
   late Animation<double> heightFirstItem;
   late Animation<double> heightSecondItem;
+  late AnimationController _buttonController =
+  AnimationController(vsync: this, duration: Duration(milliseconds: 50));
 
   @override
   void initState() {
@@ -101,20 +107,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
         ),
       ),
     );
-    // TODO: show only four progress indicators
-    // for(int i=0; i < 3; i++) {
-    //   var stat = gameStats[i];
-    //   if (stat!.categoryFrequency != 0) {
-    //     listStats.add(Padding(
-    //       padding: const EdgeInsets.all(8.0),
-    //       child: GameStatsCard(
-    //         category: stat,
-    //         score: '${stat.score}/${stat.categoryFrequency}',
-    //         ratio: stat.score / stat.categoryFrequency,
-    //       ),
-    //     ));
-    //   }
-    // }
+
     gameStats.forEach((key, value) {
       if (value.categoryFrequency != 0) {
         listStats.add(Padding(
@@ -127,6 +120,9 @@ class FinishedGamePageState extends State<FinishedGamePage>
         ));
       }
     });
+    if(listStats.length > 5)
+    listStats.removeRange(5, listStats.length);
+
     return BlocBuilder<GameEndCubit, GameEndState>(builder: (context, state) {
       return Scaffold(
         backgroundColor: Color(0xffF8F0E3),
@@ -174,9 +170,21 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         'SCORE ${widget.score}',
                         style: TextStyle(fontSize: 30, color: Colors.white),
                       ),
-                      Text(
-                        'LEVEL ${GamingStats.recentStats[gameLevel]}',
-                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomPaint(
+                              painter: XPPainter(
+                                Colors.orange,
+                                Colors.orangeAccent,
+                              ),
+                              size: Size(28, 35)),
+                          SizedBox(width: 10.0,),
+                          Text(
+                            'XP ${GamingStats.recentStats[gameLevel]}',
+                            style: TextStyle(fontSize: 30, color: Colors.white),
+                          ),
+                        ],
                       ),
                       Row(
                         children: [
@@ -216,6 +224,18 @@ class FinishedGamePageState extends State<FinishedGamePage>
                       children: listStats,
                     ),
                   ),
+                  AnimatedBuilder(
+                    builder: (context, child) {
+                      return SizedBox(height: heightSecondItem.value,);
+                    }, animation: _offsetAnimController,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  ProperElevatedButton(text: 'REPLAY', buttonWidth: 0.80 * MediaQuery.of(context).size.width, buttonHeight: 50.0, function: () => _pressButton(),position:
+                  Tween<Offset>(begin: Offset.zero, end: Offset(0.0, 0.12))
+                      .animate(CurvedAnimation(
+                      parent: _buttonController, curve: Curves.linear)),),
                 ],
               ),
         ),
@@ -229,11 +249,26 @@ class FinishedGamePageState extends State<FinishedGamePage>
     var user = context.read<AuthenticationBloc>().state.user;
     shopCubit.emit(shopCubit.state.copyWith(blueCrystals: shopCubit.state.blueCrystals + widget.reward.toInt()));
     FileStorage.instance.then((value) => value.setInt(blueCrystals, (widget.reward + shopCubit.state.blueCrystals).toInt()));
-    HighScoreRepo.updateScore(user!.id!, GamingStats.recentStats[highScore]!.toInt(), user.photo!, user.name!);
+    if(widget.highScore == true) {
+      HighScoreRepo.updateScore(
+          user!.id!,
+          GamingStats.recentStats[highScore]!.toInt(),
+          user.photoUrl!,
+          user.name!);
+    }
     // GamingStats.saveGamingStats(
     //     context.read<GameEndCubit>().state.proficiency / 100);
     GameStats.gameStats.clear();
     super.deactivate();
+  }
+
+  _pressButton() async {
+    await _buttonController.forward();
+    await _buttonController.reverse();
+    Navigator.of(context).pop();
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SinglePlayerPage();
+    }));
   }
 }
 

@@ -93,19 +93,19 @@ class Player extends User implements Equatable{
         String? name,
         String? photo,
         this.score = 0})
-      : super(id: id, name: name, photo: photo);
+      : super(id: id, name: name, photoUrl: photo);
   @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'photo': photo,
+      'photo': photoUrl,
       'score': score,
     };
   }
 
   @override
-  List<Object?> get props => [id, score, round, turn, name, photo, score];
+  List<Object?> get props => [id, score, round, turn, name, photoUrl, score];
 
   Player copy({int? score, int? round, bool? turn, String? name, String? photo, String? id}) {
     return Player(
@@ -113,7 +113,7 @@ class Player extends User implements Equatable{
       round: round ?? this.round,
       turn: turn ?? this.turn,
       name: name ?? this.name,
-      photo: photo ?? this.photo,
+      photo: photo ?? this.photoUrl,
       id: id ?? this.id,
 
     );

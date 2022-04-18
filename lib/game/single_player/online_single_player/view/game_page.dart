@@ -16,7 +16,6 @@ import 'package:trivia_expert_app/game/single_player/finished_game_page/finished
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_page.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
-import 'package:trivia_expert_app/main_bloc/cubit/main_page_bloc.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +26,8 @@ import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/power_up_container.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
+
+import '../../../../user_bloc/cubit/user_bloc.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({
@@ -109,7 +110,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
               var question = gameState.questions[gameState.index];
-              if (gameState.life == 0 || gameState.time == 0) {
+              if (gameState.life <= 0 || gameState.time <= 0) {
                 if(gameState.highScoreEvent){
                   GamingStats.recentStats[highScore] = gameState.playerScore;
                 }
@@ -146,10 +147,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                     children: [
                                       CircleAvatar(
                                         backgroundImage: NetworkImage(context
-                                            .read<MainBloc>()
+                                            .read<UserBloc>()
                                             .state
                                             .user!
-                                            .photo!),
+                                            .photoUrl!),
                                       ),
                                       Text(''), //TODO: put player score here.
                                     ],

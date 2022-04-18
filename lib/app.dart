@@ -7,10 +7,10 @@ import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/splash/view/splash_page.dart';
 import 'package:trivia_expert_app/theme.dart';
+import 'package:trivia_expert_app/user_bloc/cubit/user_bloc.dart';
 import 'authentication/authentication.dart';
 import 'package:trivia_expert_app/home/tabbed_pages/tabbed_pages.dart';
 import 'login/view/login_page.dart';
-import 'main_bloc/cubit/main_page_bloc.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -31,8 +31,9 @@ class App extends StatelessWidget {
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
             ),
+            lazy: false,
           ),
-          BlocProvider(create: (_) => MainBloc(UserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
+          BlocProvider(create: (_) => UserBloc(FirebaseUserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
           BlocProvider(create: (_)=> QuestionBloc(questionRepository: DatabaseQuestionsRepository())..add(QuestionsFetched()), lazy: false,),
           BlocProvider(create: (_)=> ShopCubit(inAppRepo: InAppRepo())..getPowerUpsFromStorage(),),
         ],

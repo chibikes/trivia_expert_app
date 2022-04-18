@@ -21,7 +21,7 @@ class SinglePlayerPage extends StatefulWidget {
 
 class SinglePlayerPageState extends State<SinglePlayerPage>
     with TickerProviderStateMixin {
-  List<String> tips = ['Answering 10 Successive questions unlocks a new level with some reward', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
+  List<String> tips = ['Answering 10  questions correctly unlocks a new level with some reward', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
   var tipIndex = 0;
   late AnimationController _buttonController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 50));
