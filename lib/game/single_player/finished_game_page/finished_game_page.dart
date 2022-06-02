@@ -1,26 +1,18 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/consts.dart';
-import 'package:trivia_expert_app/game/game.dart';
-import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
-import 'package:trivia_expert_app/gamestates/gamestates_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/chalkboard.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
-import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../file_storage.dart';
-import '../../../high_score_repo/high_score_repo.dart';
 import '../../../widgets/xp_icon.dart';
-import '../online_single_player/view/online_single_player.dart';
 
 class FinishedGamePage extends StatefulWidget {
   final int score;
@@ -59,7 +51,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
     heightFirstItem = Tween<double>(begin: 500.0, end: 0.0).animate(CurvedAnimation(parent: _offsetAnimController, curve: Interval(0.0, 1.0, curve: Curves.easeInOut)));
     heightSecondItem = Tween<double>(begin: 500.0, end: 0.0).animate(CurvedAnimation(parent: _offsetAnimController, curve: Interval(0.50, 1.0, curve: Curves.easeInOut)));
     // Tween<Offset>(begin: Offset.zero, end: Offset(50, 100)).animate(parent);
-    animation = Tween<double>(begin: 0, end: widget.reward).animate(
+    animation = Tween<double>(begin: 0, end: widget.reward + widget.score).animate(
         CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))
       ..addListener(() {
         setState(() {
@@ -88,6 +80,9 @@ class FinishedGamePageState extends State<FinishedGamePage>
   void dispose() {
     _rewardController.dispose();
     _scaleCrystalController.dispose();
+    _buttonController.dispose();
+    _offsetAnimController.dispose();
+
     super.dispose();
   }
 
@@ -195,7 +190,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                                 height: 30,
                                 width: 30,
                               ),),
-                          SizedBox(width: 0.10 * MediaQuery.of(context).size.width,),
+                          SizedBox(width: 0.02 * MediaQuery.of(context).size.width,),
                           Text(
                             '$reward',
                             style: TextStyle(fontSize: 30, color: Colors.white),
@@ -242,18 +237,8 @@ class FinishedGamePageState extends State<FinishedGamePage>
   @override
   void deactivate() {
     var shopCubit = context.read<ShopCubit>();
-    var user = context.read<AuthenticationBloc>().state.user;
-    shopCubit.emit(shopCubit.state.copyWith(blueCrystals: shopCubit.state.blueCrystals + widget.reward.toInt()));
-    FileStorage.instance.then((value) => value.setInt(blueCrystals, (widget.reward + shopCubit.state.blueCrystals).toInt()));
-    if(widget.highScore == true) {
-      HighScoreRepo.updateScore(
-          user!.id!,
-          GamingStats.recentStats[highScore]!.toInt(),
-          user.photoUrl!,
-          user.name!);
-    }
-    // GamingStats.saveGamingStats(
-    //     context.read<GameEndCubit>().state.proficiency / 100);
+    shopCubit.emit(shopCubit.state.copyWith(blueCrystals: shopCubit.state.blueCrystals + reward.toInt()));
+    FileStorage.instance.then((value) => value.setInt(blueCrystals, (reward + shopCubit.state.blueCrystals).toInt()));
     GameStats.gameStats.clear();
     super.deactivate();
   }
@@ -278,12 +263,4 @@ class FinishedGamePageState extends State<FinishedGamePage>
       audioPlayer.play('try_again.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.2);
     }
   }
-}
-
-String assessScore(double score) {
-  // a score >= 10 definitely means a new level event!
-  if (score >= 10)
-    return 'NEW XP POINTS EARNED!';
-  else
-    return 'SEE IF YOU CAN DO BETTER!';
 }

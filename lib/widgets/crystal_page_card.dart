@@ -9,7 +9,7 @@ import 'package:trivia_expert_app/widgets/widgets.dart';
 enum ItemType{redCrystal, blueCrystal, rightAnswer}
 //TODO: able to return a widget based on itemType
 /// productId is only required for crystals
-class PaYInfoWidget extends StatelessWidget {
+class PayInfoWidget extends StatelessWidget {
   final String productId;
   final RotationStack rotationStack;
   final Widget? currencyIcon;
@@ -20,7 +20,7 @@ class PaYInfoWidget extends StatelessWidget {
   final positions;
   final rotations;
   final ItemType itemTypes;
-  const PaYInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, required this.itemTypes, this.productId = '', this.amount = 0}) : super(key: key);
+  const PayInfoWidget({Key? key, this.rotationStack = const RotationStack(), this.noOfItems = 0, this.positions, this.rotations, this.itemType = '', this.currencyIcon, this.widgetItem, required this.itemTypes, this.productId = '', this.amount = 0}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var product = context.read<ShopCubit>().state.products[productId];

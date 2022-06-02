@@ -7,6 +7,7 @@ import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:trivia_expert_app/home/first_page/view/home_page.dart';
 import 'package:trivia_expert_app/widgets/other_widgets/mainpage_container.dart';
 import '../../settings_page.dart';
+import '../../user_bloc/cubit/user_bloc.dart';
 import '../leaderboardpage.dart';
 import '../shop_page.dart';
 
@@ -33,6 +34,11 @@ class _TabbedState extends State<HomePage> {
     SettingsPage(),
     // MultiPlayer(),
   ];
+  @override
+  void initState() {
+    context.read<UserBloc>().add(GetUserStat());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(

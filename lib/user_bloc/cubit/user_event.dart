@@ -37,3 +37,21 @@ class UpdateUser extends UserEvent {
   @override
   List<Object> get props => [user];
 }
+
+class GetUserStat extends UserEvent{
+
+}
+
+class UpdatePlayerStat extends UserEvent {
+  final int? highScore;
+  final int? xp;
+
+  UpdatePlayerStat({this.highScore, this.xp});
+}
+
+class SavePlayerStat extends UserEvent {
+  final int highScore;
+  final int xp;
+
+  SavePlayerStat(this.highScore, this.xp);
+}

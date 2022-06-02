@@ -46,7 +46,6 @@ class User extends Equatable {
       'name': name,
       'first_name': firstName,
       'last_name': lastName,
-      'age': age,
       'country': country,
       'photo': photoUrl,
       'email': email,
@@ -85,12 +84,11 @@ class User extends Equatable {
     return User(
       id: data['id'],
       name: data['name'],
+      email: data['email'],
       firstName: data['first_name'],
       lastName: data['last_name'],
-      age: data['age'],
       country: data['country'],
       photoUrl: data['photo'],
-      achievements: data['achievements'],
     );
   }
 

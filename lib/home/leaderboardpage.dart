@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,7 +9,6 @@ import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/user_bloc/cubit/user_bloc.dart';
 
 import '../consts.dart';
-import '../game_stats.dart';
 import '../widgets/trophy_cup_layer.dart';
 
 class LeaderBoardPage extends StatefulWidget {

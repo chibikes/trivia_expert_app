@@ -1,30 +1,19 @@
-import 'dart:async';
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:repo_packages/repo_packakges.dart';
 import 'package:rive/rive.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/file_storage.dart';
-import 'package:trivia_expert_app/game/game_cubit/game_play_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game.dart';
-import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_page.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trivia_expert_app/questions/models/question.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
-import 'package:trivia_expert_app/widgets/power_up_container.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 import '../../../../user_bloc/cubit/user_bloc.dart';
@@ -53,8 +42,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   late double chalkBoardWidth = 0.85 * MediaQuery.of(context).size.width;
   late double chalkBoardHeight = chalkBoardWidth / 1.6180;
 
-  Result? results;
-
+  bool highScoreEvent = false;
+  bool newLevelEvent = false;
+  int score = 0;
+  int xp = 0;
   Artboard? _artBoard;
   final landscapeFile = 'assets/landscape.riv';
 
@@ -72,6 +63,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   void initState() {
     _loadRiveFile();
+    //TODO: remove [AnimationHelper.init...]
     AnimationHelper.initControllers(this);
     _multiButtonMotionController?.reset();
     _buttonTapController = AnimationController(vsync: this);
@@ -82,8 +74,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   @override
   void deactivate() {
-    context
-        .read<OnlineSinglePlayerCubit>()
+    if(highScoreEvent) {
+      context.read<UserBloc>().add(UpdatePlayerStat(highScore: score));
+    }
+    if(newLevelEvent) {
+      context.read<UserBloc>().add(UpdatePlayerStat(xp: xp));
+    }
+    context.read<OnlineSinglePlayerCubit>()
         .saveGameState(context.read<OnlineSinglePlayerCubit>().state.index);
     deductExtraLife();
     super.deactivate();
@@ -109,6 +106,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           context.read<OnlineSinglePlayerCubit>().emitQuestions(questionState.questions);
           return BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
             builder: (context, gameState) {
+              score = gameState.playerScore;
+              xp = gameState.level;
+              newLevelEvent = gameState.newLevelEvent;
+              highScoreEvent = gameState.highScoreEvent;
               var question = gameState.questions[gameState.index];
               if (gameState.life <= 0 || gameState.time <= 0) {
                 if(gameState.highScoreEvent){
@@ -287,6 +288,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     AnimationHelper.disposeControllers();
     super.dispose();
   }
+
   void deductExtraLife() {
     var gameCubit = context.read<OnlineSinglePlayerCubit>();
     var shopCubit = context.read<ShopCubit>();

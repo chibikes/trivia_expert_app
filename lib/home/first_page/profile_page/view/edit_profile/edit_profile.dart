@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:repo_packages/repo_packakges.dart';
-import 'package:trivia_expert_app/dimen.dart';
 import 'package:trivia_expert_app/form_validate.dart';
 import 'package:trivia_expert_app/get_image.dart';
 import '../../../../../user_bloc/cubit/user_bloc.dart';
@@ -27,6 +25,8 @@ class EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<UserBloc>().state.user!.name);
+    print('This is my cue to love!');
     double textFieldWidth = 0.80 * MediaQuery
         .of(context)
         .size

@@ -36,23 +36,9 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController? _bounceController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-  late AnimationController _circularProgressController = AnimationController(
-    lowerBound: 0.0,
-    upperBound: GamingStats.recentStats[accuracyStat]?.toDouble() ?? 0.0,
-    vsync: this,
-    duration: Duration(seconds: 3),
-  );
   @override
   void initState() {
-    _circularProgressController.addListener(() {
-      setState(() {});
-    });
     super.initState();
-  }
-
-  Future<void> startAnimation() async {
-    await Future.delayed(Duration(seconds: 5))
-        .then((value) => _circularProgressController.forward());
   }
 
   @override
@@ -60,28 +46,15 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
       switch (state.homeStatus) {
         case HomeStatus.failure_update:
-          return Center(child: Text('something went wrong'));
+          return Scaffold(body: Center(child: Text('something went wrong')));
         case HomeStatus.updated:
           return Column(
-            // children: [
-            //   Text(context.read<UserBloc>().state.user!.age ?? 'null'),
-            //   ElevatedButton(
-            //     onPressed: () {
-            //       context.read<FirstPageCubit>().goToPage(
-            //             context,
-            //             ProfilePage(
-            //               context: context,
-            //             ),
-            //           );
-            //     },
-            //     child: Text('Go to ->'),
-            //   )
-            // ],
           );
         case HomeStatus.fetched:
-          startAnimation();
           return BlocListener<FirstPageCubit, FirstPageState>(
-            listener: (context, state) {},
+            listener: (context, state) {
+
+            },
             child: ListView(
               children: [
                 Row(
@@ -314,7 +287,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 Column(
                                   children: [
                                     Text(
-                                      '${GamingStats.recentStats[highScore]}',
+                                      '${state.highScore}',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -347,7 +320,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 Column(
                                   children: [
                                     Text(
-                                      '${GamingStats.recentStats[gameLevel]}',
+                                      '${state.xp}',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -401,7 +374,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           );
         case HomeStatus.waiting:
-          return CircularProgressIndicator();
+          return Center(
+            child: Column(
+              children: [
+                CircularProgressIndicator(),
+              ],
+            ),
+          );
       }
     });
   }

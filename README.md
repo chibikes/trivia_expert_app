@@ -1,6 +1,6 @@
 # trivia_expert_app
 
-A multi-player/single-player trivia application written with flutter SDK
+A single-player trivia application written with flutter SDK
 
 ## Getting Started
 

@@ -102,7 +102,7 @@ class CrystalPageState extends State<CrystalsPage> {
                   children: [
                     Column(
                       children: [
-                        PaYInfoWidget(
+                        PayInfoWidget(
                           productId: blueCrystalConsumableFive,
                           widgetItem: BlueCrystal(
                             width: 50,
@@ -117,7 +117,7 @@ class CrystalPageState extends State<CrystalsPage> {
                     ),
                     Column(
                       children: [
-                        PaYInfoWidget(
+                        PayInfoWidget(
                           productId: blueCrystalConsumableTen,
                           rotations: [0.0, math.pi / 8, math.pi / 4],
                           positions: [
@@ -136,7 +136,7 @@ class CrystalPageState extends State<CrystalsPage> {
                     ),
                     Column(
                       children: [
-                        PaYInfoWidget(
+                        PayInfoWidget(
                           productId: blueCrystalConsumableFifteen,
                           rotations: [
                             -math.pi / 8,
@@ -174,7 +174,7 @@ class CrystalPageState extends State<CrystalsPage> {
                   children: [
                     Column(
                       children: [
-                        PaYInfoWidget(
+                        PayInfoWidget(
                           productId: blueCrystalConsumableTwenty,
                           rotations: [0.0, math.pi / 8],
                           positions: [Position(), Position(top: 3.0, left: 18.0)],
@@ -189,7 +189,7 @@ class CrystalPageState extends State<CrystalsPage> {
                     ),
                     Column(
                       children: [
-                        PaYInfoWidget(
+                        PayInfoWidget(
                           productId: blueCrystalConsumableTwentyFive,
                           rotations: [
                             -math.pi / 15,
@@ -216,7 +216,7 @@ class CrystalPageState extends State<CrystalsPage> {
                     ),
                     Column(
                       children: [
-                        PaYInfoWidget(
+                        PayInfoWidget(
                           productId: blueCrystalConsumableThirty,
                           rotations: [0.0, math.pi / 8],
                           positions: [
@@ -366,7 +366,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    PaYInfoWidget(
+                    PayInfoWidget(
 
                       widgetItem: RightAnswer(
                         width: widthCheckMark,
@@ -388,7 +388,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ), itemTypes: ItemType.rightAnswer,
                       amount: 5,
                     ),
-                    PaYInfoWidget(
+                    PayInfoWidget(
                       widgetItem: RightAnswer(
                         width: widthCheckMark,
                         height: heightCheckMark,
@@ -411,7 +411,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                         width: 10,
                       ), itemTypes: ItemType.rightAnswer,
                     ),
-                    PaYInfoWidget(
+                    PayInfoWidget(
                       widgetItem: RightAnswer(
                         width: widthCheckMark,
                         height: heightCheckMark,
@@ -450,7 +450,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    PaYInfoWidget(
+                    PayInfoWidget(
 
                       widgetItem: RedLifeCrystal(
                         height: 70,
@@ -466,7 +466,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ), itemTypes: ItemType.redCrystal,
                       amount: 10,
                     ),
-                    PaYInfoWidget(
+                    PayInfoWidget(
                       widgetItem: RedLifeCrystal(
                         height: 70,
                         width: 50,
@@ -492,7 +492,7 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                         width: 10,
                       ), itemTypes: ItemType.redCrystal,
                     ),
-                    PaYInfoWidget(
+                    PayInfoWidget(
                       widgetItem: RedLifeCrystal(
                         height: 70,
                         width: 50,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:repo_packages/repo_packakges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/file_storage.dart';
@@ -10,10 +11,11 @@ import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
-  OnlineSinglePlayerCubit(OnlineSinglePlayerState state) : super(state);
+  OnlineSinglePlayerCubit(OnlineSinglePlayerState state, this.user) : super(state);
   StreamSubscription? _timeSubscription;
   final Ticker _ticker = Ticker();
   final prefs = SharedPreferences.getInstance();
+  final User user;
 
   Future<void> startTimer() async {
     if (_timeSubscription != null) {
@@ -49,12 +51,6 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     bool reachedQuestionsEnd = state.index == state.questions.length - 1;
     var nextQuestion  = reachedQuestionsEnd ? state.questions[state.index] : state.questions[state.index + 1];
     bool isHardQuestion = nextQuestion.question!.length >= 60 || nextQuestion.difficulty == 'hard';
-    if (score % databaseLimit == 0) {
-      emit(state.copyWith(level: state.level + 1,
-          gameStatus: GameStatus.levelChanged,
-          newLevelEvent: true,
-          reward: state.reward + 5));
-    }
     return Future.delayed(Duration(seconds: 1), () {
       emit(state.copyWith(
           time: isHardQuestion ? kTotalGameTime : 10,
@@ -82,11 +78,19 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           });
           score++;
           if(state.highScoreEvent == false && score > GamingStats.recentStats[highScore]!) {
-            playHighScoreSound();
-            emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 3),);
-            prefs.then((value) => value.setInt(highScore, index));
+            playVictorySound();
+            emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 5),);
           }
-          playWinSound();
+
+          if (score % 10 == 0 && score != 0) {
+            playVictorySound();
+            emit(state.copyWith(level: state.level + 10,
+                gameStatus: GameStatus.levelChanged,
+                newLevelEvent: true,
+                reward: state.reward + 5));
+          }
+            playWinSound();
+
           return Colors.teal;
         } else {
           playFailSound();
@@ -99,17 +103,21 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           return Colors.red;
         }
       }
-      return state.questions[state.index].correctAnswer == state.questions[state.index].answers![index] ? Colors.teal : Colors.white;
+      return question.correctAnswer == question.answers![index] ? Colors.teal : Colors.white;
     });
 
     emit(state.copyWith(colors: colors));
     updateQuestion(score);
   }
   void useRightAnswer() {
-    var question = state.questions[state.index];
-    var buttonSelected = question.answers!.indexWhere((element) => element == question.correctAnswer);
-    validateAnswer(buttonSelected);
+    if(state.gameStatus == GameStatus.inProgress){
+      var question = state.questions[state.index];
+      var buttonSelected = question.answers!
+          .indexWhere((element) => element == question.correctAnswer);
+      validateAnswer(buttonSelected);
+    }
   }
+
 
   @override
   Future<void> close() {
@@ -137,7 +145,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     audioPlayer.play('fail_sound.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 
-  void playHighScoreSound() {
+  void playVictorySound() {
     final audioPlayer = AudioCache();
     audioPlayer.play('high_score.mp3', mode: PlayerMode.LOW_LATENCY);
   }

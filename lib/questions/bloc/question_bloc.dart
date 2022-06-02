@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:questions_repository/questions_repository.dart';
 

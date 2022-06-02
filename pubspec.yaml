@@ -81,7 +81,7 @@ flutter:
     - assets/try_again.mp3
     - assets/well_done.mp3
     - assets/high_score.mp3
-    - assets/profile_avatar.svg
+    - assets/img.png
   fonts:
     - family: ShowCardGothic
       fonts:

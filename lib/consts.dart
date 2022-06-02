@@ -1,5 +1,5 @@
 // database constants
-final countRow = 3000; //TODO: countRow should be runtime constant
+final countRow = 3000; //TODO: countRow should be calculated at runtime
 const databaseLimit = 10;
 const databaseOffset = 'offset';
 // game states
@@ -36,4 +36,5 @@ const gameIndex = 'index';
 const gameLevel = 'level';
 const highScore = 'highScore';
 
+//TODO: use altImage
 const altImage = 'https://firebasestorage.googleapis.com/v0/b/flutter-trivia-ex.appspot.com/o/users%2Favatar10.png?alt=media&token=9190b47f-7220-4a40-8d88-e2c2bc99f138';

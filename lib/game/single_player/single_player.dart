@@ -1,18 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
-import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
-
-import '../../widgets/power_up_container.dart';
 import 'online_single_player/view/online_single_player.dart';
 
 class SinglePlayerPage extends StatefulWidget {
-  /// should have win lose or initial so if you fail in game play you'll come back here with a state of lose
 
   @override
   State<StatefulWidget> createState() {
