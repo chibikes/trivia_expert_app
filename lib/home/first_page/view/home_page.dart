@@ -1,17 +1,14 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/consts.dart';
-import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/game/game.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_cubit.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
-import 'package:trivia_expert_app/home/first_page/profile_page/view/profile_page.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
@@ -74,7 +71,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: 30.0,
+                  height: MediaQuery.of(context).size.height * 10,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
