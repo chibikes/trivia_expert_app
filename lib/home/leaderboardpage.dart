@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/user_bloc/cubit/user_bloc.dart';
-
 import '../consts.dart';
 import '../widgets/trophy_cup_layer.dart';
 
@@ -194,6 +193,7 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
       }, onClosing: () {  },backgroundColor: Color(0xfff8f0e3),),
     );
   }
+  //TODO: put method in an isolate
   int getUserPosition(List<Map> users) {
     var userId = context.read<AuthenticationBloc>().state.user!.id;
     if (users.isNotEmpty) for(int i = 0; i < users.length; i++) {
