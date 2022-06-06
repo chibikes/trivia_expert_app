@@ -162,8 +162,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                         0.16 * MediaQuery.of(context).size.width,
                                     text: gameState.time < 10 ? '00:0${gameState.time}':'00:${gameState.time}',
                                   ),
+                                  SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
                                   Text(
-                                    '${gameState.playerScore}  LV${gameState.level}',
+                                    '${gameState.playerScore}',
                                     style: TextStyle(
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold,
