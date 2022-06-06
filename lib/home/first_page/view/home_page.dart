@@ -71,7 +71,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 10,
+                  height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
@@ -134,7 +134,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                     );
                   }),
                 ),
-                SizedBox(height: 20.0),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 Align(
                   alignment: Alignment.center,
                   child: Stack(
@@ -194,7 +194,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 Container(
                   width: double.infinity,
@@ -236,13 +236,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(
-                  height: 30.0,
+                  height: MediaQuery.of(context).size.height * 0.08,
                 ),
                 Column(
                   children: [
                     Container(
-                      height: 115,
-                      width: 115,
+                      height: MediaQuery.of(context).size.height * 0.16,
+                      width: MediaQuery.of(context).size.height * 0.16,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
                           color: Color(0xff8b5a2b)),
@@ -258,7 +258,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     Icon(
                                       FontAwesomeIcons.trophy,
                                       color: Colors.orange,
-                                      size: 30,
+                                      size: MediaQuery.of(context).size.width * 0.09,
                                     ),
                                     Positioned(
                                       top: 3.0,
@@ -284,7 +284,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 Column(
                                   children: [
                                     Text(
-                                      '${state.highScore}',
+                                      state.highScore.toString().length <= 6 ? '${state.highScore}' : state.highScore.toString().replaceRange(7, state.highScore.toString().length, '..'),
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -313,7 +313,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       Colors.blue,
                                       Colors.lightBlue,
                                     ),
-                                    size: Size(28, 35)),
+                                    // size: Size(28, 35),
+                                    size: Size(MediaQuery.of(context).size.width * 0.08, MediaQuery.of(context).size.height * 0.05)
+                                ),
                                 Column(
                                   children: [
                                     Text(
@@ -340,7 +342,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: 60.0,
+                  height: MediaQuery.of(context).size.height * 0.08,
                 ),
                 ScaleTransition(
                   scale: Tween<double>(begin: 1.0, end: 0.70).animate(
