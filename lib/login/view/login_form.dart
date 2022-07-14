@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:trivia_expert_app/widgets/trivia_icon.dart';
 import '../login.dart';
 
 class LoginForm extends StatelessWidget {
@@ -17,25 +18,27 @@ class LoginForm extends StatelessWidget {
             );
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 16.0),
-              Image.asset('assets/img.png', width: 50, height: 50,),
-              // _EmailInput(),
-              // const SizedBox(height: 8.0),
-              // _PasswordInput(),
-              // const SizedBox(height: 8.0),
-              // _LoginButton(),
-              const SizedBox(height: 8.0),
-              _GoogleLoginButton(),
-              const SizedBox(height: 4.0),
-              // _SignUpButton(),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TriviaIcon(width: 0.10 * MediaQuery.of(context).size.width,), SizedBox(width: 2,),Text(' RIVIA EXPERT ', style: TextStyle(backgroundColor: Colors.black54, fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),),
+              ],
+            ),
+            SizedBox(height: 0.20 * MediaQuery.of(context).size.height),
+            const SizedBox(height: 8.0),
+            SizedBox(width: MediaQuery.of(context).size.width, height: 0.05 * MediaQuery.of(context).size.height,child: _GoogleLoginButton()),
+            const SizedBox(height: 10.0),
+            _EmailInput(),
+            const SizedBox(height: 8.0),
+            _PasswordInput(),
+            const SizedBox(height: 8.0),
+            _SignUpButton(),
+            _LoginButton(),
+          ],
         ),
       ),
     );
@@ -130,14 +133,13 @@ class _GoogleLoginButton extends StatelessWidget {
 class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return FlatButton(
       key: const Key('loginForm_createAccount_flatButton'),
       // onPressed: () { Navigator.of(context).push<void>(SignUpPage.route()) },
       onPressed: () {},
       child: Text(
         'CREATE ACCOUNT',
-        style: TextStyle(color: theme.primaryColor),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }
