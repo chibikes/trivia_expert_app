@@ -8,6 +8,7 @@ import '../login.dart';
 class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var data = MediaQuery.of(context).size;
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -22,20 +23,20 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SizedBox(height: 0.02 * data.height),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TriviaIcon(width: 0.10 * MediaQuery.of(context).size.width,), SizedBox(width: 2,),Text(' RIVIA EXPERT ', style: TextStyle(backgroundColor: Colors.black54, fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),),
               ],
             ),
-            SizedBox(height: 0.20 * MediaQuery.of(context).size.height),
-            const SizedBox(height: 8.0),
+            SizedBox(height: 0.20 * data.height),
             SizedBox(width: MediaQuery.of(context).size.width, height: 0.05 * MediaQuery.of(context).size.height,child: _GoogleLoginButton()),
-            const SizedBox(height: 10.0),
+            SizedBox(height: 0.04 * data.height),
             _EmailInput(),
-            const SizedBox(height: 8.0),
+            SizedBox(height: 0.01 * data.height),
             _PasswordInput(),
-            const SizedBox(height: 8.0),
+            SizedBox(height: 0.04 * data.height),
             _SignUpButton(),
             _LoginButton(),
           ],
