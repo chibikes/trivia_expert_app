@@ -5,15 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import 'online_single_player/view/online_single_player.dart';
 
-class SinglePlayerPage extends StatefulWidget {
+class TipPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SinglePlayerPageState();
+    return TipPageState();
   }
 }
 
-class SinglePlayerPageState extends State<SinglePlayerPage>
+class TipPageState extends State<TipPage>
     with TickerProviderStateMixin {
   List<String> tips = ['Answering 10  successive questions correctly gives you 10 XP points', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
   var tipIndex = 0;
