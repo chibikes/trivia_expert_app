@@ -40,6 +40,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var data = MediaQuery.of(context).size;
     return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
       switch (state.homeStatus) {
         case HomeStatus.failure_update:
@@ -54,6 +55,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             },
             child: ListView(
               children: [
+                SizedBox(
+                  height: 0.02 * data.height,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -71,7 +75,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: data.height * 0.05,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
@@ -92,8 +96,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                            height: 0.04 * MediaQuery.of(context).size.height,
-                            width: 0.25 * MediaQuery.of(context).size.width,
+                            height: 0.04 * data.height,
+                            width: 0.25 * data.width,
                           ),
                         ),
                         Expanded(
@@ -109,8 +113,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                            height: 0.04 * MediaQuery.of(context).size.height,
-                            width: 0.25 * MediaQuery.of(context).size.width,
+                            height: 0.04 * data.height,
+                            width: 0.25 * data.width,
                           ),
                         ),
                         Expanded(
@@ -126,15 +130,15 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                            height: 0.04 * MediaQuery.of(context).size.height,
-                            width: 0.25 * MediaQuery.of(context).size.width,
+                            height: 0.04 * data.height,
+                            width: 0.25 * data.width,
                           ),
                         ),
                       ],
                     );
                   }),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: data.height * 0.05),
                 Align(
                   alignment: Alignment.center,
                   child: Stack(
@@ -194,7 +198,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: data.height * 0.05,
                 ),
                 Container(
                   width: double.infinity,
@@ -236,13 +240,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.08,
+                  height: data.height * 0.08,
                 ),
                 Column(
                   children: [
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.16,
-                      width: MediaQuery.of(context).size.height * 0.16,
+                      height: data.height * 0.16,
+                      width: data.height * 0.16,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
                           color: Color(0xff8b5a2b)),
@@ -258,7 +262,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     Icon(
                                       FontAwesomeIcons.trophy,
                                       color: Colors.orange,
-                                      size: MediaQuery.of(context).size.width * 0.09,
+                                      size: data.width * 0.09,
                                     ),
                                     Positioned(
                                       top: 3.0,
@@ -314,7 +318,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       Colors.lightBlue,
                                     ),
                                     // size: Size(28, 35),
-                                    size: Size(MediaQuery.of(context).size.width * 0.08, MediaQuery.of(context).size.height * 0.05)
+                                    size: Size(data.width * 0.08, data.height * 0.05)
                                 ),
                                 Column(
                                   children: [
@@ -342,7 +346,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.08,
+                  height: data.height * 0.08,
                 ),
                 ScaleTransition(
                   scale: Tween<double>(begin: 1.0, end: 0.70).animate(
@@ -351,7 +355,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                           curve: Curves.bounceInOut)),
                   child: SizedBox(
                     height: 65,
-                    width: 0.80 * MediaQuery.of(context).size.width,
+                    width: 0.80 * data.width,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 7.0),
                       child: RoundRectBubbleButton(
@@ -359,7 +363,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         onPressed: () =>
                             context.read<FirstPageCubit>().goToPage(
                                   context,
-                                  SinglePlayerPage(),
+                                  TipPage(),
                                   buttonController: _bounceController,
                                 ),
                       ),
