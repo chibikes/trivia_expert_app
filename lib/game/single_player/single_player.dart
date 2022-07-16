@@ -15,7 +15,7 @@ class TipPage extends StatefulWidget {
 
 class TipPageState extends State<TipPage>
     with TickerProviderStateMixin {
-  List<String> tips = ['Answering 10  successive questions correctly gives you 10 XP points', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
+  List<String> tips = ['Answering 10 questions correctly gives you 10 XP points', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
   var tipIndex = 0;
   late AnimationController _buttonController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 50));
