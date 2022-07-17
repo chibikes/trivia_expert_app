@@ -89,6 +89,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     //TODO: delete this bloc builder and use the one in the main gamepage
+    var data = MediaQuery.of(context).size;
     return BlocBuilder<QuestionBloc, QuestionState>(
         builder: (context, questionState) {
       switch (questionState.status) {
@@ -134,6 +135,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         : Container(),
                     Column(
                       children: [
+                        SizedBox(
+                          height: 0.02 * data.height,
+                        ),
                         Text('category: ' +
                             questionState.questions[gameState.index].category!),
                         // Animated
