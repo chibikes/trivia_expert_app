@@ -23,7 +23,7 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 0.02 * data.height),
+            SizedBox(height: 0.07 * data.height),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -134,14 +134,20 @@ class _GoogleLoginButton extends StatelessWidget {
 class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      key: const Key('loginForm_createAccount_flatButton'),
-      // onPressed: () { Navigator.of(context).push<void>(SignUpPage.route()) },
-      onPressed: () {},
-      child: Text(
-        'CREATE ACCOUNT',
-        style: TextStyle(color: Colors.white),
-      ),
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return FlatButton(
+          key: const Key('loginForm_createAccount_flatButton'),
+          // onPressed: () { Navigator.of(context).push<void>(SignUpPage.route()) },
+          onPressed: () {
+           if (state.status == FormzStatus.valid) context.read<LoginCubit>().signUpWithCredentials(state.email.value, state.password.value);
+          },
+          child: Text(
+            'CREATE ACCOUNT',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      }
     );
   }
 }

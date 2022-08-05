@@ -11,12 +11,11 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          gradient: LinearGradient(begin:Alignment.topCenter, end:Alignment.bottomCenter,colors: [Colors.white70, Colors.blue], ),
+          gradient: LinearGradient(begin:Alignment.topCenter, end:Alignment.bottomCenter,colors: [Colors.white, Colors.blue], ),
 
         ),
         child: Padding(
