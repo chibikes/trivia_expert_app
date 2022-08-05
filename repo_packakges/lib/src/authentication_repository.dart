@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 
@@ -106,6 +107,9 @@ class AuthenticationRepository {
       print(e.message);
       print("**************");
       throw LogInWithEmailAndPasswordFailure();
+    }
+    on PlatformException catch (e) {
+      throw e.code;
     }
   }
 
