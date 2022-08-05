@@ -87,7 +87,7 @@ class _PasswordInput extends StatelessWidget {
               ),
             ),
             Positioned(
-              left: 0.80 * MediaQuery.of(context).size.width,
+              left: 0.85 * MediaQuery.of(context).size.width,
               top: 0.02 * MediaQuery.of(context).size.height,
               child: GestureDetector(onTap: () {
                 context.read<LoginCubit>().emit(state.copyWith(obscurePassword: !state.obscurePassword));
