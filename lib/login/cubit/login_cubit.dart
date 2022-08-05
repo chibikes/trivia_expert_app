@@ -54,9 +54,9 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> signUpWithCredentials(String email, String password) async {
+  Future<void> signUpWithCredentials() async {
     try {
-      await _authenticationRepository.signUp(email: email, password: password);
+      await _authenticationRepository.signUp(email: state.email.value, password: state.password.value);
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

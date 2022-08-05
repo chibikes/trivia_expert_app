@@ -140,7 +140,7 @@ class _SignUpButton extends StatelessWidget {
           key: const Key('loginForm_createAccount_flatButton'),
           // onPressed: () { Navigator.of(context).push<void>(SignUpPage.route()) },
           onPressed: () {
-           if (state.status == FormzStatus.valid) context.read<LoginCubit>().signUpWithCredentials(state.email.value, state.password.value);
+           if (state.status == FormzStatus.valid) context.read<LoginCubit>().signUpWithCredentials();
           },
           child: Text(
             'CREATE ACCOUNT',
