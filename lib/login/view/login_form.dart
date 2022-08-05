@@ -71,18 +71,29 @@ class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      buildWhen: (previous, current) => previous.password != current.password || previous.obscurePassword != current.obscurePassword,
       builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<LoginCubit>().passwordChanged(password),
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
-          ),
+        return Stack(
+          children: [
+            TextField(
+              key: const Key('loginForm_passwordInput_textField'),
+              onChanged: (password) =>
+                  context.read<LoginCubit>().passwordChanged(password),
+              obscureText: state.obscurePassword,
+              decoration: InputDecoration(
+                labelText: 'password',
+                helperText: '',
+                errorText: state.password.invalid ? 'password should be at least six characters' : null,
+              ),
+            ),
+            Positioned(
+              left: 0.80 * MediaQuery.of(context).size.width,
+              top: 0.02 * MediaQuery.of(context).size.height,
+              child: GestureDetector(onTap: () {
+                context.read<LoginCubit>().emit(state.copyWith(obscurePassword: !state.obscurePassword));
+              },child: Icon(state.obscurePassword ? Icons.visibility : Icons.visibility_off)),
+            ),
+          ],
         );
       },
     );
