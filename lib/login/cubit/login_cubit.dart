@@ -37,8 +37,8 @@ class LoginCubit extends Cubit<LoginState> {
         password: state.password.value,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } on Exception catch(e) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure, exception: e.toString()));
     }
   }
 
@@ -47,8 +47,8 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await _authenticationRepository.logInWithGoogle();
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } on Exception catch(e){
+      emit(state.copyWith(status: FormzStatus.submissionFailure, exception: e.toString()));
     } on NoSuchMethodError {
       emit(state.copyWith(status: FormzStatus.pure));
     }
@@ -58,8 +58,8 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await _authenticationRepository.signUp(email: state.email.value, password: state.password.value);
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } on Exception catch(e) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure, exception: e.toString()));
     }
   }
 }
