@@ -8,7 +8,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'models/models.dart';
 
 /// Thrown if during the sign up process if a failure occurs.
-class SignUpFailure implements Exception {}
+class SignUpFailure implements Exception {
+
+}
 
 /// Thrown during the login process if a failure occurs.
 class LogInWithEmailAndPasswordFailure implements Exception {}
