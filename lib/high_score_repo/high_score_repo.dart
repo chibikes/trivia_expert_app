@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../main_models/user_game_details.dart';
 
-class HighScoreRepo {
+class GameRepository {
   static final highScores = FirebaseFirestore.instance.collection('highScores');
   static Future<void> updateScore(
     String id,

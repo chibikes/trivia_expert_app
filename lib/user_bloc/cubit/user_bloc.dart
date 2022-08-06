@@ -94,7 +94,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   void _saveUserStats(SavePlayerStat event) {
-    HighScoreRepo.updateScore(state.user!.id!, event.highScore, state.user!.photoUrl!, state.user!.name!);
+    GameRepository.updateScore(state.user!.id!, event.highScore, state.user!.photoUrl!, state.user!.name!);
     FileStorage.instance.then((value) => value.setInt(highScore, event.highScore));
     FileStorage.instance.then((value) => value.setInt(gameLevel, event.xp));
   }
