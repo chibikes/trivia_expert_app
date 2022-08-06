@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../main_models/user_game_details.dart';
+
 class HighScoreRepo {
   static final highScores = FirebaseFirestore.instance.collection('highScores');
   static Future<void> updateScore(
@@ -18,7 +20,12 @@ class HighScoreRepo {
         'userName': userName,
       }));
   }
-  Stream<int> getUserScore(String id) {
-    return highScores.doc(id).snapshots().map((event) => 1);
+  Stream<UserGameDetails> getUserGameDetails(String id) {
+    return highScores.doc(id).snapshots().map((event) => UserGameDetails.fromMap(event.data()! as Map<String, int>));
+  }
+  Stream<List<Map<String, int>>> getLeaderBoard() {
+    return highScores.snapshots().map((event)  {
+      return event.docs.map((e) => e.data() as Map<String, int>).toList();
+    });
   }
 }
