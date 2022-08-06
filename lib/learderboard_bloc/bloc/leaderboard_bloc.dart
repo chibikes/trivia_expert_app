@@ -6,14 +6,14 @@ import 'leaderboard_event.dart';
 import 'leaderboard_state.dart';
 
 class LeaderBoardBloc extends Bloc<LeaderBoardEvent, LeaderBoardState> {
-  LeaderBoardBloc({required GameRepository highScoreRepo}) :
-        _highScoreRepo = highScoreRepo,
+  LeaderBoardBloc({required GameRepository gameRepository}) :
+        _highScoreRepo = gameRepository,
         super(LeaderBoardState()) {
-    _streamgameScores = _highScoreRepo.getLeaderBoard().listen((event) {
+    _streamGameScores = _highScoreRepo.getLeaderBoard().listen((event) {
       add(GetLeaderBoard(event));
     });
   }
-  StreamSubscription? _streamgameScores;
+  StreamSubscription? _streamGameScores;
   GameRepository _highScoreRepo;
 
   @override
@@ -24,12 +24,12 @@ class LeaderBoardBloc extends Bloc<LeaderBoardEvent, LeaderBoardState> {
 
   }
   void getScores() {
-    _streamgameScores;
+    _streamGameScores;
   }
 
   @override
   Future<Function> close() {
-    _streamgameScores?.cancel();
+    _streamGameScores?.cancel();
     return super.close().then((value) => value as Function);
   }
 }
