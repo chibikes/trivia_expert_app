@@ -3,6 +3,8 @@ import 'package:questions_repository/questions_repository.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
+import 'package:trivia_expert_app/learderboard_bloc/bloc/leaderboard_bloc.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/splash/view/splash_page.dart';
@@ -16,9 +18,11 @@ class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationRepository,
+    required this.gameRepository,
   }) : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final GameRepository gameRepository;
 
 
   @override
@@ -36,6 +40,7 @@ class App extends StatelessWidget {
           BlocProvider(create: (_) => UserBloc(FirebaseUserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
           BlocProvider(create: (_)=> QuestionBloc(questionRepository: OnlineRepository())..add(QuestionsFetched()), lazy: false,),
           BlocProvider(create: (_)=> ShopCubit(inAppRepo: InAppRepo())..getPowerUpsFromStorage(),),
+          BlocProvider(create: (_)=> LeaderBoardBloc(gameRepository: gameRepository)),
         ],
         child: AppView(),
       ),
