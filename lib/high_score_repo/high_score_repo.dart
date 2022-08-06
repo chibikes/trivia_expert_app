@@ -17,6 +17,8 @@ class HighScoreRepo {
         'id': id,
         'userName': userName,
       }));
-
+  }
+  Stream<int> getUserScore(String id) {
+    return highScores.doc(id).snapshots().map((event) => 1);
   }
 }
