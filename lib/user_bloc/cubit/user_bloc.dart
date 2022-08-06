@@ -5,6 +5,7 @@ import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
+import 'package:trivia_expert_app/main_models/user_game_details.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -12,10 +13,10 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(
     this._userRepository, {
-    required AuthenticationRepository authRepository,
-  })  : _authRepository = authRepository,
+    required AuthenticationRepository authRepository, required GameRepository gameRepository,
+  })  : _authRepository = authRepository, _gameRepository = gameRepository,
         super(UserState()) {
-    _authRepoSub = _authRepository.user.listen(
+    _authRepoSubscription = _authRepository.user.listen(
       (event) {
         user = event;
         add(FetchUserData());
@@ -23,8 +24,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     );
   }
 
-  StreamSubscription? _authRepoSub;
+  StreamSubscription? _authRepoSubscription, _scoreSubscription;
   final AuthenticationRepository _authRepository;
+  final GameRepository _gameRepository;
   final FirebaseUserRepository _userRepository;
   User user = User.empty;
 
@@ -45,16 +47,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Future<void> getUserData() async {
-    _authRepoSub?.cancel();
-    user = (await _userRepository.getUserData(
-      user,
-    ));
+    _authRepoSubscription?.cancel();
+    user = await _userRepository.getUserData(user);
     add(UserUpdated(user));
   }
 
   @override
   Future<Function?> close() {
-    _authRepoSub?.cancel();
+    _scoreSubscription?.cancel();
+    _authRepoSubscription?.cancel();
     return super.close().then((value) => value as Function?);
   }
 
@@ -81,14 +82,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Stream<UserState> _getHighScore() async* {
-    var score =
-        await FileStorage.instance.then((value) => value.getInt(highScore));
-    var xp =
-        await FileStorage.instance.then((value) => value.getInt(gameLevel));
-    yield state.copyWith(highScore: score, xp: xp);
+    var gameDeets;
+    _scoreSubscription = _gameRepository.getUserGameDetails(state.user!.id!).listen((userDetails) {
+       gameDeets = userDetails;
+    });
+
+    yield state.copyWith(gameDetails: gameDeets);
   }
 
-  Stream<UserState> _updateHighScore(UpdatePlayerStat event) async*{
+  Stream<UserState> _updateHighScore(UpdatePlayerStat event) async* {
     add(SavePlayerStat(event.highScore ?? state.highScore, event.xp ?? state.xp));
     yield state.copyWith(highScore: event.highScore, xp: event.xp);
   }
