@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/file_storage.dart';
+import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
 import 'app.dart';
 import 'firebase_options.dart';
 
@@ -17,7 +18,7 @@ void main() async {
   await FileStorage.instance;
   EquatableConfig.stringify = kDebugMode;
   // await SharedPreferences.getInstance().then((value) => value.setInt(gameIndex, 0));
-  runApp(App(authenticationRepository: AuthenticationRepository()));
+  runApp(App(authenticationRepository: AuthenticationRepository(), gameRepository: GameRepository(),));
   HttpOverrides.global = new MyHttpOverrides();
 }
 
