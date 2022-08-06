@@ -7,7 +7,7 @@ class UserGameDetails extends Equatable {
   final int redCrystals;
   final int correctAnswers;
 
-  UserGameDetails(
+  const UserGameDetails(
       {this.highScore = 0, this.xp = 0, this.blueCrystals = 0, this.correctAnswers = 0, this.redCrystals = 0});
   @override
   // TODO: implement props
