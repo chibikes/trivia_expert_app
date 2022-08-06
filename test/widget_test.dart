@@ -9,13 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/app.dart';
+import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
 
 import 'package:trivia_expert_app/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(App(authenticationRepository: AuthenticationRepository(),));
+    await tester.pumpWidget(App(authenticationRepository: AuthenticationRepository(), gameRepository: GameRepository(),));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
