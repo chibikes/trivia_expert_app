@@ -13,7 +13,7 @@ class UserGameDetails extends Equatable {
   // TODO: implement props
   List<Object?> get props => [highScore, xp, blueCrystals, redCrystals, correctAnswers];
 
-  Map toMap() {
+  Map<String, int> toMap() {
     return {
       'highScore' : highScore,
       'xp' : xp,
