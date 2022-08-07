@@ -82,6 +82,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Stream<UserState> _getHighScore() async* {
+    _scoreSubscription?.cancel();
     var gameDeets;
     _scoreSubscription = _gameRepository.getUserGameDetails(state.user!.id!).listen((userDetails) {
        gameDeets = userDetails;

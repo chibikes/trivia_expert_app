@@ -37,7 +37,7 @@ class App extends StatelessWidget {
             ),
             lazy: false,
           ),
-          BlocProvider(create: (_) => UserBloc(FirebaseUserRepository(),authRepository: authenticationRepository)..add(FetchUserData())),
+          BlocProvider(create: (_) => UserBloc(FirebaseUserRepository(),authRepository: authenticationRepository, gameRepository: gameRepository)..add(FetchUserData())),
           BlocProvider(create: (_)=> QuestionBloc(questionRepository: OnlineRepository())..add(QuestionsFetched()), lazy: false,),
           BlocProvider(create: (_)=> ShopCubit(inAppRepo: InAppRepo())..getPowerUpsFromStorage(),),
           BlocProvider(create: (_)=> LeaderBoardBloc(gameRepository: gameRepository)),
