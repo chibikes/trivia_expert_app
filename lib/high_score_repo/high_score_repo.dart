@@ -28,4 +28,7 @@ class GameRepository {
       return event.docs.map((e) => e.data() as Map<String, int>).toList();
     });
   }
+  Future<void> updateUserGameDetails(String id, UserGameDetails gameDetails) {
+    return highScores.doc(id).update(gameDetails.toMap()).onError((error, stackTrace) => highScores.doc(id).set(gameDetails.toMap()));
+  }
 }
