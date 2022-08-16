@@ -18,6 +18,7 @@ import 'package:trivia_expert_app/widgets/xp_icon.dart';
 import '../../../get_image.dart';
 import '../../../user_bloc/cubit/user_bloc.dart';
 import '../../../widgets/camera_widget.dart';
+import '../../../widgets/trivia_icon.dart';
 import '../../../widgets/trophy_cup_layer.dart';
 import '../profile_page/view/edit_profile/edit_profile.dart';
 
@@ -42,6 +43,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var data = MediaQuery.of(context).size;
     return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+      var highScore = context.read<UserBloc>().state.gameDetails.highScore;
       switch (state.homeStatus) {
         case HomeStatus.failure_update:
           return Scaffold(body: Center(child: Text('something went wrong')));
@@ -288,7 +290,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 Column(
                                   children: [
                                     Text(
-                                      state.highScore.toString().length <= 6 ? '${state.highScore}' : state.highScore.toString().replaceRange(7, state.highScore.toString().length, '..'),
+                                      highScore.toString().length <= 6 ? '$highScore' : highScore.toString().replaceRange(7, highScore.toString().length, '..'),
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,

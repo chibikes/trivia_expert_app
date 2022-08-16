@@ -12,11 +12,16 @@ class GameRepository {
       ).onError((error, stackTrace) => highScores.doc(id).set(gameDetails.toMap()));
   }
   Stream<UserGameDetails> getUserGameDetails(String id) {
-    return highScores.doc(id).snapshots().map((event) => UserGameDetails.fromMap(event.data()! as Map<String, int>));
+    try {
+      return highScores.doc(id).snapshots().map((event) => UserGameDetails.fromMap(event.data()!));
+    }catch(e) {
+      throw 'exception is: $e';
+    }
+    return highScores.doc(id).snapshots().map((event) => UserGameDetails.fromMap(event.data()!));
   }
-  Stream<List<Map<String, int>>> getLeaderBoard() {
-    return highScores.snapshots().map((event)  {
-      return event.docs.map((e) => e.data() as Map<String, int>).toList();
+  Stream<List<Map<String, dynamic>>> getLeaderBoard() {
+    return highScores.orderBy('highScore',descending: true).snapshots().map((event)  {
+      return event.docs.map((e) => e.data()).toList();
     });
   }
   Future<void> updateUserGameDetails(String id, UserGameDetails gameDetails) {

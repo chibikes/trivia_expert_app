@@ -59,7 +59,8 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           index: reachedQuestionsEnd ? state.index : state.index + 1,
           gameStatus: reachedQuestionsEnd
               ? GameStatus.getQuestions
-              : GameStatus.inProgress),);
+              : GameStatus.inProgress),
+      );
     });
   }
 

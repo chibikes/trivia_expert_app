@@ -7,9 +7,15 @@ abstract class LeaderBoardEvent extends Equatable {
 
 }
 
-class GetLeaderBoard extends LeaderBoardEvent {
-  final List<Map<String, int>> gameScores;
+class CreateLeaderBoard extends LeaderBoardEvent {
+  final List<Map<String, dynamic>> gameScores;
 
-  GetLeaderBoard(this.gameScores);
+  CreateLeaderBoard(this.gameScores);
 
+}
+
+class GetUserId extends LeaderBoardEvent{
+  final String id;
+
+  GetUserId(this.id);
 }

@@ -55,3 +55,9 @@ class SavePlayerStat extends UserEvent {
 
   SavePlayerStat(this.highScore, this.xp);
 }
+
+class UserStatFetched extends UserEvent {
+  final UserGameDetails gameDetails;
+  UserStatFetched(this.gameDetails);
+
+}

@@ -9,7 +9,7 @@ class UserState extends Equatable {
   final UserGameDetails gameDetails;
   final List<GameState> gameStates;
 
-  const UserState({this.xp = 0, this.highScore = 0,this.gameStates = const [], this.user = User.empty, this.homeStatus = HomeStatus.waiting, this.gameDetails = const UserGameDetails()}); /// default state of item is zero which is tab zero
+  const UserState({this.xp = 0, this.highScore = 0,this.gameStates = const [], this.user = User.empty, this.homeStatus = HomeStatus.waiting, this.gameDetails = const UserGameDetails(userId: '')}); /// default state of item is zero which is tab zero
 
   UserState copyWith({
     HomeStatus? homeStatus,

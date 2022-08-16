@@ -6,6 +6,9 @@ import 'package:trivia_expert_app/home/first_page/cubit/first_page_cubit.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:trivia_expert_app/home/first_page/view/home_page.dart';
 import 'package:trivia_expert_app/widgets/other_widgets/mainpage_container.dart';
+import '../../authentication/bloc/authentication_bloc.dart';
+import '../../high_score_repo/high_score_repo.dart';
+import '../../learderboard_bloc/bloc/leaderboard_bloc.dart';
 import '../../settings_page.dart';
 import '../../user_bloc/cubit/user_bloc.dart';
 import '../leaderboardpage.dart';
@@ -36,7 +39,6 @@ class _TabbedState extends State<HomePage> {
   ];
   @override
   void initState() {
-    context.read<UserBloc>().add(GetUserStat());
     super.initState();
   }
   @override

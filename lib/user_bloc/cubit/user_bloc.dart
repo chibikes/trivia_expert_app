@@ -41,15 +41,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     else if (event is UpdateUserImage)
       _updateImage(event.imgPath);
     else if (event is GetUserStat) {
-      yield* _getHighScore();
+      _getHighScore();
     } else if (event is UpdatePlayerStat) yield* _updateHighScore(event);
     else if (event is SavePlayerStat) _saveUserStats(event);
+    else if (event is UserStatFetched) yield state.copyWith(gameDetails: event.gameDetails);
   }
 
   Future<void> getUserData() async {
     _authRepoSubscription?.cancel();
     user = await _userRepository.getUserData(user);
     add(UserUpdated(user));
+    add(GetUserStat());
   }
 
   @override
@@ -81,14 +83,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     )));
   }
 
-  Stream<UserState> _getHighScore() async* {
-    _scoreSubscription?.cancel();
-    var gameDeets;
+   _getHighScore() {
+    var gameDeets = state.gameDetails;
     _scoreSubscription = _gameRepository.getUserGameDetails(state.user!.id!).listen((userDetails) {
+      print(userDetails.toString());
        gameDeets = userDetails;
+       add(UserStatFetched(gameDeets));
     });
-
-    yield state.copyWith(gameDetails: gameDeets);
   }
 
   Stream<UserState> _updateHighScore(UpdatePlayerStat event) async* {
@@ -97,7 +98,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   void _saveUserStats(SavePlayerStat event) {
-    GameRepository.updateScore(state.user!.id!, event.highScore, state.user!.photoUrl!, state.user!.name!);
+    var user = state.user!;
+    GameRepository.updateScore(user.id!, state.gameDetails.copyWith(userId: user.id, xp: event.xp, avatarUrl: user.photoUrl, userName: user.name, highScore: event.highScore));
     FileStorage.instance.then((value) => value.setInt(highScore, event.highScore));
     FileStorage.instance.then((value) => value.setInt(gameLevel, event.xp));
   }
