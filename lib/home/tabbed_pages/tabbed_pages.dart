@@ -15,11 +15,11 @@ import '../leaderboardpage.dart';
 import '../shop_page.dart';
 
 class HomePage extends StatefulWidget {
-  final FirebaseUserRepository? userRepository;
+  // final FirebaseUserRepository? userRepository;
 
-  const HomePage({Key? key, this.userRepository,}) : super(key: key);
+  const HomePage({Key? key,}) : super(key: key);
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage(userRepository: FirebaseUserRepository(),));
+    return MaterialPageRoute<void>(builder: (_) => HomePage());
   }
 
   @override
@@ -46,21 +46,18 @@ class _TabbedState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
           body: MainPageContainer(
-            child: RepositoryProvider.value(
-              value: widget.userRepository,
-              child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (_) => FirstPageCubit(
-                        FirstPageState(),
-                      ),
+            child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (_) => FirstPageCubit(
+                      FirstPageState(),
                     ),
-                  ],
+                  ),
+                ],
 
-                  // create: (_) =>
-                  //     MainPageBloc(MainPageState(homeStatus: HomeStatus.idle)),
-                  child: _widgetOptions.elementAt(_selectedIndex)),
-            ),
+                // create: (_) =>
+                //     MainPageBloc(MainPageState(homeStatus: HomeStatus.idle)),
+                child: _widgetOptions.elementAt(_selectedIndex)),
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: [

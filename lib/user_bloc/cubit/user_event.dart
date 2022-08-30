@@ -61,3 +61,7 @@ class UserStatFetched extends UserEvent {
   UserStatFetched(this.gameDetails);
 
 }
+
+class DeleteUser extends UserEvent {
+
+}

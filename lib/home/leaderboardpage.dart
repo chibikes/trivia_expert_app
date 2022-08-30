@@ -175,7 +175,7 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                     width: 0.02 * MediaQuery.of(context).size.width,
                   ),
                   Text(
-                    '${GamingStats.recentStats[highScore]}',
+                    '${context.read<UserBloc>().state.gameDetails.highScore}',
                     style: GoogleFonts.ultra(color: Colors.blueGrey),
                   ),
                 ],

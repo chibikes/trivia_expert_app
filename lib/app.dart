@@ -19,15 +19,17 @@ class App extends StatelessWidget {
     Key? key,
     required this.authenticationRepository,
     required this.gameRepository,
+    required this.firebaseUserRepository,
   }) : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final GameRepository gameRepository;
+  final FirebaseUserRepository firebaseUserRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [RepositoryProvider(create: (_) => authenticationRepository), RepositoryProvider(create: (_) => firebaseUserRepository),],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -37,7 +39,7 @@ class App extends StatelessWidget {
             lazy: false,
           ),
           BlocProvider(
-              create: (_) => UserBloc(FirebaseUserRepository(),
+              create: (_) => UserBloc(firebaseUserRepository,
                   authRepository: authenticationRepository,
                   gameRepository: gameRepository)
                 ..add(FetchUserData())),
@@ -49,11 +51,12 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (_) =>
                 ShopCubit(inAppRepo: InAppRepo())..getPowerUpsFromStorage(),
+            lazy: false,
           ),
           BlocProvider(
               create: (_) => LeaderBoardBloc(
                     gameRepository: gameRepository,
-                  )),
+                  ), lazy: false,),
         ],
         child: AppView(),
       ),

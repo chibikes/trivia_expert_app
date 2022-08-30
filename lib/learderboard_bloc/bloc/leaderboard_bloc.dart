@@ -19,27 +19,29 @@ class LeaderBoardBloc extends Bloc<LeaderBoardEvent, LeaderBoardState> {
   @override
   Stream<LeaderBoardState> mapEventToState(LeaderBoardEvent event) async* {
     if (event is CreateLeaderBoard) {
-      yield _createLeaderBoard(event);
-    }
-    if (event is GetUserId) {
-      yield _getPosition(event.id);
+      yield* _createLeaderBoard(event);
+    } else if (event is GetUserId) {
+      yield* _getPosition(event.id);
     }
 
 
   }
 
-  LeaderBoardState _createLeaderBoard(CreateLeaderBoard event) {
+  Stream<LeaderBoardState> _createLeaderBoard(CreateLeaderBoard event) async*{
 
-    return state.copyWith(gameScores: event.gameScores, leaderBoardStatus: event.gameScores.isNotEmpty ? LeaderBoardStatus.fetched : LeaderBoardStatus.failed);
+    yield state.copyWith(gameScores: event.gameScores, leaderBoardStatus: event.gameScores.isNotEmpty ? LeaderBoardStatus.fetched : LeaderBoardStatus.failed);
   }
 
-  LeaderBoardState _getPosition(String id) {
+  Stream<LeaderBoardState> _getPosition(String id) async* {
     var gamers = state.gameScores;
     var position = 0;
     if (gamers.isNotEmpty) for(int i = 0; i < gamers.length; i++) {
-      if (gamers[i]['id'] == id) position =  i + 1;
-    }
-    return state.copyWith(position: position);
+      if (gamers[i]['userId'] == id) {
+          position = i + 1;
+          break;
+        }
+      }
+    yield state.copyWith(position: position);
   }
 
 

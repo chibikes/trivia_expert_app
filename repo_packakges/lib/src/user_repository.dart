@@ -43,6 +43,15 @@ class FirebaseUserRepository extends UserRepository {
         .onError((error, stackTrace) => print('error occured'));
   }
 
+  Future<void> deleteUser(repo.User user) async {
+    try {
+      await users.doc(user.id).delete().then((value) => highScores.doc(user.id).delete());
+    } catch(e) {
+      print('Error >>>>>>>>>>>>>>>>>>>>>>>>>> : $e');
+    }
+
+  }
+
   Future<String> saveUserImage(String imgPath, String userId) async {
     File file = File(imgPath);
     String storageRef = 'users/$userId.png';

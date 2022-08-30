@@ -19,8 +19,8 @@ class GamingStats {
     historyStat: FileStorage._instance?.getDouble(historyStat),
     geographyStat: FileStorage._instance?.getDouble(geographyStat),
     entertainmentStat: FileStorage._instance?.getDouble(entertainmentStat),
-    highScore : FileStorage._instance?.getInt(highScore) ?? 0,
-    gameLevel: FileStorage._instance?.getInt(gameLevel) ?? 0,
+    // highScore : FileStorage._instance?.getInt(highScore) ?? 0,
+    // gameLevel: FileStorage._instance?.getInt(gameLevel) ?? 0,
   };
   static void saveGamingStats(double accuracy) async {
     var gameStats = GameStats.gameStats;

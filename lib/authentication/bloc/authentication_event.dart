@@ -20,3 +20,7 @@ class AuthenticationUserChanged extends AuthenticationEvent {
 class AuthenticationLogOutRequested extends AuthenticationEvent {
 
 }
+
+class DeleteAccount extends AuthenticationEvent {
+
+}

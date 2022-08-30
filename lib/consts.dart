@@ -1,5 +1,5 @@
 // database constants
-final countRow = 3000; //TODO: countRow should be calculated at runtime
+final countRow = 3000;
 const databaseLimit = 10;
 const databaseOffset = 'offset';
 // game states

@@ -25,9 +25,12 @@ class ShopPageState extends State<ShopPage> with TickerProviderStateMixin {
         child: Scaffold(
           backgroundColor: Colors.deepPurple,
           appBar: AppBar(
+            backgroundColor: Colors.blueAccent,
             toolbarHeight: 0.0,
             bottom: TabBar(
-              tabs: [Text('POWERUPS'), Text('BLUE CRYSTALS')],
+              indicatorColor: Colors.pink,
+              indicatorWeight: 3.0,
+              tabs: [Text('POWER UP', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),), Text('BLUE CRYSTALS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)],
             ),
           ),
           body: TabBarView(

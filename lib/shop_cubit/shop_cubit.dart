@@ -34,9 +34,14 @@ class ShopCubit extends Cubit<ShopState> {
   }
 
   Future<void> getPowerUpsFromStorage() async {
-    await FileStorage.instance.then((value) {emit(state.copyWith(redCrystals: value.getInt(redCrystals) ?? state.redCrystals));});
-    await FileStorage.instance.then((value) {emit(state.copyWith(rightAnswers: value.getInt(rightAnswers) ?? state.rightAnswers));});
-    await FileStorage.instance.then((value) {emit(state.copyWith(blueCrystals: value.getInt(blueCrystals) ?? state.blueCrystals));});
+    var redC = 0;
+    var blueC = 0;
+    var rightA = 0;
+    await FileStorage.instance.then((value) => redC = value.getInt(redCrystals) ?? state.redCrystals);
+    await FileStorage.instance.then((value) => blueC = value.getInt(blueCrystals) ?? state.blueCrystals);
+    await FileStorage.instance.then((value) => rightA = value.getInt(rightAnswers) ?? state.rightAnswers);
+
+    emit(state.copyWith(blueCrystals: blueC, redCrystals: redC, rightAnswers: rightA));
   }
 
   Future<void> loadPurchases() async{

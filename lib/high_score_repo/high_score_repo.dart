@@ -17,7 +17,6 @@ class GameRepository {
     }catch(e) {
       throw 'exception is: $e';
     }
-    return highScores.doc(id).snapshots().map((event) => UserGameDetails.fromMap(event.data()!));
   }
   Stream<List<Map<String, dynamic>>> getLeaderBoard() {
     return highScores.orderBy('highScore',descending: true).snapshots().map((event)  {

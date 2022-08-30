@@ -6,15 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
 import 'package:trivia_expert_app/consts.dart';
-import 'package:trivia_expert_app/game/game.dart';
+import 'package:trivia_expert_app/game/single_player/online_single_player/view/online_single_player.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_cubit.dart';
 import 'package:trivia_expert_app/home/first_page/cubit/first_page_state.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/power_up_container.dart';
+import 'package:trivia_expert_app/widgets/score_card.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
-import 'package:trivia_expert_app/widgets/xp_icon.dart';
 import '../../../get_image.dart';
 import '../../../user_bloc/cubit/user_bloc.dart';
 import '../../../widgets/camera_widget.dart';
@@ -43,7 +43,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var data = MediaQuery.of(context).size;
     return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-      var highScore = context.read<UserBloc>().state.gameDetails.highScore;
       switch (state.homeStatus) {
         case HomeStatus.failure_update:
           return Scaffold(body: Center(child: Text('something went wrong')));
@@ -92,7 +91,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                BlueCrystal(
+                                const BlueCrystal(
                                   height: 12,
                                   width: 12,
                                 ),
@@ -109,7 +108,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                RedLifeCrystal(
+                                const RedLifeCrystal(
                                   height: 12,
                                   width: 12,
                                 ),
@@ -126,7 +125,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                RightAnswer(
+                                const RightAnswer(
                                   height: 12,
                                   width: 12,
                                 ),
@@ -244,109 +243,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 SizedBox(
                   height: data.height * 0.08,
                 ),
-                Column(
-                  children: [
-                    Container(
-                      height: data.height * 0.16,
-                      width: data.height * 0.16,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Color(0xff8b5a2b)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.trophy,
-                                      color: Colors.orange,
-                                      size: data.width * 0.09,
-                                    ),
-                                    Positioned(
-                                      top: 3.0,
-                                      left: 5.5,
-                                      child: CustomPaint(
-                                        painter: TrophyLayerPainter(),
-                                        size: Size(23, 20),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 8.0,
-                                      left: 20.0,
-                                      child: Container(
-                                        height: 3,
-                                        width: 3,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white24,
-                                            shape: BoxShape.circle),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      highScore.toString().length <= 6 ? '$highScore' : highScore.toString().replaceRange(7, highScore.toString().length, '..'),
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white70),
-                                    ),
-                                    Text(
-                                      'High Score',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              thickness: 2.0,
-                              color: Colors.white,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CustomPaint(
-                                    painter: XPPainter(
-                                      Colors.blue,
-                                      Colors.lightBlue,
-                                    ),
-                                    // size: Size(28, 35),
-                                    size: Size(data.width * 0.08, data.height * 0.05)
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      '${state.xp}',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white70),
-                                    ),
-                                    Text(
-                                      'XP',
-                                      style: GoogleFonts.alegreyaSans(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black54),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                ScoreCard(),
                 SizedBox(
                   height: data.height * 0.08,
                 ),
@@ -365,7 +262,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         onPressed: () =>
                             context.read<FirstPageCubit>().goToPage(
                                   context,
-                                  TipPage(),
+                                  OnlineSinglePlayer(),
                                   buttonController: _bounceController,
                                 ),
                       ),
@@ -382,7 +279,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           return Center(
             child: Column(
               children: [
-                CircularProgressIndicator(),
+                Padding(
+                  padding: EdgeInsets.only(left: data.width* 0.1, top: data.height * 0.40),
+                  child: CircularProgressIndicator(),
+                ),
               ],
             ),
           );

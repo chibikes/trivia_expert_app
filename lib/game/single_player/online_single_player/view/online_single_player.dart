@@ -20,7 +20,7 @@ class OnlineSinglePlayer extends StatelessWidget {
           body: Padding(
             padding: const EdgeInsets.all(0.0),
             child: BlocProvider(
-              create: (_) => OnlineSinglePlayerCubit(OnlineSinglePlayerState(), context.read<UserBloc>().state.user ?? User()),
+              create: (_) => OnlineSinglePlayerCubit(OnlineSinglePlayerState(), context.read<UserBloc>().state.user ?? User(), context.read<UserBloc>().state.gameDetails.highScore),
               child: GamePage(),
             ),
           ),

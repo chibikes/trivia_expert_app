@@ -74,10 +74,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   @override
   void deactivate() {
-    if(highScoreEvent) {
+    if(highScoreEvent && newLevelEvent) {
+      context.read<UserBloc>().add(UpdatePlayerStat(xp: xp, highScore: score));
+    }
+    else if(highScoreEvent) {
       context.read<UserBloc>().add(UpdatePlayerStat(highScore: score));
     }
-    if(newLevelEvent) {
+    else if(newLevelEvent) {
       context.read<UserBloc>().add(UpdatePlayerStat(xp: xp));
     }
     context.read<OnlineSinglePlayerCubit>()
@@ -139,7 +142,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           height: 0.02 * data.height,
                         ),
                         Text('category: ' +
-                            questionState.questions[gameState.index].category!),
+                            questionState.questions[gameState.index].category!, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
                         // Animated
                         Padding(
                           padding: EdgeInsets.only(top: 8.0),
@@ -222,7 +225,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
 
                         SizedBox(
-                          height: 50,
+                          height: data.height * 0.15,
                         ),
                         Column(
                           children: List.generate(gameState.questions[gameState.index].answers!.length, (index) => Column(

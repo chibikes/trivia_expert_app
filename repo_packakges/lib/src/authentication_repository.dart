@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:trivia_expert_app/consts.dart';
 
 
 import 'models/models.dart';
@@ -129,12 +130,30 @@ class AuthenticationRepository {
       throw LogOutFailure();
     }
   }
+  Future<void> deleteAccount() async{
+    try {
+      await firebase_auth.FirebaseAuth.instance.currentUser?.delete();
+    }  catch(e) {
+      print('************************* exception is $e');
+    }
+
+  }
 }
+
 
 extension on firebase_auth.User {
   User get toUser  {
 
-    return User(id: uid, email: email!, name: displayName, photoUrl: photoURL);
+    return User(id: uid, email: email!, name: displayName ?? createUserNameFromEmail(email!), photoUrl: photoURL ?? altImage);
   }
 
 }
+
+String createUserNameFromEmail (String email) {
+
+  for(int i = 0; i < email.length; i++) { // abc@dfdf
+    if (email[i] == '@') return email.substring(0, i);
+  }
+  return email;
+}
+

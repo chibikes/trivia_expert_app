@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:repo_packages/repo_packakges.dart';
-import 'package:trivia_expert_app/consts.dart';
-import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
 import 'package:trivia_expert_app/main_models/user_game_details.dart';
 
@@ -45,6 +43,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else if (event is UpdatePlayerStat) yield* _updateHighScore(event);
     else if (event is SavePlayerStat) _saveUserStats(event);
     else if (event is UserStatFetched) yield state.copyWith(gameDetails: event.gameDetails);
+    else if (event is DeleteUser) {
+      _userRepository.deleteUser(user);
+    }
   }
 
   Future<void> getUserData() async {
@@ -93,14 +94,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Stream<UserState> _updateHighScore(UpdatePlayerStat event) async* {
-    add(SavePlayerStat(event.highScore ?? state.highScore, event.xp ?? state.xp));
+    add(SavePlayerStat(event.highScore ?? state.gameDetails.highScore, event.xp ?? state.gameDetails.xp));
     yield state.copyWith(highScore: event.highScore, xp: event.xp);
   }
 
   void _saveUserStats(SavePlayerStat event) {
     var user = state.user!;
     GameRepository.updateScore(user.id!, state.gameDetails.copyWith(userId: user.id, xp: event.xp, avatarUrl: user.photoUrl, userName: user.name, highScore: event.highScore));
-    FileStorage.instance.then((value) => value.setInt(highScore, event.highScore));
-    FileStorage.instance.then((value) => value.setInt(gameLevel, event.xp));
+    // FileStorage.instance.then((value) => value.setInt(highScore, event.highScore));
+    // FileStorage.instance.then((value) => value.setInt(gameLevel, event.xp));
   }
 }

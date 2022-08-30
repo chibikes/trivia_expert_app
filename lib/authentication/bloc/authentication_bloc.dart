@@ -30,11 +30,14 @@ class AuthenticationBloc
       yield _mapAuthenticationUserChangedToState(event);
     } else if (event is AuthenticationLogOutRequested) {
       unawaited(_authenticationRepository.logOut());
+    } else if (event is DeleteAccount) {
+      await _authenticationRepository.deleteAccount();
+      _authenticationRepository.logOut();
     }
   }
 
   @override
-  Future<Function?> close() {
+  Future<void> close() {
     _userSubscription?.cancel();
     return super.close().then((value) => value as Function?);
   }

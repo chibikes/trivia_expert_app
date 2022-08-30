@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/form_validate.dart';
 import 'package:trivia_expert_app/get_image.dart';
+import '../../../../../authentication/bloc/authentication_bloc.dart';
 import '../../../../../user_bloc/cubit/user_bloc.dart';
 
 class EditProfile extends StatefulWidget {
@@ -25,8 +26,6 @@ class EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<UserBloc>().state.user!.name);
-    print('This is my cue to love!');
     double textFieldWidth = 0.80 * MediaQuery
         .of(context)
         .size
@@ -160,6 +159,11 @@ class EditProfileState extends State<EditProfile> {
                       },
                       child: Text('Update Profile'),
                     ) : Column(children: [SizedBox(height: 0.10 * MediaQuery.of(context).size.width, width: 0.10 * MediaQuery.of(context).size.width,child: CircularProgressIndicator())],),
+                    ElevatedButton(onPressed: () async {
+                      context.read<UserBloc>().add(DeleteUser());
+                      context.read<AuthenticationBloc>().add(DeleteAccount());
+                    }, child: Text('Delete Account')
+                    )
                   ],
                 ),
               );

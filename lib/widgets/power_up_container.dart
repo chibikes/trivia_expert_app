@@ -20,7 +20,7 @@ class PowerUpContainer extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.blue,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(radius), bottomLeft: Radius.circular(radius)),
-            border: Border(),
+            border: const Border(),
           ),
           child: Center(child: Text(powerUpQty,style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
         ),
@@ -30,7 +30,7 @@ class PowerUpContainer extends StatelessWidget {
           decoration: BoxDecoration(
             color: Color(0xff23395d),
             borderRadius: BorderRadius.only(topRight: Radius.circular(radius), bottomRight: Radius.circular(radius)),
-            border: Border(),
+            border: const Border(),
           ),
           child: powerUpIcon,
         ),

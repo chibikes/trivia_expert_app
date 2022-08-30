@@ -11,11 +11,12 @@ import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
-  OnlineSinglePlayerCubit(OnlineSinglePlayerState state, this.user) : super(state);
+  OnlineSinglePlayerCubit(OnlineSinglePlayerState state, this.user, this.highScore) : super(state);
   StreamSubscription? _timeSubscription;
   final Ticker _ticker = Ticker();
   final prefs = SharedPreferences.getInstance();
   final User user;
+  final int highScore;
 
   Future<void> startTimer() async {
     if (_timeSubscription != null) {
@@ -71,14 +72,17 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     var answer = question.answers![buttonSelected];
     List<Color> colors = List.generate(question.answers!.length, (index) {
       if (index == buttonSelected) {
+        var category = getCategory(question.category!);
+
         if (question.correctAnswer == answer) {
-          GameStats.gameStats.update(question.category!,
+
+          GameStats.gameStats.update(category,
               (value) => Stats(value.score + 1, value.categoryFrequency + 1),
               ifAbsent: () {
             return Stats(1, 1);
           });
           score++;
-          if(state.highScoreEvent == false && score > GamingStats.recentStats[highScore]!) {
+          if(state.highScoreEvent == false && score > highScore) {
             playVictorySound();
             emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 5),);
           }
@@ -96,7 +100,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
         } else {
           playFailSound();
           emit(state.copyWith(life: state.life - 1));
-          GameStats.gameStats.update(question.category!,
+          GameStats.gameStats.update(category,
               (value) => Stats(value.score, value.categoryFrequency + 1),
               ifAbsent: () {
             return Stats(0, 0);
@@ -109,6 +113,19 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
 
     emit(state.copyWith(colors: colors));
     updateQuestion(score);
+  }
+
+  String getCategory(String category) {
+    if (RegExp('^Entertainment',caseSensitive: false).hasMatch(category)) {
+      category = 'Entertainment';
+    } else if (RegExp('^Art', caseSensitive: false).hasMatch(category)) {
+      category = 'Art';
+    } else if (RegExp('^Science', caseSensitive: false).hasMatch(category)) {
+      category = 'Science';
+    } else if (RegExp('^History', caseSensitive: false).hasMatch(category)) {
+      category = 'History';
+    }
+    return category;
   }
   void useRightAnswer() {
     if(state.gameStatus == GameStatus.inProgress){
