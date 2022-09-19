@@ -1,5 +1,4 @@
 # trivia_expert_app
 
 A single-player trivia application written with flutter SDK
-
-![trivia_expert_app](https://user-images.githubusercontent.com/53054854/171998874-f31d9b03-328f-44dd-9f3f-c37bf51fb367.jpg)
+![20220919_232658](https://user-images.githubusercontent.com/53054854/191131688-dc507b82-c26b-4c9b-82af-30c351058057.gif)
