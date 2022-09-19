@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:repo_packages/repo_packakges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_expert_app/consts.dart';
-import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
@@ -103,7 +102,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           GameStats.gameStats.update(category,
               (value) => Stats(value.score, value.categoryFrequency + 1),
               ifAbsent: () {
-            return Stats(0, 0);
+            return Stats(0, 1);
           });
           return Colors.red;
         }
@@ -128,12 +127,10 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     return category;
   }
   void useRightAnswer() {
-    if(state.gameStatus == GameStatus.inProgress){
       var question = state.questions[state.index];
       var buttonSelected = question.answers!
           .indexWhere((element) => element == question.correctAnswer);
       validateAnswer(buttonSelected);
-    }
   }
 
 

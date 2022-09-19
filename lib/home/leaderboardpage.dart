@@ -1,15 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
-import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/learderboard_bloc/bloc/leaderboard_event.dart';
 import 'package:trivia_expert_app/learderboard_bloc/bloc/leaderboard_state.dart';
 import 'package:trivia_expert_app/user_bloc/cubit/user_bloc.dart';
-import '../consts.dart';
 import '../learderboard_bloc/bloc/leaderboard_bloc.dart';
 import '../widgets/trophy_cup_layer.dart';
 
@@ -77,7 +74,7 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
         ),
         backgroundColor: Colors.white70,
         body: state.leaderBoardStatus == LeaderBoardStatus.failed
-            ? Text('Something went wrong')
+            ? Center(child: Text('Something went wrong', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),))
             : state.leaderBoardStatus == LeaderBoardStatus.fetching
                 ? Center(
                     child: Column(

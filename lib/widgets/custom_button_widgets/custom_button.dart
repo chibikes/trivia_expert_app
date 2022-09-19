@@ -18,6 +18,7 @@ class AnimatedCustomButton extends StatelessWidget  {
 
   @override
   Widget build(BuildContext context) {
+    var data = MediaQuery.of(context).size;
     return SlideTransition(
       position: Tween<Offset>(
           begin: Offset.zero, end: Offset(3.5, 0.0))
@@ -32,7 +33,7 @@ class AnimatedCustomButton extends StatelessWidget  {
               child: Text(text, style: MyTextStyle.style,),
             ),
             alignment: Alignment.center,
-            height: text.length >= 34 ? 70 : 50.0,
+            height: text.length >= 34 ? 0.07555 * data.height : 0.0555 * data.height,
             width: MediaQuery.of(context).size.width * 0.90,
             duration: Duration(milliseconds: 300),
             decoration: BoxDecoration(

@@ -37,6 +37,7 @@ class ShopCubit extends Cubit<ShopState> {
     var redC = 0;
     var blueC = 0;
     var rightA = 0;
+    //TODO: save the scores to the cloud when the user exists the app (good to prevent excessive network calls)
     await FileStorage.instance.then((value) => redC = value.getInt(redCrystals) ?? state.redCrystals);
     await FileStorage.instance.then((value) => blueC = value.getInt(blueCrystals) ?? state.blueCrystals);
     await FileStorage.instance.then((value) => rightA = value.getInt(rightAnswers) ?? state.rightAnswers);

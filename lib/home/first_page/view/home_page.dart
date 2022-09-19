@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,8 +17,6 @@ import 'package:trivia_expert_app/widgets/widgets.dart';
 import '../../../get_image.dart';
 import '../../../user_bloc/cubit/user_bloc.dart';
 import '../../../widgets/camera_widget.dart';
-import '../../../widgets/trivia_icon.dart';
-import '../../../widgets/trophy_cup_layer.dart';
 import '../profile_page/view/edit_profile/edit_profile.dart';
 
 class Home extends StatefulWidget {
@@ -38,6 +35,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -216,25 +216,21 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (_){return EditProfile();}));},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Badge(
-                              badgeContent: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 10,
-                              ),
-                              child: Text(
-                                context.read<UserBloc>().state.user!.name ??
-                                    context.read<UserBloc>().state.user!.email ??
-                                    'User Name',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30),
-                              )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              context.read<UserBloc>().state.user!.name ??
+                                  context.read<UserBloc>().state.user!.email ??
+                                  'User Name',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30),
+                            ),
+                            GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => EditProfile(autoFocusName: true,))), child: Icon(Icons.edit, color: Colors.green, size: 20,)),
+                          ],
                         ),
                       ),
                     ],
