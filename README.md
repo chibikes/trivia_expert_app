@@ -2,5 +2,4 @@
 
 A single-player trivia application written with flutter SDK
 
-
-![20220919_232658](https://user-images.githubusercontent.com/53054854/191131688-dc507b82-c26b-4c9b-82af-30c351058057.gif)
+![trivia_app](https://user-images.githubusercontent.com/53054854/192139109-bf19805d-244b-42b8-b52e-9054a15304a3.gif)
