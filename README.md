@@ -11,7 +11,7 @@ This app uses bloc state management pattern https://github.com/felangel/bloc and
 For more on best practices using bloc state management solution visit 
 https://verygood.ventures/blog/very-good-flutter-architecture
 
-# Firebase setup
+## Firebase setup
 This app uses flutterfire cli, which makes it easier to configure firebase for both mobile and ios.
 
 To get started first install firebase cli using npm:
@@ -32,7 +32,7 @@ flutterfire configure -d <project-id>
 ```
 note: your project-id is your project's id when you setup firebase for your project. you can omit the -d parameter and flutterfire will create a new firebase project for you.
 
-# Run app
+## Run app
 In your terminal, in your project's root directory, execute the follwing command:
 ```bash
 flutter run
