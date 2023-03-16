@@ -28,9 +28,9 @@ dart pub global activate flutterfire_cli
 ```
 To set up firebase for your app run the following command on your terminal in your project's root directory:
 ```bash
-flutterfire configure -d <project-id>
+flutterfire configure --project=<firebase-project-id>
 ```
-note: your project-id is your project's id when you setup firebase for your project. you can omit the -d parameter and flutterfire will create a new firebase project for you.
+note: your project-id is the project's id when you setup firebase for this project. you can omit the --project parameter and flutterfire will create a new firebase project for you.
 
 ## Run app
 In your terminal, in your project's root directory, execute the follwing command:
