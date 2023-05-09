@@ -17,7 +17,6 @@ void main() async {
   );
   await FileStorage.instance;
   EquatableConfig.stringify = kDebugMode;
-  // await SharedPreferences.getInstance().then((value) => value.setInt(gameIndex, 0));
   runApp(App(firebaseUserRepository: FirebaseUserRepository(),authenticationRepository: AuthenticationRepository(), gameRepository: GameRepository(),));
   HttpOverrides.global = new MyHttpOverrides();
 }

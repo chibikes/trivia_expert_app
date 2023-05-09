@@ -3,10 +3,7 @@ import '../main_models/user_game_details.dart';
 
 class GameRepository {
   static final highScores = FirebaseFirestore.instance.collection('highScores');
-  static Future<void> updateScore(
-      String id,
-      UserGameDetails gameDetails,
-  ) {
+  static Future<void> updateScore( String id, UserGameDetails gameDetails) {
       return highScores.doc(id).update(
         gameDetails.toMap()
       ).onError((error, stackTrace) => highScores.doc(id).set(gameDetails.toMap()));

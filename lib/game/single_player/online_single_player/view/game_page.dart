@@ -7,6 +7,7 @@ import 'package:trivia_expert_app/game/single_player/animations.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_state.dart';
+import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,6 +75,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   @override
   void deactivate() {
+    GameStats.gameStats.clear();
     if(highScoreEvent && newLevelEvent) {
       context.read<UserBloc>().add(UpdatePlayerStat(xp: xp, highScore: score));
     }
@@ -121,7 +123,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 }
                 GamingStats.recentStats[gameLevel] = gameState.level;
                 context.read<OnlineSinglePlayerCubit>().close();
-                return FinishedGame(highScore: gameState.highScoreEvent,score: gameState.playerScore, newLevel: gameState.newLevelEvent, reward: gameState.reward,);
+                var stats = GameStats.gameStats;
+                return FinishedGame(stats: stats, highScore: gameState.highScoreEvent,score: gameState.playerScore, newLevel: gameState.newLevelEvent, reward: gameState.reward,);
               }
               else if (gameState.gameStatus == GameStatus.getQuestions) {
                 /// offset should be multiples of database limit parameter.
@@ -164,12 +167,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   Clock(
-                                    width: 0.16 * MediaQuery.of(context).size.width,
+                                    width: 0.16 * data.width,
                                     height:
-                                        0.16 * MediaQuery.of(context).size.width,
+                                        0.16 * data.width,
                                     text: gameState.time < 10 ? '00:0${gameState.time}':'00:${gameState.time}',
                                   ),
-                                  SizedBox(width: MediaQuery.of(context).size.width * 0.05,),
+                                  SizedBox(width: data.width * 0.05,),
                                   Text(
                                     '${gameState.playerScore}',
                                     style: TextStyle(
@@ -178,24 +181,24 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                         fontSize: 30),
                                   ),
                                   SizedBox(
-                                    width: 10,
+                                    width: data.width * 0.05,
                                   ),
                                   Row(
                                     children: [
-                                      RedLifeCrystal(height: 5, width: 5,),
-                                      Text(gameState.life.toString()),
+                                      RedLifeCrystal(height: 10, width: 10,),
+                                      Text(gameState.life.toString(), style: TextStyle(fontSize: 16, color: Colors.black54, fontWeight: FontWeight.bold),),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      RightAnswer(height: 10, width: 10,),
-                                      Text(shopState.rightAnswers.toString()),
+                                      RightAnswer(height: 15, width: 15,),
+                                      Text(shopState.rightAnswers.toString(), style: TextStyle(fontSize: 16, color: Colors.black54, fontWeight: FontWeight.bold),),
                                     ],
                                   ),
                                   Row(
                                     children: [
                                       BlueCrystal(height: 10, width: 10,),
-                                      Text(shopState.blueCrystals.toString()),
+                                      Text(shopState.blueCrystals.toString(), style: TextStyle(fontSize: 16, color: Colors.black54, fontWeight: FontWeight.bold),),
                                     ],
                                   ),
                                 ],
@@ -204,7 +207,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 0.025 * data.height,
                         ),
                         ChalkBoard(
                           height: chalkBoardHeight,
@@ -247,19 +250,21 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                 animationController: AnimationHelper.controllerTwo,
                                 text: question.answers![index],
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 0.010 * data.height),
                             ],
                           ),
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(height: 0.020 * data.height,),
                         GestureDetector(
                           onTap: () {
+                            var gameCubit = context.read<OnlineSinglePlayerCubit>();
                             var shopBloc = context.read<ShopCubit>();
-                            if(shopBloc.state.rightAnswers >= 1){
-                            context.read<OnlineSinglePlayerCubit>().useRightAnswer();
-                            shopBloc.useItem(ItemType.rightAnswer);
-                          }
+                            if (shopBloc.state.rightAnswers >= 1 && gameState.gameStatus == GameStatus.inProgress) {
+                              gameCubit.emit(gameState.copyWith(gameStatus: GameStatus.checkingAnswer));
+                              gameCubit.useRightAnswer();
+                              shopBloc.useItem(ItemType.rightAnswer);
+                            }
                         },
                           child: Container(
                             height: 30,
@@ -276,7 +281,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
-                    Positioned(top: 20.0,left: 0.40 * MediaQuery.of(context).size.width, child: Text(gameState.gameStatus == GameStatus.levelChanged ? 'XP ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30, fontFamily: 'ShowCardGothic', color: Colors.green),)),
+                    Positioned(top: 20.0,left: 0.40 * data.width, child: Text(gameState.gameStatus == GameStatus.levelChanged ? 'XP ${gameState.level}' : gameState.gameStatus == GameStatus.highScore ? 'HIGH SCORE!' : '', style: TextStyle(fontSize: 30, fontFamily: 'ShowCardGothic', color: Colors.green),)),
                   ],
                 );
             },

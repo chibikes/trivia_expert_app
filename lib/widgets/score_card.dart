@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,7 +39,7 @@ class ScoreCard extends StatelessWidget {
                         ),
                         Positioned(
                           top: 3.0,
-                          left: 5.5,
+                          left: data.width * 0.020,
                           child: CustomPaint(
                             painter: TrophyLayerPainter(),
                             size: Size(23, 20),
@@ -48,7 +47,7 @@ class ScoreCard extends StatelessWidget {
                         ),
                         Positioned(
                           top: 8.0,
-                          left: 20.0,
+                          left: data.width * 0.055,
                           child: Container(
                             height: 3,
                             width: 3,

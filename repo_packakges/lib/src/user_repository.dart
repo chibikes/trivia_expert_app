@@ -45,20 +45,25 @@ class FirebaseUserRepository extends UserRepository {
 
   Future<void> deleteUser(repo.User user) async {
     try {
-      await users.doc(user.id).delete().then((value) => highScores.doc(user.id).delete());
+      await highScores.doc(user.id).delete();
+      await users.doc(user.id).delete();
     } catch(e) {
-      print('Error >>>>>>>>>>>>>>>>>>>>>>>>>> : $e');
     }
 
   }
 
   Future<String> saveUserImage(String imgPath, String userId) async {
     File file = File(imgPath);
-    String storageRef = 'users/$userId.png';
+    String storageRef = 'users/$userId/$userId.png';
     var firebaseStorageRef = FirebaseStorage.instance.ref(storageRef);
 
       await firebaseStorageRef.putFile(file);
       return firebaseStorageRef.getDownloadURL();
+  }
+
+  Future<void> deleteUserImage(String userId) {
+    String storageRef = 'users/$userId/$userId.png';
+    return FirebaseStorage.instance.ref(storageRef).delete();
   }
 
   FirebaseUserRepository();

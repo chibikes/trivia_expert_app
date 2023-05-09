@@ -36,7 +36,6 @@ class App extends StatelessWidget {
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
             ),
-            lazy: false,
           ),
           BlocProvider(
               create: (_) => UserBloc(firebaseUserRepository,
@@ -56,7 +55,7 @@ class App extends StatelessWidget {
           BlocProvider(
               create: (_) => LeaderBoardBloc(
                     gameRepository: gameRepository,
-                  ), lazy: false,),
+                  ),),
         ],
         child: AppView(),
       ),

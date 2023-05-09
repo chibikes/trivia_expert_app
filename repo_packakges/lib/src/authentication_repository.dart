@@ -134,7 +134,7 @@ class AuthenticationRepository {
     try {
       await firebase_auth.FirebaseAuth.instance.currentUser?.delete();
     }  catch(e) {
-      print('************************* exception is $e');
+
     }
 
   }
@@ -144,9 +144,8 @@ class AuthenticationRepository {
 extension on firebase_auth.User {
   User get toUser  {
 
-    return User(id: uid, email: email!, name: displayName ?? createUserNameFromEmail(email!), photoUrl: photoURL ?? altImage);
+    return User(id: uid, email: email!, name: displayName != null && displayName!.isNotEmpty ? displayName : createUserNameFromEmail(email!), photoUrl: photoURL ?? altImage);
   }
-
 }
 
 String createUserNameFromEmail (String email) {

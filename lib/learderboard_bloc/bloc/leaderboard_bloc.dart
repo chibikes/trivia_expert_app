@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:repo_packages/repo_packakges.dart';
 import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
 import 'leaderboard_event.dart';
 import 'leaderboard_state.dart';
@@ -23,13 +22,15 @@ class LeaderBoardBloc extends Bloc<LeaderBoardEvent, LeaderBoardState> {
     } else if (event is GetUserId) {
       yield* _getPosition(event.id);
     }
-
-
   }
 
   Stream<LeaderBoardState> _createLeaderBoard(CreateLeaderBoard event) async*{
+    try {
+      yield state.copyWith(gameScores: event.gameScores, leaderBoardStatus: LeaderBoardStatus.fetched);
+    } catch(e) {
+      yield state.copyWith(leaderBoardStatus: LeaderBoardStatus.failed);
+    }
 
-    yield state.copyWith(gameScores: event.gameScores, leaderBoardStatus: event.gameScores.isNotEmpty ? LeaderBoardStatus.fetched : LeaderBoardStatus.failed);
   }
 
   Stream<LeaderBoardState> _getPosition(String id) async* {

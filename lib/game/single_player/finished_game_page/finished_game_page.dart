@@ -1,18 +1,17 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rive/rive.dart' hide LinearGradient;
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';
+import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
+import 'package:trivia_expert_app/game/single_player/online_single_player/view/online_single_player.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
-import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
 import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
 import 'package:trivia_expert_app/widgets/end_game_card.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
-import 'package:trivia_expert_app/widgets/game_widgets/chalkboard.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
@@ -26,12 +25,14 @@ class FinishedGamePage extends StatefulWidget {
   final bool newLevel;
   final bool highScore;
   final double reward;
+  final Map stats;
   const FinishedGamePage({
     Key? key,
     required this.score,
     required this.newLevel,
     required this.reward,
     required this.highScore,
+    required this.stats,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -53,22 +54,9 @@ class FinishedGamePageState extends State<FinishedGamePage>
   late Animation<double> heightSecondItem;
   late AnimationController _buttonController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 50));
-  Artboard? _artBoard;
-
-  final landscapeFile = 'assets/landscape.riv';
-
-  void _loadRiveFile() async {
-    await rootBundle.load(landscapeFile).then((data) {
-      final file = RiveFile.import(data);
-
-      setState(() => _artBoard = file.mainArtboard
-      );
-    });
-  }
 
   @override
   void initState() {
-    _loadRiveFile();
     heightFirstItem = Tween<double>(begin: 500.0, end: 0.0).animate(
         CurvedAnimation(
             parent: _offsetAnimController,
@@ -77,7 +65,6 @@ class FinishedGamePageState extends State<FinishedGamePage>
         CurvedAnimation(
             parent: _offsetAnimController,
             curve: Interval(0.50, 1.0, curve: Curves.easeInOut)));
-    // Tween<Offset>(begin: Offset.zero, end: Offset(50, 100)).animate(parent);
     animation = Tween<double>(begin: 0, end: widget.reward + widget.score)
         .animate(
             CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))
@@ -117,13 +104,14 @@ class FinishedGamePageState extends State<FinishedGamePage>
 
   @override
   Widget build(BuildContext context) {
-    var gameStats = GameStats.gameStats;
+    var data = MediaQuery.of(context).size;
+    var gameStats = widget.stats;
     List<Widget> listStats = [];
     listStats.add(
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          'Category Stats',
+          'Game Stats',
           style: GoogleFonts.droidSans(
             fontSize: 20,
             color: Colors.white,
@@ -149,16 +137,9 @@ class FinishedGamePageState extends State<FinishedGamePage>
 
     return BlocBuilder<GameEndCubit, GameEndState>(builder: (context, state) {
       return Scaffold(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0xFF607D8B),
         body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0x948fd7ff), ],),
-              ),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
@@ -178,7 +159,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 0.03 * data.height,
                   ),
                   AnimatedBuilder(
                       animation: _offsetAnimController,
@@ -194,7 +175,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         '${widget.score}',
                         style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 14),
                       ),
-                      icon: Icon(Icons.gpp_good, color: Colors.blueGrey, size: 30,),
+                      icon: Icon(FontAwesomeIcons.trophy, color: Colors.blueGrey, size: 30,),
                       ),
                       EndGameCard(title: 'Total XP', contents: Text(
                         '${GamingStats.recentStats[gameLevel]}',
@@ -205,7 +186,6 @@ class FinishedGamePageState extends State<FinishedGamePage>
                             Colors.blue,
                             Colors.lightBlue,
                           ),
-                          // size: Size(28, 35),
                           size: Size(23,30)
                       ),
                       ),
@@ -213,8 +193,8 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         children: [
                           SizedBox(width: MediaQuery.of(context).size.width * 0.07,),
                           BlueCrystal(
-                            height: 10,
-                            width: 10,
+                            height: 0.025 * data.width,
+                            width: 0.025 * data.width,
                           ),
                           SizedBox(
                             width: 3,
@@ -245,7 +225,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                     animation: _offsetAnimController,
                   ),
                   SizedBox(
-                    height: 20.0,
+                    height: 0.020 * data.height,
                   ),
 
                    gameStats.isNotEmpty ? Column(
@@ -293,7 +273,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
         .copyWith(blueCrystals: shopCubit.state.blueCrystals + reward.toInt()));
     FileStorage.instance.then((value) => value.setInt(
         blueCrystals, (reward + shopCubit.state.blueCrystals).toInt()));
-    GameStats.gameStats.clear();
+    widget.stats.clear();
     super.deactivate();
   }
 
@@ -302,6 +282,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
     await _buttonController.forward();
     await _buttonController.reverse();
     Navigator.of(context).pop();
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {return OnlineSinglePlayer();}));
   }
 
   void buttonClick() {

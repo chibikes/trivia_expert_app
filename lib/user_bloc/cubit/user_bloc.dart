@@ -44,7 +44,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     else if (event is SavePlayerStat) _saveUserStats(event);
     else if (event is UserStatFetched) yield state.copyWith(gameDetails: event.gameDetails);
     else if (event is DeleteUser) {
-      _userRepository.deleteUser(user);
+      await _userRepository.deleteUser(user);
+      await _userRepository.deleteUserImage(user.id ?? '');
+      await _authRepository.deleteAccount();
+      await _authRepository.logOut();
     }
   }
 
@@ -70,6 +73,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     yield state.copyWith(homeStatus: HomeStatus.waiting);
     try {
       await _userRepository.updateUser(event.user);
+      yield state.copyWith(homeStatus: HomeStatus.updated);
       add(UserUpdated(event.user));
     } catch (e) {
       yield state.copyWith(homeStatus: HomeStatus.failure_update);
@@ -87,7 +91,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
    _getHighScore() {
     var gameDeets = state.gameDetails;
     _scoreSubscription = _gameRepository.getUserGameDetails(state.user!.id!).listen((userDetails) {
-      print(userDetails.toString());
        gameDeets = userDetails;
        add(UserStatFetched(gameDeets));
     });
@@ -101,7 +104,5 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   void _saveUserStats(SavePlayerStat event) {
     var user = state.user!;
     GameRepository.updateScore(user.id!, state.gameDetails.copyWith(userId: user.id, xp: event.xp, avatarUrl: user.photoUrl, userName: user.name, highScore: event.highScore));
-    // FileStorage.instance.then((value) => value.setInt(highScore, event.highScore));
-    // FileStorage.instance.then((value) => value.setInt(gameLevel, event.xp));
   }
 }
