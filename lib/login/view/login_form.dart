@@ -12,7 +12,7 @@ class LoginForm extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(content: Text('Authentication Failure: ${state.exception}')),
@@ -108,13 +108,15 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
-            : RaisedButton(
+            : ElevatedButton(
           key: const Key('loginForm_continue_raisedButton'),
           child: const Text('LOGIN'),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Color(0xFFFFD600)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),),
           ),
-          color: const Color(0xFFFFD600),
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().logInWithCredentials()
               : null,
@@ -128,16 +130,24 @@ class _GoogleLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return RaisedButton.icon(
-      key: const Key('loginForm_googleLogin_raisedButton'),
-      label: const Text(
-        'SIGN IN WITH GOOGLE',
-        style: TextStyle(color: Colors.white),
+    return GestureDetector(
+      onTap: () => context.read<LoginCubit>().logInWithGoogle(),
+      child: Container(
+        key: const Key('loginForm_googleLogin_raisedButton'),
+        child: Row(
+          children: [
+            Icon(FontAwesomeIcons.google, color: Colors.white),
+            const Text(
+              'SIGN IN WITH GOOGLE',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Color(0xff009688),
+          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+        ),
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-      icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
-      color: theme.accentColor,
-      onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
     );
   }
 }
@@ -147,12 +157,11 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        return FlatButton(
-          key: const Key('loginForm_createAccount_flatButton'),
-          // onPressed: () { Navigator.of(context).push<void>(SignUpPage.route()) },
-          onPressed: () {
-           if (state.status == FormzStatus.valid) context.read<LoginCubit>().signUpWithCredentials();
+        return GestureDetector(
+          onTap: () {
+            if (state.status == FormzStatus.valid) context.read<LoginCubit>().signUpWithCredentials();
           },
+          key: const Key('loginForm_createAccount_flatButton'),
           child: Text(
             'CREATE ACCOUNT',
             style: TextStyle(color: Colors.white),
