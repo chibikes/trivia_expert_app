@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/consts.dart';
@@ -307,8 +307,8 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ),
                       child: Row(
                         children: [
-                          Badge(
-                            position: BadgePosition.bottomEnd(end: -15),
+                          badges.Badge(
+                            position: badges.BadgePosition.bottomEnd(end: -15),
                             badgeContent: Text(state.redCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: RedLifeCrystal(
                               height: 30,
@@ -326,8 +326,8 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ),
                       child: Row(
                         children: [
-                          Badge(
-                            position: BadgePosition.bottomEnd(end: -20),
+                          badges.Badge(
+                            position: badges.BadgePosition.bottomEnd(end: -20),
                             badgeContent: Text(state.blueCrystals.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: BlueCrystal(
                               width: 30,
@@ -345,8 +345,8 @@ class PowerUpPageState extends State<PowerUpPage> with TickerProviderStateMixin{
                       ),
                       child: Row(
                         children: [
-                          Badge(
-                            position: BadgePosition.bottomEnd(),
+                          badges.Badge(
+                            position: badges.BadgePosition.bottomEnd(),
                             badgeContent: Text(state.rightAnswers.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),),
                             child: RightAnswer(
                               width: 30,
