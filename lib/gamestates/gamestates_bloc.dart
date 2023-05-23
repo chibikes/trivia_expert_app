@@ -3,7 +3,7 @@
 // import 'package:equatable/equatable.dart';
 // import 'package:flutter/material.dart';
 // import 'package:meta/meta.dart';
-// import 'package:repo_packages/repo_packakges.dart';
+// import 'package:repo_packages/authentication_repository.dart';
 //
 // part 'gamestates_event.dart';
 // part 'gamestates_state.dart';

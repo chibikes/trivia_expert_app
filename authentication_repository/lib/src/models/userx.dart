@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:repo_packages/src/models/scores.dart';
+import 'package:authentication_repository/src/models/scores.dart';
 import 'power_ups.dart';
 
 /// {@template user}

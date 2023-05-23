@@ -1,6 +1,6 @@
 import 'package:in_app_repo/in_app_repository.dart';
 import 'package:questions_repository/questions_repository.dart';
-import 'package:repo_packages/repo_packakges.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
@@ -13,6 +13,7 @@ import 'package:trivia_expert_app/user_bloc/cubit/user_bloc.dart';
 import 'authentication/authentication.dart';
 import 'package:trivia_expert_app/home/tabbed_pages/tabbed_pages.dart';
 import 'login/view/login_page.dart';
+
 
 class App extends StatelessWidget {
   const App({

@@ -13,29 +13,39 @@ class Clock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-      width: width,
+      height: 50,
+      width: 50,
       decoration: BoxDecoration(
         color: Colors.orange,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            color: Colors.lightBlueAccent,
-            shape: BoxShape.circle,
-          ),
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
           child: Container(
-            height: 0.70 * height,
-            width: 0.70 * width,
+            height: 50,
+            width: 50,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.lightBlueAccent,
               shape: BoxShape.circle,
             ),
-            child: Center(child: Text(text, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),),),
+            child: Container(
+              height: 25,
+              width: 25,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11),
+                ),
+              ),
+            ),
           ),
         ),
       ),

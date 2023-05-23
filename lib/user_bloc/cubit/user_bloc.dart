@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:repo_packages/repo_packakges.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
 import 'package:trivia_expert_app/main_models/user_game_details.dart';
 

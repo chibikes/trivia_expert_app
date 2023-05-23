@@ -11,11 +11,25 @@ class FinishedGame extends StatelessWidget {
   final double reward;
   final Map stats;
 
-
-  const FinishedGame({Key? key, required this.score, required this.newLevel, required this.reward, required this.highScore, required this.stats}) : super(key: key);
+  const FinishedGame(
+      {Key? key,
+      required this.score,
+      required this.newLevel,
+      required this.reward,
+      required this.highScore,
+      required this.stats})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => GameEndCubit(GameEndState())..getGameStats(), child: FinishedGamePage(stats: stats, highScore: highScore,score: score, newLevel: newLevel, reward: reward,),);
+    return BlocProvider(
+      create: (_) => GameEndCubit(GameEndState())..getGameStats(),
+      child: FinishedGamePage(
+        stats: stats,
+        highScore: highScore,
+        score: score,
+        newLevel: newLevel,
+        reward: reward,
+      ),
+    );
   }
-
 }

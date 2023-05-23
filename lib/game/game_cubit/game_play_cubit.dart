@@ -5,7 +5,7 @@
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:equatable/equatable.dart';
 // import 'package:flutter/material.dart';
-// import 'package:repo_packages/repo_packakges.dart';
+// import 'package:repo_packages/authentication_repository.dart';
 // import 'package:rive/rive.dart';
 // import 'package:trivia_expert_app/game/single_player/animations.dart';
 // import 'package:trivia_expert_app/game/single_player/finished_game_page.dart';
