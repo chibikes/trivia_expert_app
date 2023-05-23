@@ -12,31 +12,21 @@ class XPPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     Path path = Path()
-      ..addPolygon([
-        Offset(0.50 * size.width, 0),
-        Offset(0, 0.25 * size.height),
-        Offset(0, 0.75 * size.height),
-        Offset(0.50 * size.width, size.height),
-        Offset(size.width, 0.75 * size.height),
-        Offset(size.width, 0.25 * size.height)
-      ], true);
-    canvas.drawPath(path, paint);
-
-    paint.color = colorTwo;
-    path.reset();
-    path..addPolygon([
-    Offset(0.50 * size.width, 0.10 * size.height),
-    Offset(0.10 * size.width, 0.30 * size.height),
-    Offset(0.10 * size.width, 0.70 * size.height),
-    Offset(0.50 * size.width, 0.90 * size.height),
-    Offset(0.90 * size.width, 0.70 * size.height),
-    Offset(0.90 * size.width, 0.30 * size.height)
-    ], true);
-
-    canvas.drawPath(path, paint);
-    path.reset();
-    paint.color = Colors.white10;
-    path..addPolygon([Offset(0, 0.60 * size.height), Offset(0, 0.75 * size.height), Offset(0.10 * size.width, 0.80 * size.height), Offset(size.width, 0.30 * size.height), Offset(size.width, 0.25 * size.height), Offset(0.77 * size.width, 0.15 * size.height)], false);
+      ..moveTo(0.10 * size.width, 0.50 * size.height)
+      ..lineTo(0.40 * size.width, 0.10 * size.height)
+      ..quadraticBezierTo(0.50 * size.width, 0.05 * size.height,
+          0.55 * size.width, 0.15 * size.height)
+      ..lineTo(0.55 * size.width, 0.35 * size.height)
+      ..lineTo(0.90 * size.width, 0.40 * size.height)
+      ..quadraticBezierTo(0.95 * size.width, 0.45 * size.height,
+          0.93 * size.width, 0.50 * size.height)
+      ..lineTo(0.55 * size.width, 0.90 * size.height)
+      ..quadraticBezierTo(0.45 * size.width, 0.95 * size.height,
+          0.40 * size.width, 0.87 * size.height)
+      ..lineTo(0.40 * size.width, 0.60 * size.height)
+      ..lineTo(0.15 * size.width, 0.55 * size.height)
+      ..quadraticBezierTo(0.07 * size.width, 0.50 * size.height,
+          0.10 * size.width, 0.50 * size.height);
     canvas.drawPath(path, paint);
   }
 
