@@ -1,14 +1,14 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:repo_packages/repo_packakges.dart';
+import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:trivia_expert_app/authentication/authentication.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this._authenticationRepository)
-      : super(const LoginState());
+  LoginCubit(this._authenticationRepository) : super(const LoginState());
 
   final AuthenticationRepository _authenticationRepository;
 
@@ -37,8 +37,12 @@ class LoginCubit extends Cubit<LoginState> {
         password: state.password.value,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception catch(e) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure, exception: e.toString()));
+    } on LogInWithEmailAndPasswordFailure catch (e) {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure, errorMessage: e.message));
+    } on Exception {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure, errorMessage: 'Login failed'));
     }
   }
 
@@ -47,19 +51,31 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await _authenticationRepository.logInWithGoogle();
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception catch(e){
-      emit(state.copyWith(status: FormzStatus.submissionFailure, exception: e.toString()));
-    } on NoSuchMethodError {
-      emit(state.copyWith(status: FormzStatus.pure));
+    } on LogInWithGoogleFailure catch (e) {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure,
+          errorMessage: 'Error logging in'));
+    } on Exception {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure,
+          errorMessage: 'Error logging in'));
     }
   }
 
   Future<void> signUpWithCredentials() async {
     try {
-      await _authenticationRepository.signUp(email: state.email.value, password: state.password.value);
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception catch(e) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure, exception: e.toString()));
+      await _authenticationRepository.signUp(
+          email: state.email.value, password: state.password.value);
+      emit(state.copyWith(
+          status: FormzStatus.submissionSuccess,
+          signUpStatus: SignUpStatus.signedUp));
+    } on SignUpWithEmailAndPasswordFailure catch (e) {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure, errorMessage: e.message));
+    } on Exception {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure,
+          errorMessage: 'Could not complete sign up'));
     }
   }
 }
