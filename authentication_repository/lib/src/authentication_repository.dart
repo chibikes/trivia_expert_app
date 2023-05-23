@@ -3,25 +3,94 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:trivia_expert_app/consts.dart';
-
 
 import 'models/models.dart';
 
-/// Thrown if during the sign up process if a failure occurs.
-class SignUpFailure implements Exception {
+const altImage =
+    'https://firebasestorage.googleapis.com/v0/b/flutter-trivia-ex.appspot.com/o/users%2Favatar10.png?alt=media&token=9190b47f-7220-4a40-8d88-e2c2bc99f138';
 
+/// Thrown if during the sign up process if a failure occurs.
+class SignUpWithEmailAndPasswordFailure implements Exception {
+  /// {@macro sign_up_with_email_and_password_failure}
+  const SignUpWithEmailAndPasswordFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// Create an authentication message
+  /// from a firebase authentication exception code.
+  /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/createUserWithEmailAndPassword.html
+  factory SignUpWithEmailAndPasswordFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return const SignUpWithEmailAndPasswordFailure(
+          'Email is not valid or badly formatted.',
+        );
+      case 'user-disabled':
+        return const SignUpWithEmailAndPasswordFailure(
+          'This user has been disabled. Please contact support for help.',
+        );
+      case 'email-already-in-use':
+        return const SignUpWithEmailAndPasswordFailure(
+          'An account already exists for that email.',
+        );
+      case 'operation-not-allowed':
+        return const SignUpWithEmailAndPasswordFailure(
+          'Operation is not allowed.  Please contact support.',
+        );
+      case 'weak-password':
+        return const SignUpWithEmailAndPasswordFailure(
+          'Please enter a stronger password.',
+        );
+      default:
+        return const SignUpWithEmailAndPasswordFailure();
+    }
+  }
+
+  /// The associated error message.
+  final String message;
 }
 
 /// Thrown during the login process if a failure occurs.
-class LogInWithEmailAndPasswordFailure implements Exception {}
+class LogInWithEmailAndPasswordFailure implements Exception {
+  /// {@macro log_in_with_email_and_password_failure}
+  const LogInWithEmailAndPasswordFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  /// Create an authentication message
+  /// from a firebase authentication exception code.
+  factory LogInWithEmailAndPasswordFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return const LogInWithEmailAndPasswordFailure(
+          'Email is not valid or badly formatted.',
+        );
+      case 'user-disabled':
+        return const LogInWithEmailAndPasswordFailure(
+          'This user has been disabled. Please contact support for help.',
+        );
+      case 'user-not-found':
+        return const LogInWithEmailAndPasswordFailure(
+          'Email is not found, please create an account.',
+        );
+      case 'wrong-password':
+        return const LogInWithEmailAndPasswordFailure(
+          'Incorrect password, please try again.',
+        );
+      default:
+        return const LogInWithEmailAndPasswordFailure();
+    }
+  }
+
+  /// The associated error message.
+  final String message;
+}
 
 /// Thrown during the sign in with google process if a failure occurs.
 class LogInWithGoogleFailure implements Exception {}
 
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
-
 
 class LogInWithFacebookFailure implements Exception {}
 
@@ -51,7 +120,7 @@ class AuthenticationRepository {
 
   /// Creates a new user with the provided [email] and [password].
   ///
-  /// Throws a [SignUpFailure] if an exception occurs.
+  /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
   Future<void> signUp({
     required String email,
     required String password,
@@ -61,8 +130,10 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on Exception {
-      throw SignUpFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
+    } catch (_) {
+      throw SignUpWithEmailAndPasswordFailure();
     }
   }
 
@@ -72,6 +143,7 @@ class AuthenticationRepository {
   Future<void> logInWithGoogle() async {
     try {
       final googleUser = await (_googleSignIn.signIn());
+      // if (googleUser == null) throw Exception();
       final googleAuth = await googleUser!.authentication;
       final credential = firebase_auth.GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -79,17 +151,14 @@ class AuthenticationRepository {
       );
       await _firebaseAuth.signInWithCredential(credential);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      print('*********');
-      print(e.message);
-      print("This is firebase error ***************");
       throw LogInWithGoogleFailure();
+    } on Exception {
+      throw Exception();
     }
   }
 
   Future<void> logInWithFacebook() async {
-    try {
-
-    } on Exception {
+    try {} on Exception {
       throw LogInWithFacebookFailure();
     }
   }
@@ -106,13 +175,10 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on firebase_auth.FirebaseAuthException catch (e){
-      print(e.message);
-      print("**************");
-      throw LogInWithEmailAndPasswordFailure();
-    }
-    on PlatformException catch (e) {
-      throw e.code;
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
+    } catch (_) {
+      throw const LogInWithEmailAndPasswordFailure();
     }
   }
 
@@ -130,29 +196,30 @@ class AuthenticationRepository {
       throw LogOutFailure();
     }
   }
-  Future<void> deleteAccount() async{
+
+  Future<void> deleteAccount() async {
     try {
       await firebase_auth.FirebaseAuth.instance.currentUser?.delete();
-    }  catch(e) {
-
-    }
-
+    } catch (e) {}
   }
 }
-
 
 extension on firebase_auth.User {
-  User get toUser  {
-
-    return User(id: uid, email: email!, name: displayName != null && displayName!.isNotEmpty ? displayName : createUserNameFromEmail(email!), photoUrl: photoURL ?? altImage);
+  User get toUser {
+    return User(
+        id: uid,
+        email: email!,
+        name: displayName != null && displayName!.isNotEmpty
+            ? displayName
+            : createUserNameFromEmail(email!),
+        photoUrl: photoURL ?? altImage);
   }
 }
 
-String createUserNameFromEmail (String email) {
-
-  for(int i = 0; i < email.length; i++) { // abc@dfdf
+String createUserNameFromEmail(String email) {
+  for (int i = 0; i < email.length; i++) {
+    // abc@dfdf
     if (email[i] == '@') return email.substring(0, i);
   }
   return email;
 }
-
