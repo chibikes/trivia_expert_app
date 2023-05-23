@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:repo_packages/repo_packakges.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:trivia_expert_app/home/first_page/profile_page/view/edit_profile/edit_profile.dart';
 import 'package:trivia_expert_app/widgets/decorated_avatar.dart';
 import 'package:trivia_expert_app/widgets/progress_indicator_widgets/roundrect_progress_indicator.dart';

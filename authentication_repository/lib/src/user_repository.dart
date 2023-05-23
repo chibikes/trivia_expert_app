@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:repo_packages/repo_packakges.dart' as repo;
+import 'package:authentication_repository/authentication_repository.dart' as repo;
 import 'models/gamestate.dart';
 import 'models/models.dart';
 

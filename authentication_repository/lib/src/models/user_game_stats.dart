@@ -1,4 +1,4 @@
-import 'package:repo_packages/src/models/power_ups.dart';
+import 'package:authentication_repository/src/models/power_ups.dart';
 
 class UserGameStats {
   Map<String, int> usersPlayed; /// map of users(id) played and no of wins

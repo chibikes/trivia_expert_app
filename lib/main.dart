@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:repo_packages/repo_packakges.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:trivia_expert_app/file_storage.dart';
 import 'package:trivia_expert_app/high_score_repo/high_score_repo.dart';
 import 'app.dart';

@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:equatable/equatable.dart';
 
-import '../../repo_packakges.dart';
+import '../../authentication_repository.dart';
 
 /// [GameState.rounds] indicates the round clients are currently playing.
 /// Total no of rounds is three
