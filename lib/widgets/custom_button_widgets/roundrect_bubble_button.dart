@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,30 +6,25 @@ class RoundRectBubbleButton extends StatelessWidget {
   final onPressed;
   final String text;
 
-  const RoundRectBubbleButton({Key? key, required this.onPressed, required this.text}) : super(key: key);
+  const RoundRectBubbleButton(
+      {Key? key, required this.onPressed, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 8.0)),
+          padding:
+              MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 8.0)),
           elevation: MaterialStateProperty.all(8.0),
           shape: MaterialStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(color: Colors.orange, width: 2.0)
-              )
-          ),
+                  side: BorderSide(color: Colors.orange, width: 2.0))),
           alignment: Alignment.topCenter,
           backgroundColor: MaterialStateProperty.all(Colors.orange),
         ),
         onPressed: onPressed,
-          // await _bounceController?.forward().whenComplete(() => _bounceController?.reverse());
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) {
-          //   return SinglePlayerPage();
-          // }));
-
         child: Stack(
           // clipBehavior: Clip.none,
           children: [
@@ -82,9 +76,15 @@ class RoundRectBubbleButton extends StatelessWidget {
                 ),
               ),
             ),
-            Center(child: Text(text, style: GoogleFonts.blackHanSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),))
+            Center(
+                child: Text(
+              text,
+              style: GoogleFonts.blackHanSans(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700),
+            ))
           ],
-        )
-    );
+        ));
   }
 }
