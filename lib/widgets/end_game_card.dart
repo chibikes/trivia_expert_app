@@ -23,7 +23,7 @@ class EndGameCard extends StatelessWidget {
               width: 0.25 * data.width,
               height: 1.06 * cardHeight,
               decoration: BoxDecoration(
-                color: Colors.cyan,
+                color: Colors.cyan.shade700,
                 // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0))
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -39,10 +39,10 @@ class EndGameCard extends StatelessWidget {
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.white, Colors.cyan],
+                  colors: [Colors.white, Colors.cyan.shade500],
                   stops: [0.7, 0.3]),
               borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(color: Colors.white, width: 0.3),
+              border: Border.all(color: Colors.white54, width: 0.3),
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
