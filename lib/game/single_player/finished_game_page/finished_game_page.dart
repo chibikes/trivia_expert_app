@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import '../../../file_storage.dart';
+import '../../../widgets/stacked_button.dart';
 import '../../../widgets/xp_icon.dart';
 import 'dart:math' as math;
 
@@ -171,46 +172,123 @@ class FinishedGamePageState extends State<FinishedGamePage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      EndGameCard(title: 'Score', contents:  Text(
-                        '${widget.score}',
-                        style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 14),
-                      ),
-                      icon: Icon(FontAwesomeIcons.trophy, color: Colors.blueGrey, size: 30,),
-                      ),
-                      EndGameCard(title: 'Total XP', contents: Text(
-                        '${GamingStats.recentStats[gameLevel]}',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      icon: CustomPaint(
-                          painter: XPPainter(
-                            Colors.blue,
-                            Colors.lightBlue,
+                      EndGameCard(
+                        title: 'Score',
+                        contents: SizedBox(
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 1.0,
+                                left: 1.0,
+                                child: Text(
+                                  '${widget.score}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.black,
+                                      fontSize: 16),
+                                ),
+                              ),
+                              Text(
+                                '${widget.score}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                    fontSize: 16),
+                              ),
+                            ],
                           ),
-                          size: Size(23,30)
+                        ),
+                        icon: Icon(
+                          FontAwesomeIcons.trophy,
+                          color: Colors.blueGrey,
+                          size: 30,
+                        ),
                       ),
+                      EndGameCard(
+                        title: 'Total XP',
+                        contents: Stack(
+                          children: [
+                            Positioned(
+                              top: 1.0,
+                              left: 1.0,
+                              child: Text(
+                                '${GamingStats.recentStats[gameLevel]}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                            ),
+                            Text(
+                              '${GamingStats.recentStats[gameLevel]}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        icon: CustomPaint(
+                            painter: XPPainter(
+                              Colors.blue,
+                              Colors.lightBlue,
+                            ),
+                            size: Size(23, 30)),
                       ),
-                      EndGameCard(title: 'Reward', contents: Row(
-                        children: [
-                          SizedBox(width: MediaQuery.of(context).size.width * 0.07,),
-                          BlueCrystal(
-                            height: 0.025 * data.width,
-                            width: 0.025 * data.width,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text(
-                            '$reward',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                          ),
-                        ],
-                      ),
+                      EndGameCard(
+                        title: 'Reward',
+                        contents: Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.07,
+                            ),
+                            BlueCrystal(
+                              height: 0.025 * data.width,
+                              width: 0.025 * data.width,
+                            ),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            Stack(
+                              children: [
+                                Positioned(
+                                  top: 1.0,
+                                  left: 1.0,
+                                  child: Text(
+                                    '$reward',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                Text(
+                                  '$reward',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                         icon: Stack(
                           children: [
-                            Transform.rotate(angle:-math.pi/8,child: BlueCrystal(height: 30, width: 30,)),
-                            Positioned(left:3, child: Transform.rotate(angle: math.pi/15,child: RedLifeCrystal(height: 30, width: 30,))),
-                            RightAnswer(height: 30, width: 30,),
-
+                            Transform.rotate(
+                                angle: -math.pi / 8,
+                                child: BlueCrystal(
+                                  height: 30,
+                                  width: 30,
+                                )),
+                            Positioned(
+                                left: 3,
+                                child: Transform.rotate(
+                                    angle: math.pi / 15,
+                                    child: RedLifeCrystal(
+                                      height: 30,
+                                      width: 30,
+                                    ))),
+                            RightAnswer(
+                              height: 30,
+                              width: 30,
+                            ),
                           ],
                         ),
                       ),
@@ -227,15 +305,19 @@ class FinishedGamePageState extends State<FinishedGamePage>
                   SizedBox(
                     height: 0.020 * data.height,
                   ),
-
-                   gameStats.isNotEmpty ? Column(
-                      children: listStats,
-                    ) : Center(child: Text('GET A SCORE TO SEE STATS', style: GoogleFonts.droidSans(
-                     fontSize: 20,
-                     color: Colors.white,
-                     fontWeight: FontWeight.w900,
-                   ),)),
-
+                  gameStats.isNotEmpty
+                      ? Column(
+                          children: listStats,
+                        )
+                      : Center(
+                          child: Text(
+                          'GET A SCORE TO SEE STATS',
+                          style: GoogleFonts.droidSans(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        )),
                   AnimatedBuilder(
                     builder: (context, child) {
                       return SizedBox(
@@ -247,16 +329,48 @@ class FinishedGamePageState extends State<FinishedGamePage>
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.30,
                   ),
-                  ProperElevatedButton(
-                    text: 'REPLAY',
-                    buttonWidth: 0.80 * MediaQuery.of(context).size.width,
-                    buttonHeight: 50.0,
-                    function: () => _pressButton(),
-                    position:
-                        Tween<Offset>(begin: Offset.zero, end: Offset(0.0, 0.12))
-                            .animate(CurvedAnimation(
-                                parent: _buttonController, curve: Curves.linear)),
-                  ),
+                  Center(
+                    child: StackedButtons(
+                      height: 50,
+                      width: 0.80 * data.width,
+                      topColor: Color(0xffd45500),
+                      bottomColor: Color(0xffd45500),
+                      child: SizedBox(
+                        width: 0.22 * data.width,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 1.5,
+                              left: 2.0,
+                              child: Text(
+                                'REPLAY',
+                                style: GoogleFonts.blackHanSans(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'REPLAY',
+                              style: GoogleFonts.blackHanSans(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPress: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return OnlineSinglePlayer();
+                        }));
+                      },
+                    ),
+                  )
                 ],
               ),
             ),
@@ -282,7 +396,9 @@ class FinishedGamePageState extends State<FinishedGamePage>
     await _buttonController.forward();
     await _buttonController.reverse();
     Navigator.of(context).pop();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {return OnlineSinglePlayer();}));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return OnlineSinglePlayer();
+    }));
   }
 
   void buttonClick() {
