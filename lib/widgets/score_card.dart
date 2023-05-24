@@ -88,15 +88,13 @@ class ScoreCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Shimmer(
-                      child: CustomPaint(
-                          painter: XPPainter(
-                            Colors.blue,
-                            Colors.lightBlue,
-                          ),
-                          // size: Size(28, 35),
-                          size: Size(data.width * 0.08, data.height * 0.05)),
-                    ),
+                    CustomPaint(
+                        painter: XPPainter(
+                          Colors.blue,
+                          Colors.lightBlue,
+                        ),
+                        // size: Size(28, 35),
+                        size: Size(data.width * 0.08, data.height * 0.05)),
                     Column(
                       children: [
                         Text(
