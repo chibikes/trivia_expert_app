@@ -6,26 +6,28 @@ import 'package:trivia_expert_app/widgets/widgets.dart';
 import 'online_single_player/view/online_single_player.dart';
 
 class TipPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return TipPageState();
   }
 }
 
-class TipPageState extends State<TipPage>
-    with TickerProviderStateMixin {
-  List<String> tips = ['Answering 10 questions correctly gives you 10 XP points', 'Buy power ups from the store section', 'Blue Crystals can be used in the store to purchase power ups. Use them!'];
+class TipPageState extends State<TipPage> with TickerProviderStateMixin {
+  List<String> tips = [
+    'Answering 10 questions correctly gives you 10 XP points',
+    'Buy power ups from the store section',
+    'Blue Crystals can be used in the store to purchase power ups. Use them!'
+  ];
   var tipIndex = 0;
   late AnimationController _buttonController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 50));
-  late AnimationController _fadeController = AnimationController(vsync: this, duration: Duration(seconds: 5));
+  late AnimationController _fadeController =
+      AnimationController(vsync: this, duration: Duration(seconds: 5));
 
   @override
   void initState() {
-
     _fadeController.addStatusListener((status) {
-      if(status == AnimationStatus.reverse) {
+      if (status == AnimationStatus.reverse) {
         setState(() {
           tipIndex == tips.length - 1 ? tipIndex = 0 : tipIndex++;
         });
@@ -35,12 +37,14 @@ class TipPageState extends State<TipPage>
     _fadeController.repeat(reverse: true);
     super.initState();
   }
+
   @override
   void dispose() {
     _buttonController.dispose();
     _fadeController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,23 +56,39 @@ class TipPageState extends State<TipPage>
             ),
             Row(
               children: [
-                SizedBox(width: 0.30 * MediaQuery.of(context).size.width,),
-                Text('CLASSIC TRIVIA', style: TextStyle(color: Colors.blueGrey,fontSize: 20, fontWeight: FontWeight.bold),),
-                SizedBox(width: 0.10 * MediaQuery.of(context).size.width,),
+                SizedBox(
+                  width: 0.30 * MediaQuery.of(context).size.width,
+                ),
+                Text(
+                  'CLASSIC TRIVIA',
+                  style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 0.10 * MediaQuery.of(context).size.width,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SizedBox(
                     height: 30,
                     width: 30,
-                    child: FloatingActionButton(backgroundColor: Colors.cyan,onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(Icons.close), elevation: 3.0,),
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.cyan,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Icon(Icons.close),
+                      elevation: 3.0,
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 50,),
+            SizedBox(
+              height: 50,
+            ),
             Padding(
               padding: EdgeInsets.only(
                   right: 0.70 * MediaQuery.of(context).size.width),
@@ -84,7 +104,9 @@ class TipPageState extends State<TipPage>
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white, width: 3.0),
-                boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 8.0),],
+                boxShadow: [
+                  BoxShadow(color: Colors.black38, blurRadius: 8.0),
+                ],
                 color: Color(0xff008080),
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -92,14 +114,19 @@ class TipPageState extends State<TipPage>
               width: 0.70 * MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: FadeTransition(opacity: Tween<double>(begin: 1.0, end: 0.30).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn)),
-                child: Text(tips[tipIndex], style: GoogleFonts.balooDa(color: Colors.white, fontSize: 15))),
+                child: FadeTransition(
+                    opacity: Tween<double>(begin: 1.0, end: 0.30).animate(
+                        CurvedAnimation(
+                            parent: _fadeController, curve: Curves.easeIn)),
+                    child: Text(tips[tipIndex],
+                        style: GoogleFonts.balooDa(
+                            color: Colors.white, fontSize: 15))),
               ),
             ),
             SizedBox(
               height: 50.0,
             ),
-            ProperElevatedButton(
+            StackedButton(
               // tapUpFunction: () =>_longPressButton(),
               // tapDownFunction: (details) => _longPressStop(),
               function: () => _pressButton(),
