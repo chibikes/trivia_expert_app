@@ -28,6 +28,7 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
         appBar: AppBar(
           toolbarHeight: 0.12 * MediaQuery.of(context).size.height,
           backgroundColor: Color(0xfff8f0e3),
+          elevation: 0.5,
           title: Center(
               child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -74,7 +75,14 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
         ),
         backgroundColor: Colors.white70,
         body: state.leaderBoardStatus == LeaderBoardStatus.failed
-            ? Center(child: Text('Something went wrong', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),))
+            ? Center(
+                child: Text(
+                'Something went wrong',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ))
             : state.leaderBoardStatus == LeaderBoardStatus.fetching
                 ? Center(
                     child: Column(
@@ -84,64 +92,75 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                       ],
                     ),
                   )
-                : ListView.builder(
-                    itemCount: state.gameScores.length < 50 ? state.gameScores.length : 50,
-                    itemBuilder: (context, index) {
-                      String name = state.gameScores[index]['userName'];
-                      name = name.length > 20
-                          ? name.replaceRange(17, name.length, '...')
-                          : name;
-
-                      return SizedBox(
-                        height: 0.10 * MediaQuery.of(context).size.height,
-                        child: Card(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${index + 1}',
-                                  style: GoogleFonts.ultra(),
-                                ),
-                                SizedBox(
-                                  width:
-                                      0.10 * MediaQuery.of(context).size.width,
-                                ),
-                                CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      state.gameScores[index]['avatarUrl']),
-                                ),
-                                SizedBox(
-                                  width:
-                                      0.08 * MediaQuery.of(context).size.width,
-                                ),
-                                Expanded(child: Text(name)),
-                                SizedBox(
-                                  width:
-                                      0.17 * MediaQuery.of(context).size.width,
-                                ),
-                                Icon(
-                                  FontAwesomeIcons.trophy,
-                                  color: Colors.orange,
-                                ),
-                                SizedBox(
-                                  width:
-                                      0.02 * MediaQuery.of(context).size.width,
-                                ),
-                                Text(
-                                  state.gameScores[index]['highScore']
-                                      .toString(),
-                                  style:
-                                      GoogleFonts.ultra(color: Colors.blueGrey),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                : RefreshIndicator(
+                    onRefresh: () {
+                      context.read<LeaderBoardBloc>().add(GetUserId(id ?? ''));
+                      return Future.delayed(
+                        Duration(milliseconds: 300),
                       );
-                    }),
+                    },
+                    child: ListView.builder(
+                        itemCount: state.gameScores.length < 50
+                            ? state.gameScores.length
+                            : 50,
+                        itemBuilder: (context, index) {
+                          String name = state.gameScores[index]['userName'];
+                          name = name.length > 20
+                              ? name.replaceRange(17, name.length, '...')
+                              : name;
+
+                          return SizedBox(
+                            height: 0.10 * MediaQuery.of(context).size.height,
+                            child: Card(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${index + 1}',
+                                      style: GoogleFonts.ultra(),
+                                    ),
+                                    SizedBox(
+                                      width: 0.10 *
+                                          MediaQuery.of(context).size.width,
+                                    ),
+                                    CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(state
+                                              .gameScores[index]['avatarUrl']),
+                                    ),
+                                    SizedBox(
+                                      width: 0.08 *
+                                          MediaQuery.of(context).size.width,
+                                    ),
+                                    Expanded(child: Text(name)),
+                                    SizedBox(
+                                      width: 0.17 *
+                                          MediaQuery.of(context).size.width,
+                                    ),
+                                    Icon(
+                                      FontAwesomeIcons.trophy,
+                                      color: Colors.orange,
+                                    ),
+                                    SizedBox(
+                                      width: 0.02 *
+                                          MediaQuery.of(context).size.width,
+                                    ),
+                                    Text(
+                                      state.gameScores[index]['highScore']
+                                          .toString(),
+                                      style: GoogleFonts.ultra(
+                                          color: Colors.blueGrey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
         bottomSheet: BottomSheet(
           builder: (BuildContext context) {
             var user = context.read<UserBloc>().state.user;
@@ -186,5 +205,4 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
     });
   }
   //TODO: put method in an isolate
-
 }
