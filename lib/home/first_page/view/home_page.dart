@@ -70,12 +70,27 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                           color: Colors.black54,
                         )),
                     Center(
-                        child: Text(
-                      'TRIVIA EXPERT',
-                      style: GoogleFonts.aBeeZee(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+                        child: Stack(
+                      children: [
+                        Positioned(
+                          left: 1.5,
+                          top: 1.5,
+                          child: Text(
+                            'TRIVIA EXPERT',
+                            style: GoogleFonts.aBeeZee(
+                                color: Colors.black,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          'TRIVIA EXPERT',
+                          style: GoogleFonts.aBeeZee(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     )),
                     GestureDetector(
                         onTap: () {
@@ -229,7 +244,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                       Positioned(
                         top: 65.0,
-                        left: 240.0,
+                        left: 230.0,
                         child: GestureDetector(
                           onTap: () async {
                             try {
@@ -254,7 +269,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                       ),
                       Positioned(
-                        top: 120,
+                        top: 115,
                         left: 95,
                         child: CustomBanner(
                           height: 100,

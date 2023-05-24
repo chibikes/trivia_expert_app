@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:trivia_expert_app/widgets/trophy_cup_layer.dart';
 import 'package:trivia_expert_app/widgets/xp_icon.dart';
 
@@ -88,15 +87,13 @@ class ScoreCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Shimmer(
-                      child: CustomPaint(
-                          painter: XPPainter(
-                            Colors.blue,
-                            Colors.lightBlue,
-                          ),
-                          // size: Size(28, 35),
-                          size: Size(data.width * 0.08, data.height * 0.05)),
-                    ),
+                    CustomPaint(
+                        painter: XPPainter(
+                          Colors.blue,
+                          Colors.lightBlue,
+                        ),
+                        // size: Size(28, 35),
+                        size: Size(data.width * 0.08, data.height * 0.05)),
                     Column(
                       children: [
                         Text(

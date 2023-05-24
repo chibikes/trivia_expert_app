@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProperElevatedButton extends StatelessWidget {
+class StackedButton extends StatelessWidget {
   final buttonWidth;
   final buttonHeight;
   final text;
@@ -14,7 +14,19 @@ class ProperElevatedButton extends StatelessWidget {
   final Color topShade;
   final Color textColor;
 
-  const ProperElevatedButton({Key? key, this.buttonWidth, this.buttonHeight, this.text, this.position, this.function, this.tapDownFunction, this.tapUpFunction, this.bottomShade = const Color(0xffd45500), this.textColor = Colors.white, this.topShade = const Color(0xffd45500),}) : super(key: key);
+  const StackedButton({
+    Key? key,
+    this.buttonWidth,
+    this.buttonHeight,
+    this.text,
+    this.position,
+    this.function,
+    this.tapDownFunction,
+    this.tapUpFunction,
+    this.bottomShade = const Color(0xffd45500),
+    this.textColor = Colors.white,
+    this.topShade = const Color(0xffd45500),
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +46,6 @@ class ProperElevatedButton extends StatelessWidget {
                 side: BorderSide.none,
                 borderRadius: BorderRadius.circular(8.0),
               ),
-
             ),
           ),
         ),
@@ -49,13 +60,17 @@ class ProperElevatedButton extends StatelessWidget {
               child: RawMaterialButton(
                 fillColor: topShade,
                 onPressed: function,
-                child: Text(text, style: GoogleFonts.blackHanSans(color: textColor, fontSize: 20, fontWeight: FontWeight.w700,)),
+                child: Text(text,
+                    style: GoogleFonts.blackHanSans(
+                      color: textColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    )),
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Color(0xb1ffffff), width: 0.5),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 // shape: Border(), // TODO:
-
               ),
             ),
           ),

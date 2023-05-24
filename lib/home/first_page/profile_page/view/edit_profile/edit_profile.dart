@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/form_validate.dart';
 import 'package:trivia_expert_app/get_image.dart';
-import 'package:trivia_expert_app/login/login.dart';
-import '../../../../../authentication/bloc/authentication_bloc.dart';
 import '../../../../../user_bloc/cubit/user_bloc.dart';
+import '../../../../../widgets/stacked_button.dart';
 
 class EditProfile extends StatefulWidget {
   EditProfile({this.autoFocusName = false});
@@ -42,22 +41,19 @@ class EditProfileState extends State<EditProfile> {
       ),
       backgroundColor: Colors.white,
       body: BlocListener<UserBloc, UserState>(
-          listener: (context, state) {
-            if (state.homeStatus == HomeStatus.updated) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(
-                content: Text('Profile updated successfully'),
-                behavior: SnackBarBehavior.floating,
-              ));
-            } else if (state.homeStatus ==
-                HomeStatus.failure_update) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(
-                content: Text('Profile update fail'),
-                behavior: SnackBarBehavior.floating,
-              ));
-            }
-          },
+        listener: (context, state) {
+          if (state.homeStatus == HomeStatus.updated) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Profile updated successfully'),
+              behavior: SnackBarBehavior.floating,
+            ));
+          } else if (state.homeStatus == HomeStatus.failure_update) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Profile update fail'),
+              behavior: SnackBarBehavior.floating,
+            ));
+          }
+        },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -65,8 +61,8 @@ class EditProfileState extends State<EditProfile> {
             child: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 if (state.homeStatus == HomeStatus.failure_update) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('failed to update')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('failed to update')));
                 }
                 return SingleChildScrollView(
                   child: Column(
@@ -173,40 +169,56 @@ class EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       state.homeStatus != HomeStatus.waiting
-                          ? ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                context.read<UserBloc>().add(
-                                      UpdateUser(
-                                        state.user!.copyWith(
-                                          name: userCred.name,
-                                          firstName: userCred.firstName,
-                                          lastName: userCred.lastName,
-                                          email: userCred.email,
-                                          country: userCred.country,
+                          ? StackedButtons(
+                              height: 40,
+                              width: 0.30 * MediaQuery.of(context).size.width,
+                              topColor: Colors.blue.shade600,
+                              bottomColor: Colors.blue.shade800,
+                              onPress: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  context.read<UserBloc>().add(
+                                        UpdateUser(
+                                          state.user!.copyWith(
+                                            name: userCred.name,
+                                            firstName: userCred.firstName,
+                                            lastName: userCred.lastName,
+                                            email: userCred.email,
+                                            country: userCred.country,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                              }
-                            },
-                            child: Text('Update Profile'),
-                          )
+                                      );
+                                }
+                              },
+                              child: Text(
+                                'Update Profile',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )
                           : Column(
                               children: [
                                 SizedBox(
-                                    height:
-                                        0.10 * MediaQuery.of(context).size.width,
-                                    width:
-                                        0.10 * MediaQuery.of(context).size.width,
+                                    height: 0.10 *
+                                        MediaQuery.of(context).size.width,
+                                    width: 0.10 *
+                                        MediaQuery.of(context).size.width,
                                     child: CircularProgressIndicator())
                               ],
                             ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            showDeleteAccountDialog(context);
-                          },
-                          child: Text('Delete Account'))
+                      SizedBox(height: 16.0),
+                      StackedButtons(
+                        height: 40,
+                        width: 0.30 * MediaQuery.of(context).size.width,
+                        topColor: Colors.blue.shade600,
+                        bottomColor: Colors.blue.shade800,
+                        onPress: () async {
+                          showDeleteAccountDialog(context);
+                        },
+                        child: Text(
+                          'Delete Account',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
                     ],
                   ),
                 );

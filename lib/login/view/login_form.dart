@@ -30,26 +30,6 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 0.07 * data.height),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TriviaIcon(
-                  width: 0.10 * MediaQuery.of(context).size.width,
-                ),
-                SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  ' RIVIA EXPERT ',
-                  style: TextStyle(
-                      backgroundColor: Colors.black54,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
             SizedBox(height: 0.20 * data.height),
             SizedBox(
                 width: MediaQuery.of(context).size.width,
