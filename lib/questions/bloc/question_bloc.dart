@@ -31,37 +31,38 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
 
   @override
   Stream<QuestionState> mapEventToState(QuestionEvent event) async* {
-    if (event is QuestionsFetched) {
+    if (event is FetchQuestions) {
       yield await _mapQuestionFetchedToState(state);
-    }
-
-    else if(event is FetchingQuestions) {
+    } else if (event is FetchingQuestions) {
       yield state.copyWith(status: QuestionStatus.inProgress);
-      add(QuestionsFetched());
+      add(FetchQuestions());
+    } else if (event is CategoryEvent) {
+      if (event.category != state.category) {
+        yield state.copyWith(
+            category: event.category, status: QuestionStatus.inProgress);
+        add(FetchQuestions());
+      }
     }
   }
 
-  Future<QuestionState> _mapQuestionFetchedToState(
-      QuestionState state) async {
+  Future<QuestionState> _mapQuestionFetchedToState(QuestionState state) async {
     try {
-        List<String> answers = [];
+      List<String> answers = [];
 
-        final questions = await _fetchQuestions();
-        for (Questions question in questions) {
-          answers = question.answers!;
-          answers.add(question.correctAnswer!);
-          answers.shuffle();
-          answers.removeWhere((element) => element.isEmpty);
-          question.copyWith(answers: answers);
-        }
+      final questions = await _fetchQuestions();
+      for (Questions question in questions) {
+        answers = question.answers!;
+        answers.add(question.correctAnswer!);
+        answers.shuffle();
+        answers.removeWhere((element) => element.isEmpty);
+        question.copyWith(answers: answers);
+      }
 
-        return state.copyWith(
-            status: QuestionStatus.success,
-            questions: questions,
-            hasReachedMax: _hasReachedMax(questions.length));
-
+      return state.copyWith(
+          status: QuestionStatus.success,
+          questions: questions,
+          hasReachedMax: _hasReachedMax(questions.length));
     } on Exception catch (e) {
-      print('error: $e');
       return state.copyWith(status: QuestionStatus.failure);
     }
   }
@@ -71,11 +72,10 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     return questions;
   }
 
-  bool _hasReachedMax(int postCount) =>
-      false; // TODO: delete hasREachedmax
+  bool _hasReachedMax(int postCount) => false; // TODO: delete hasREachedmax
   Future<List<Questions>> retrieveQuestionsFromDatabase() async {
-    List<TriviaQuestion> triviaQuestions =
-        await _questionRepository.fetchQuestions(state.offset, state.limit);
+    List<TriviaQuestion> triviaQuestions = await _questionRepository
+        .fetchQuestions(state.offset, state.limit, state.category);
 
     return List.generate(
       triviaQuestions.length,
@@ -93,5 +93,4 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
           ]),
     );
   }
-
 }
