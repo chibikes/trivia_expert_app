@@ -9,6 +9,7 @@ class StackedButtons extends StatefulWidget {
   final Color bottomColor;
   final Function onPress;
   final double borderRadius;
+  final double xHeight;
 
   const StackedButtons({
     Key? key,
@@ -18,6 +19,7 @@ class StackedButtons extends StatefulWidget {
     this.topColor = Colors.teal,
     this.bottomColor = Colors.teal,
     this.borderRadius = 0,
+    this.xHeight = 6.0,
     required this.onPress,
   }) : super(key: key);
 
@@ -33,11 +35,11 @@ class _StackedButtonsState extends State<StackedButtons>
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      height: widget.height + 6.0,
+      height: widget.height + widget.xHeight,
       child: Stack(
         children: [
           Positioned(
-            top: 6.0,
+            top: widget.xHeight,
             child: SizedBox(
               width: widget.width,
               height: widget.height,
