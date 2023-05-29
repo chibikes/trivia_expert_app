@@ -10,18 +10,17 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-
+      title: 'Trivia Expert',
       home: Scaffold(
-        body: MyRiveAnimation(),
+        body: Container(
+          color: Colors.white,
+        ),
       ),
     );
   }
 }
 
 class MyRiveAnimation extends StatefulWidget {
-
-
   @override
   _MyRiveAnimationState createState() => _MyRiveAnimationState();
 }
@@ -35,7 +34,6 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
   bool _wipers = false;
 
-
   @override
   void initState() {
     _loadRiveFile();
@@ -44,21 +42,17 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
   void _loadRiveFile() async {
     // final bytes = await rootBundle.load(riveFileName);
-    rootBundle.load(riveFileName).then(
-            (data) async {
-              final file = RiveFile.import(data);
-              final artboard = file.mainArtboard;
-              artboard.addController(SimpleAnimation('fall_in_line'));
-              setState(() => _artboard = artboard);
-            });
+    rootBundle.load(riveFileName).then((data) async {
+      final file = RiveFile.import(data);
+      final artboard = file.mainArtboard;
+      artboard.addController(SimpleAnimation('fall_in_line'));
+      setState(() => _artboard = artboard);
+    });
     // final file = RiveFile.import(bytes);
-    
-
-
   }
 
   void _wipersChange(bool wipersOn) {
-    if(_wipersController == null) {
+    if (_wipersController == null) {
       _artboard!.addController(
         _wipersController = SimpleAnimation('windshield_wipers'),
       );
@@ -68,15 +62,14 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Expanded(
-          child: _artboard !=  null
+          child: _artboard != null
               ? Rive(
-            artboard: _artboard!,
-            fit: BoxFit.cover,
-          )
+                  artboard: _artboard!,
+                  fit: BoxFit.cover,
+                )
               : Container(),
         ),
         // SizedBox(
@@ -90,6 +83,5 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         // )
       ],
     );
-
   }
 }
