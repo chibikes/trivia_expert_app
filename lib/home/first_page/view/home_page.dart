@@ -18,6 +18,7 @@ import 'package:trivia_expert_app/widgets/score_card.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 import '../../../get_image.dart';
 import '../../../user_bloc/cubit/user_bloc.dart';
+import '../../../widgets/category_card.dart';
 import '../../../widgets/custom_banner.dart';
 import '../../../widgets/camera_widget.dart';
 import '../profile_page/view/edit_profile/edit_profile.dart';
@@ -289,26 +290,17 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 SizedBox(
                   height: data.height * 0.15,
                 ),
-                ScaleTransition(
-                  scale: Tween<double>(begin: 1.0, end: 0.70).animate(
-                      CurvedAnimation(
-                          parent: _bounceController!,
-                          curve: Curves.bounceInOut)),
-                  child: SizedBox(
-                    height: 65,
-                    width: 0.80 * data.width,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                      child: Shimmer(
-                        child: RoundRectBubbleButton(
-                          text: 'Play',
-                          onPressed: () =>
-                              context.read<FirstPageCubit>().goToPage(
-                                    context,
-                                    OnlineSinglePlayer(),
-                                    buttonController: _bounceController,
-                                  ),
-                        ),
+                SizedBox(
+                  height: 65,
+                  width: 0.80 * data.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                    child: Shimmer(
+                      child: RoundRectBubbleButton(
+                        text: 'Play',
+                        onPressed: () {
+                          return showSelectionDialog();
+                        },
                       ),
                     ),
                   ),
@@ -333,5 +325,18 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           );
       }
     });
+  }
+
+  showSelectionDialog() async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: CategoryCard(
+              height: 350,
+              width: 200,
+            ),
+          );
+        });
   }
 }
