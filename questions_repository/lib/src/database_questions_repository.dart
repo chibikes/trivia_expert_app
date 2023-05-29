@@ -16,13 +16,14 @@ class DatabaseQuestionsRepository implements QuestionRepository {
   final prefs = SharedPreferences.getInstance();
 
   @override
-  Future<List<TriviaQuestion>> fetchQuestions(int offset, int limit) async {
+  Future<List<TriviaQuestion>> fetchQuestions(
+      int offset, int limit, category) async {
     await initDatabase();
-    offsetX == null ? await getOffsetFromStorage() : await updateAndSaveOffset();
+    offsetX == null
+        ? await getOffsetFromStorage()
+        : await updateAndSaveOffset();
     final List<Map<String, dynamic>> maps = await _database!
         .query('trivia_questions', limit: rowsRetrieved, offset: offsetX);
-    debugPrint('************************************************************row beelow');
-    debugPrint(databaseRows.toString());
     return List.generate(maps.length, (i) {
       return TriviaQuestion(
         id: maps[i]['id'],
@@ -37,8 +38,10 @@ class DatabaseQuestionsRepository implements QuestionRepository {
       );
     });
   }
+
   static Future<int?> getRow() async {
-    return Sqflite.firstIntValue(await _database!.rawQuery('SELECT COUNT(*) FROM $triviaDBaseTable'));
+    return Sqflite.firstIntValue(
+        await _database!.rawQuery('SELECT COUNT(*) FROM $triviaDBaseTable'));
   }
   // Future<int> getOffsetFromStorage() async {
   //   int? offset;
@@ -60,7 +63,9 @@ class DatabaseQuestionsRepository implements QuestionRepository {
   }
 
   Future<void> getOffsetFromStorage() async {
-      await prefs.then((value)  {offsetX = value.getInt('offset') ?? 0;});
+    await prefs.then((value) {
+      offsetX = value.getInt('offset') ?? 0;
+    });
   }
 
   updateAndSaveOffset() async {
@@ -73,11 +78,42 @@ class DatabaseQuestionsRepository implements QuestionRepository {
 
 class OnlineRepository implements QuestionRepository {
   @override
-  Future<List<TriviaQuestion>> fetchQuestions(int offset, int limit) async {
+  Future<List<TriviaQuestion>> fetchQuestions(
+      int offset, int limit, String? category) async {
+    var entertainment = [
+      '26',
+      '11',
+      '14',
+      '12',
+    ];
+    var science = [
+      '17',
+      '18',
+      '19',
+      '30',
+    ];
+    switch (category) {
+      case 'Science':
+        science.shuffle();
+        category = science.first;
+        break;
+      case 'Entertainment':
+        entertainment.shuffle();
+        category = entertainment.first;
+        break;
+      case 'Art':
+        category = '25';
+        break;
+      default:
+        break;
+    }
+    var stringUrl = category == 'General'
+        ? 'https://opentdb.com/api.php?amount=10&encode=base64'
+        : 'https://opentdb.com/api.php?amount=10&encode=base64&category=$category';
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
     List<TriviaQuestion> questions = [];
     List<Result> results = [];
-    var url = Uri.parse('https://opentdb.com/api.php?amount=10&encode=base64');
+    var url = Uri.parse(stringUrl);
 
     final response = await http.get(
       url,
