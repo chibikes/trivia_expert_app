@@ -14,7 +14,6 @@ import 'authentication/authentication.dart';
 import 'package:trivia_expert_app/home/tabbed_pages/tabbed_pages.dart';
 import 'login/view/login_page.dart';
 
-
 class App extends StatelessWidget {
   const App({
     Key? key,
@@ -30,7 +29,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: [RepositoryProvider(create: (_) => authenticationRepository), RepositoryProvider(create: (_) => firebaseUserRepository),],
+      providers: [
+        RepositoryProvider(create: (_) => authenticationRepository),
+        RepositoryProvider(create: (_) => firebaseUserRepository),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -45,7 +47,7 @@ class App extends StatelessWidget {
                 ..add(FetchUserData())),
           BlocProvider(
             create: (_) => QuestionBloc(questionRepository: OnlineRepository())
-              ..add(QuestionsFetched()),
+              ..add(FetchQuestions()),
             lazy: false,
           ),
           BlocProvider(
@@ -54,9 +56,10 @@ class App extends StatelessWidget {
             lazy: false,
           ),
           BlocProvider(
-              create: (_) => LeaderBoardBloc(
-                    gameRepository: gameRepository,
-                  ),),
+            create: (_) => LeaderBoardBloc(
+              gameRepository: gameRepository,
+            ),
+          ),
         ],
         child: AppView(),
       ),
