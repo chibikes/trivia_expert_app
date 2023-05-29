@@ -10,7 +10,9 @@ import 'package:trivia_expert_app/main_models/questions.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
-  OnlineSinglePlayerCubit(OnlineSinglePlayerState state, this.user, this.highScore) : super(state);
+  OnlineSinglePlayerCubit(
+      OnlineSinglePlayerState state, this.user, this.highScore)
+      : super(state);
   StreamSubscription? _timeSubscription;
   final Ticker _ticker = Ticker();
   final prefs = SharedPreferences.getInstance();
@@ -37,7 +39,8 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     await prefs.then((value) => level = value.getInt(gameLevel));
     await prefs.then((value) => life = value.getInt(redCrystals) ?? 0);
     life += state.life;
-    emit(state.copyWith(index: index ?? state.index, level: level ?? state.level, life: life));
+    emit(state.copyWith(
+        index: index ?? state.index, level: level ?? state.level, life: life));
   }
 
   void saveGameState(int index) async {
@@ -49,17 +52,21 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   Future<void> updateQuestion(int score) {
     List<Color> colors = List.filled(4, Colors.white);
     bool reachedQuestionsEnd = state.index == state.questions.length - 1;
-    var nextQuestion  = reachedQuestionsEnd ? state.questions[state.index] : state.questions[state.index + 1];
-    bool isHardQuestion = nextQuestion.question!.length >= 60 || nextQuestion.difficulty == 'hard';
+    var nextQuestion = reachedQuestionsEnd
+        ? state.questions[state.index]
+        : state.questions[state.index + 1];
+    bool isHardQuestion = nextQuestion.question!.length >= 60 ||
+        nextQuestion.difficulty == 'hard';
     return Future.delayed(Duration(seconds: 1), () {
-      emit(state.copyWith(
-          time: isHardQuestion ? kTotalGameTime : 10,
-          playerScore: score,
-          colors: colors,
-          index: reachedQuestionsEnd ? state.index : state.index + 1,
-          gameStatus: reachedQuestionsEnd
-              ? GameStatus.getQuestions
-              : GameStatus.inProgress),
+      emit(
+        state.copyWith(
+            time: isHardQuestion ? kTotalGameTime : 10,
+            playerScore: score,
+            colors: colors,
+            index: reachedQuestionsEnd ? state.index : state.index + 1,
+            gameStatus: reachedQuestionsEnd
+                ? GameStatus.getQuestions
+                : GameStatus.inProgress),
       );
     });
   }
@@ -74,26 +81,31 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
         var category = getCategory(question.category!);
 
         if (question.correctAnswer == answer) {
-
           GameStats.gameStats.update(category,
               (value) => Stats(value.score + 1, value.categoryFrequency + 1),
               ifAbsent: () {
             return Stats(1, 1);
           });
           score++;
-          if(state.highScoreEvent == false && score > highScore) {
+          if (state.highScoreEvent == false && score > highScore) {
             playVictorySound();
-            emit(state.copyWith(gameStatus: GameStatus.highScore, highScoreEvent: true, reward: state.reward + 5),);
+            emit(
+              state.copyWith(
+                  gameStatus: GameStatus.highScore,
+                  highScoreEvent: true,
+                  reward: state.reward + 5),
+            );
           }
 
           if (score % 10 == 0 && score != 0) {
             playVictorySound();
-            emit(state.copyWith(level: state.level + 10,
+            emit(state.copyWith(
+                level: state.level + 10,
                 gameStatus: GameStatus.levelChanged,
                 newLevelEvent: true,
                 reward: state.reward + 5));
           }
-            playWinSound();
+          playWinSound();
 
           return Colors.teal;
         } else {
@@ -107,7 +119,9 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           return Colors.red;
         }
       }
-      return question.correctAnswer == question.answers![index] ? Colors.teal : Colors.white;
+      return question.correctAnswer == question.answers![index]
+          ? Colors.teal
+          : Colors.white;
     });
 
     emit(state.copyWith(colors: colors));
@@ -115,7 +129,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   String getCategory(String category) {
-    if (RegExp('^Entertainment',caseSensitive: false).hasMatch(category)) {
+    if (RegExp('^Entertainment', caseSensitive: false).hasMatch(category)) {
       category = 'Entertainment';
     } else if (RegExp('^Art', caseSensitive: false).hasMatch(category)) {
       category = 'Art';
@@ -126,13 +140,13 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     }
     return category;
   }
-  void useRightAnswer() {
-      var question = state.questions[state.index];
-      var buttonSelected = question.answers!
-          .indexWhere((element) => element == question.correctAnswer);
-      validateAnswer(buttonSelected);
-  }
 
+  void useRightAnswer() {
+    var question = state.questions[state.index];
+    var buttonSelected = question.answers!
+        .indexWhere((element) => element == question.correctAnswer);
+    validateAnswer(buttonSelected);
+  }
 
   @override
   Future<void> close() {
@@ -141,18 +155,20 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   void emitQuestions(List<Questions> questions) {
-    if(state.gameStatus == GameStatus.inProgress) {
-      emit(state.copyWith(questions: questions,));
-    } else if(state.gameStatus == GameStatus.getQuestions) {
+    if (state.gameStatus == GameStatus.inProgress) {
       emit(state.copyWith(
-          questions: questions,
-          index: 0,
-          gameStatus: GameStatus.inProgress));
+        questions: questions,
+      ));
+    } else if (state.gameStatus == GameStatus.getQuestions) {
+      emit(state.copyWith(
+          questions: questions, index: 0, gameStatus: GameStatus.inProgress));
     }
   }
-  void playWinSound(){
+
+  void playWinSound() {
     final audioPlayer = AudioCache();
-    audioPlayer.play('win_sound.mp3', mode: PlayerMode.LOW_LATENCY, volume: 0.2);
+    audioPlayer.play('win_sound.mp3',
+        mode: PlayerMode.LOW_LATENCY, volume: 0.2);
   }
 
   void playFailSound() {
@@ -163,6 +179,10 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   void playVictorySound() {
     final audioPlayer = AudioCache();
     audioPlayer.play('high_score.mp3', mode: PlayerMode.LOW_LATENCY);
+  }
+
+  void resetGameState() {
+    emit(state.copyWith(highScoreEvent: false));
   }
 }
 
