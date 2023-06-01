@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 import 'package:trivia_expert_app/consts.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/src/painting/gradient.dart' as gradient;
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 import '../../../../user_bloc/cubit/user_bloc.dart';
+import '../../../../widgets/other_widgets/mainpage_container.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({
@@ -66,7 +68,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   void initState() {
     _loadRiveFile();
-    //TODO: remove [AnimationHelper.init...]
     AnimationHelper.initControllers(this);
     _multiButtonMotionController?.reset();
     _buttonTapController = AnimationController(vsync: this);
@@ -94,18 +95,26 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: delete this bloc builder and use the one in the main gamepage
     var data = MediaQuery.of(context).size;
+    var currentHighScore = context.read<UserBloc>().state.gameDetails.highScore;
     return BlocBuilder<QuestionBloc, QuestionState>(
         builder: (context, questionState) {
       switch (questionState.status) {
         case QuestionStatus.inProgress:
-          return Center(
-            child: SizedBox(
-              height: 50,
-              width: 50,
-              child: CircularProgressIndicator(),
-            ),
+          return Stack(
+            children: [
+              SizedBox(
+                  height: data.height,
+                  width: data.width,
+                  child: MainPageContainer()),
+              Center(
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ],
           );
         case QuestionStatus.failure:
           return const Center(child: Text('Failed to get questions'));
@@ -155,6 +164,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             questionState.questions[gameState.index].category!,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      Text(
+                        gameState.highScoreEvent
+                            ? 'HIGH SCORE: ${gameState.playerScore}'
+                            : 'HIGH SCORE: $currentHighScore',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
                       ),
                       // Animated
                       Padding(
@@ -224,22 +242,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                     const RightAnswer(
                                       height: 10,
                                       width: 10,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PowerUpContainer(
-                                fontSize: 12,
-                                height: 20,
-                                width: 40,
-                                powerUpQty: shopState.blueCrystals.toString(),
-                                powerUpIcon: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const BlueCrystal(
-                                      height: 8,
-                                      width: 8,
                                     ),
                                   ],
                                 ),

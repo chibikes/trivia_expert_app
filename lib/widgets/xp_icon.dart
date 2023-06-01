@@ -28,6 +28,14 @@ class XPPainter extends CustomPainter {
       ..quadraticBezierTo(0.07 * size.width, 0.50 * size.height,
           0.10 * size.width, 0.50 * size.height);
     canvas.drawPath(path, paint);
+
+    path.reset();
+    paint..color = colorTwo;
+    path
+      ..moveTo(0.15 * size.width, 0.45 * size.height)
+      ..lineTo(0.25 * size.width, 0.45 * size.height)
+      ..lineTo(0.40 * size.width, 0.10 * size.height);
+    canvas.drawPath(path, paint);
   }
 
   @override

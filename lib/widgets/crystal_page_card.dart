@@ -57,10 +57,10 @@ class PayInfoWidget extends StatelessWidget {
           ],
         ),
         StackedButtons(
-          height: 25,
+          height: 30,
           width: 0.15 * MediaQuery.of(context).size.width,
           topColor: Colors.cyan.shade500,
-          bottomColor: Colors.cyan.shade700,
+          bottomColor: Colors.cyan.shade600,
           onPress: () {
             context
                 .read<ShopCubit>()

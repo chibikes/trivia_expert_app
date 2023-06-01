@@ -363,6 +363,9 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         ),
                       ),
                       onPress: () {
+                        context
+                            .read<OnlineSinglePlayerCubit>()
+                            .resetGameState();
                         Navigator.of(context).pop();
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
