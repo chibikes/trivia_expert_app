@@ -210,7 +210,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   height: 200,
                   child: Stack(
                     children: [
-                      Center(
+                      Positioned(
+                        left: 0.37 * data.width,
                         child: Container(
                           height: 100,
                           width: 100,
@@ -244,8 +245,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                       ),
                       Positioned(
-                        top: 65.0,
-                        left: 230.0,
+                        top: 5.0,
+                        left: 0.54 * data.width,
                         child: GestureDetector(
                           onTap: () async {
                             try {
@@ -270,8 +271,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                       ),
                       Positioned(
-                        top: 115,
-                        left: 95,
+                        top: 55,
+                        left: 0.22 * data.width,
                         child: CustomBanner(
                           height: 100,
                           width: 250,
