@@ -167,7 +167,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
 
   void playWinSound() {
     final audioPlayer = AudioCache();
-    audioPlayer.play('win_sound.mp3',
+    audioPlayer.play('win_sound.wav',
         mode: PlayerMode.LOW_LATENCY, volume: 0.2);
   }
 
