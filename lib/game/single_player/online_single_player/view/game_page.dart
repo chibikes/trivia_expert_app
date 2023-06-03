@@ -129,7 +129,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               newLevelEvent = gameState.newLevelEvent;
               highScoreEvent = gameState.highScoreEvent;
               var question = gameState.questions[gameState.index];
-              if (gameState.life <= 0 || gameState.time <= 0) {
+              if (gameState.life <= 0 ||
+                  gameState.time <= 0 ||
+                  gameState.newLevelEvent) {
                 if (gameState.highScoreEvent) {
                   GamingStats.recentStats[highScore] = gameState.playerScore;
                 }
@@ -166,9 +168,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       Text(
-                        gameState.highScoreEvent
-                            ? 'HIGH SCORE: ${gameState.playerScore}'
-                            : 'HIGH SCORE: $currentHighScore',
+                        ' ${gameState.playerScore} / 10',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black54,
