@@ -70,12 +70,13 @@ class ScoreCard extends StatelessWidget {
                               color: Colors.white70),
                         ),
                         Text(
-                          'High Score',
+                          'Score',
                           style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
-                        )
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -104,7 +105,7 @@ class ScoreCard extends StatelessWidget {
                               color: Colors.white70),
                         ),
                         Text(
-                          'XP',
+                          'Level',
                           style: GoogleFonts.alegreyaSans(
                               fontWeight: FontWeight.bold,
                               color: Colors.black54),
