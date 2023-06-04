@@ -233,5 +233,11 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
       );
     });
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
   //TODO: put method in an isolate
 }
