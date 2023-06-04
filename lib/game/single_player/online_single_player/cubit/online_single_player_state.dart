@@ -2,31 +2,42 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/main_models/questions.dart';
-import 'package:trivia_expert_app/questions/models/question.dart';
 
-enum GameStatus {getQuestions, inProgress, checkingAnswer, levelChanged, highScore}
+enum GameStatus {
+  getQuestions,
+  inProgress,
+  checkingAnswer,
+  levelChanged,
+  highScore
+}
 
 /// should correct and incorrect be states? let's find out.
 
 class OnlineSinglePlayerState extends Equatable {
-  const OnlineSinglePlayerState({
-    this.colors = const [Colors.white, Colors.white, Colors.white, Colors.white,],
-    this.index = 0,
-    this.questions = const [],
-    this.gameStatus = GameStatus.inProgress,
-    this.playerScore = 0,
-    this.time = kTotalGameTime,
-    this.life = gameLife,
-    this.level = 0,
-    this.reward = 0,
-    this.highScoreEvent = false,
-    this.newLevelEvent = false,
-    this.stats = const {}
-  });
+  const OnlineSinglePlayerState(
+      {this.colors = const [
+        Colors.white,
+        Colors.white,
+        Colors.white,
+        Colors.white,
+      ],
+      this.index = 0,
+      this.rightAnswersUsed = 0,
+      this.questions = const [],
+      this.gameStatus = GameStatus.inProgress,
+      this.playerScore = 0,
+      this.time = kTotalGameTime,
+      this.life = gameLife,
+      this.level = 0,
+      this.reward = 0,
+      this.highScoreEvent = false,
+      this.newLevelEvent = false,
+      this.stats = const {}});
   final GameStatus gameStatus;
   final int playerScore;
   final List<Questions> questions;
   final List<Color> colors;
+  final int rightAnswersUsed;
   final int index;
   final int time;
   final int life;
@@ -50,6 +61,7 @@ class OnlineSinglePlayerState extends Equatable {
     bool? newLevelEvent,
     double? reward,
     Map? stats,
+    int? rightAnswersUsed,
   }) {
     return OnlineSinglePlayerState(
       gameStatus: gameStatus ?? this.gameStatus,
@@ -64,9 +76,24 @@ class OnlineSinglePlayerState extends Equatable {
       newLevelEvent: newLevelEvent ?? this.newLevelEvent,
       reward: reward ?? this.reward,
       stats: stats ?? this.stats,
+      rightAnswersUsed: rightAnswersUsed ?? this.rightAnswersUsed,
     );
   }
 
   @override
-  List<Object> get props => [gameStatus, playerScore, questions, colors, index, time, life, level, highScoreEvent, newLevelEvent, reward, stats];
+  List<Object> get props => [
+        gameStatus,
+        playerScore,
+        questions,
+        colors,
+        index,
+        time,
+        life,
+        level,
+        highScoreEvent,
+        newLevelEvent,
+        reward,
+        stats,
+        rightAnswersUsed
+      ];
 }

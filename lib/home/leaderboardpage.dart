@@ -18,6 +18,30 @@ class LeaderBoardPage extends StatefulWidget {
 }
 
 class LeaderBoardPageState extends State<LeaderBoardPage> {
+  final _scrollController = ScrollController();
+  double? bottomSheetHeight;
+
+  // final _bottomSheetController = AnimationController(vsync: this);
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          bottomSheetHeight = 0;
+        });
+      } else {
+        if (_scrollController.position.pixels <= 50) {
+          setState(() {
+            bottomSheetHeight = null;
+          });
+        }
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var id = context.read<AuthenticationBloc>().state.user!.id;
@@ -100,6 +124,7 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                       );
                     },
                     child: ListView.builder(
+                        controller: _scrollController,
                         itemCount: state.gameScores.length < 50
                             ? state.gameScores.length
                             : 50,
@@ -162,39 +187,43 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                         }),
                   ),
         bottomSheet: BottomSheet(
+          // animationController: _bottomSheetController,
           builder: (BuildContext context) {
             var user = context.read<UserBloc>().state.user;
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    state.position.toString(),
-                    style: GoogleFonts.ultra(),
-                  ),
-                  SizedBox(
-                    width: 0.10 * MediaQuery.of(context).size.width,
-                  ),
-                  CircleAvatar(
-                    backgroundImage:
-                        CachedNetworkImageProvider(user!.photoUrl!),
-                  ),
-                  SizedBox(
-                    width: 0.08 * MediaQuery.of(context).size.width,
-                  ),
-                  Expanded(child: Text(user.name!)),
-                  SizedBox(
-                    width: 0.17 * MediaQuery.of(context).size.width,
-                  ),
-                  SizedBox(
-                    width: 0.02 * MediaQuery.of(context).size.width,
-                  ),
-                  Text(
-                    '${context.read<UserBloc>().state.gameDetails.highScore}',
-                    style: GoogleFonts.ultra(color: Colors.blueGrey),
-                  ),
-                ],
+            return SizedBox(
+              height: null,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      state.position.toString(),
+                      style: GoogleFonts.ultra(),
+                    ),
+                    SizedBox(
+                      width: 0.10 * MediaQuery.of(context).size.width,
+                    ),
+                    CircleAvatar(
+                      backgroundImage:
+                          CachedNetworkImageProvider(user!.photoUrl!),
+                    ),
+                    SizedBox(
+                      width: 0.08 * MediaQuery.of(context).size.width,
+                    ),
+                    Expanded(child: Text(user.name!)),
+                    SizedBox(
+                      width: 0.17 * MediaQuery.of(context).size.width,
+                    ),
+                    SizedBox(
+                      width: 0.02 * MediaQuery.of(context).size.width,
+                    ),
+                    Text(
+                      '${context.read<UserBloc>().state.gameDetails.highScore}',
+                      style: GoogleFonts.ultra(color: Colors.blueGrey),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -203,6 +232,12 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
         ),
       );
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
   //TODO: put method in an isolate
 }

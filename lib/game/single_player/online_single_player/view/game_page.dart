@@ -79,13 +79,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   void deactivate() {
     GameStats.gameStats.clear();
-    if (highScoreEvent && newLevelEvent) {
-      context.read<UserBloc>().add(UpdatePlayerStat(xp: xp, highScore: score));
-    } else if (highScoreEvent) {
-      context.read<UserBloc>().add(UpdatePlayerStat(highScore: score));
-    } else if (newLevelEvent) {
-      context.read<UserBloc>().add(UpdatePlayerStat(xp: xp));
-    }
+    context.read<UserBloc>().add(UpdatePlayerStat(
+        xp: xp, highScore: GamingStats.recentStats[highScore]?.toInt()));
     context
         .read<OnlineSinglePlayerCubit>()
         .saveGameState(context.read<OnlineSinglePlayerCubit>().state.index);
@@ -129,17 +124,21 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               newLevelEvent = gameState.newLevelEvent;
               highScoreEvent = gameState.highScoreEvent;
               var question = gameState.questions[gameState.index];
-              if (gameState.life <= 0 || gameState.time <= 0) {
-                if (gameState.highScoreEvent) {
-                  GamingStats.recentStats[highScore] = gameState.playerScore;
-                }
+              if (gameState.life <= 0 ||
+                  gameState.time <= 0 ||
+                  gameState.newLevelEvent) {
+                var state = context.read<UserBloc>().state;
+                var totalScore = state.gameDetails.highScore;
+                GamingStats.recentStats[highScore] =
+                    totalScore + gameState.playerScore;
+
                 GamingStats.recentStats[gameLevel] = gameState.level;
                 context.read<OnlineSinglePlayerCubit>().close();
                 var stats = GameStats.gameStats;
                 return FinishedGame(
                   stats: stats,
                   highScore: gameState.highScoreEvent,
-                  score: gameState.playerScore,
+                  score: totalScore + gameState.playerScore,
                   newLevel: gameState.newLevelEvent,
                   reward: gameState.reward,
                 );
@@ -166,9 +165,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       Text(
-                        gameState.highScoreEvent
-                            ? 'HIGH SCORE: ${gameState.playerScore}'
-                            : 'HIGH SCORE: $currentHighScore',
+                        ' ${gameState.playerScore} / 10',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black54,
@@ -310,13 +307,22 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         onTap: () {
                           var gameCubit =
                               context.read<OnlineSinglePlayerCubit>();
-                          var shopBloc = context.read<ShopCubit>();
-                          if (shopBloc.state.rightAnswers >= 1 &&
-                              gameState.gameStatus == GameStatus.inProgress) {
-                            gameCubit.emit(gameState.copyWith(
-                                gameStatus: GameStatus.checkingAnswer));
-                            gameCubit.useRightAnswer();
-                            shopBloc.useItem(ItemType.rightAnswer);
+                          if (gameCubit.state.rightAnswersUsed == 3) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(SnackBar(
+                                content: Text('3 right answers already used'),
+                                behavior: SnackBarBehavior.floating,
+                              ));
+                          } else {
+                            var shopBloc = context.read<ShopCubit>();
+                            if (shopBloc.state.rightAnswers >= 1 &&
+                                gameState.gameStatus == GameStatus.inProgress) {
+                              gameCubit.emit(gameState.copyWith(
+                                  gameStatus: GameStatus.checkingAnswer));
+                              gameCubit.useRightAnswer();
+                              shopBloc.useItem(ItemType.rightAnswer);
+                            }
                           }
                         },
                         child: Container(
@@ -332,35 +338,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-                  Positioned(
-                    top: 16.0,
-                    left: 0.3 * data.width,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: gameState.gameStatus == GameStatus.levelChanged ||
-                              gameState.gameStatus == GameStatus.highScore
-                          ? 45
-                          : 0,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.orange),
-                        gradient: gradient.LinearGradient(
-                            colors: [Color(0xff1e4b7a), Color(0xff1e66ae)]),
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      ),
-                      child: Text(
-                        gameState.gameStatus == GameStatus.levelChanged
-                            ? 'XP ${gameState.level}'
-                            : gameState.gameStatus == GameStatus.highScore
-                                ? 'HIGH SCORE!'
-                                : '',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
                 ],
               );
             },
