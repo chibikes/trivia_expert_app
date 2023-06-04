@@ -66,9 +66,8 @@ class FinishedGamePageState extends State<FinishedGamePage>
         CurvedAnimation(
             parent: _offsetAnimController,
             curve: Interval(0.50, 1.0, curve: Curves.easeInOut)));
-    animation = Tween<double>(begin: 0, end: widget.reward + widget.score)
-        .animate(
-            CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))
+    animation = Tween<double>(begin: 0, end: widget.reward).animate(
+        CurvedAnimation(parent: _rewardController, curve: Curves.easeIn))
       ..addListener(() {
         setState(() {
           reward = animation.value.toInt();
@@ -150,7 +149,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                       widget.highScore
                           ? 'NEW HIGH SCORE!'
                           : widget.newLevel
-                              ? 'XP POINTS EARNED!'
+                              ? 'NEW LEVEL ACQUIRED!'
                               : 'SEE IF YOU CAN DO BETTER!',
                       style: GoogleFonts.droidSans(
                         fontSize: 25,
@@ -205,7 +204,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         ),
                       ),
                       EndGameCard(
-                        title: 'Total XP',
+                        title: 'Level',
                         contents: Stack(
                           children: [
                             Positioned(
@@ -336,14 +335,14 @@ class FinishedGamePageState extends State<FinishedGamePage>
                       topColor: Color(0xffd45500),
                       bottomColor: Color(0xffd45500),
                       child: SizedBox(
-                        width: 0.22 * data.width,
+                        width: 0.30 * data.width,
                         child: Stack(
                           children: [
                             Positioned(
                               top: 1.5,
                               left: 2.0,
                               child: Text(
-                                'REPLAY',
+                                widget.newLevel ? 'Continue' : 'REPLAY',
                                 style: GoogleFonts.blackHanSans(
                                   color: Colors.black,
                                   fontSize: 20,
@@ -352,7 +351,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                               ),
                             ),
                             Text(
-                              'REPLAY',
+                              widget.newLevel ? 'Continue' : 'REPLAY',
                               style: GoogleFonts.blackHanSans(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -412,7 +411,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
   void playWinOrLose() {
     final audioPlayer = AudioCache();
     if (widget.highScore || widget.newLevel) {
-      audioPlayer.play('well_done.mp3',
+      audioPlayer.play('well_done.wav',
           mode: PlayerMode.LOW_LATENCY, volume: 0.2);
     } else {
       audioPlayer.play('try_again.mp3',
