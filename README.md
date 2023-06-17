@@ -2,7 +2,7 @@
 
 A single-player trivia application written in flutter
 
-![trivia_app](https://user-images.githubusercontent.com/53054854/192139109-bf19805d-244b-42b8-b52e-9054a15304a3.gif)
+<img src="https://user-images.githubusercontent.com/53054854/192139109-bf19805d-244b-42b8-b52e-9054a15304a3.gif" width="25%" height="25%"/>
 
 ## Getting Started 
 
