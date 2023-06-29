@@ -92,6 +92,12 @@ class OnlineRepository implements QuestionRepository {
       '19',
       '30',
     ];
+
+    var difficulties = [
+      'easy',
+      'medium',
+      'hard',
+    ];
     switch (category) {
       case 'Science':
         science.shuffle();
@@ -107,10 +113,13 @@ class OnlineRepository implements QuestionRepository {
       default:
         break;
     }
+    difficulties.shuffle();
+    var difficulty = difficulties.first;
+
     var stringUrl = category == 'General'
-        ? 'https://opentdb.com/api.php?amount=10&encode=base64'
+        ? 'https://the-trivia-api.com/v2/questions?difficulties=$difficulty'
         : 'https://opentdb.com/api.php?amount=10&encode=base64&category=$category';
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    // Codec<String, String> stringToBase64 = utf8.fuse(base64);
     List<TriviaQuestion> questions = [];
     List<Result> results = [];
     var url = Uri.parse(stringUrl);
@@ -126,17 +135,17 @@ class OnlineRepository implements QuestionRepository {
 
       for (int i = 0; i < results.length; i++) {
         questions.add(TriviaQuestion(
-          category: stringToBase64.decode(results[i].category!),
-          type: stringToBase64.decode(results[i].type!),
-          difficulty: stringToBase64.decode(results[i].difficulty!),
-          question: stringToBase64.decode(results[i].question!),
-          correctAnswer: stringToBase64.decode(results[i].correctAnswer!),
-          incorrectOne: stringToBase64.decode(results[i].incorrectAnswers![0]),
+          category: results[i].category!,
+          type: results[i].type!,
+          difficulty: results[i].difficulty!,
+          question: results[i].question!,
+          correctAnswer: results[i].correctAnswer!,
+          incorrectOne: results[i].incorrectAnswers![0],
           incorrectTwo: results[i].incorrectAnswers!.length > 1
-              ? stringToBase64.decode(results[i].incorrectAnswers![1])
+              ? results[i].incorrectAnswers![1]
               : '',
           incorrectThree: results[i].incorrectAnswers!.length > 2
-              ? stringToBase64.decode(results[i].incorrectAnswers![2])
+              ? results[i].incorrectAnswers![2]
               : '',
         ));
       }

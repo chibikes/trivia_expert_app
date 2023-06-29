@@ -140,6 +140,8 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     } else if (RegExp('^History', caseSensitive: false).hasMatch(category)) {
       category = 'History';
     }
+    category = category.replaceAll('_', ' ');
+    category = category.toUpperCase();
     return category;
   }
 
@@ -185,7 +187,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
   }
 
   void resetGameState() {
-    emit(state.copyWith(highScoreEvent: false));
+    emit(state.copyWith(highScoreEvent: false, questions: []));
   }
 }
 

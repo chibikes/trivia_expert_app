@@ -8,6 +8,7 @@ import 'package:trivia_expert_app/game/single_player/finished_game_page/finished
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/view/online_single_player.dart';
 import 'package:trivia_expert_app/game_stats.dart';
+import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
 import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
 import 'package:trivia_expert_app/widgets/end_game_card.dart';
@@ -338,30 +339,21 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         width: 0.30 * data.width,
                         child: Stack(
                           children: [
-                            Positioned(
-                              top: 1.5,
-                              left: 2.0,
+                            Center(
                               child: Text(
                                 widget.newLevel ? 'Continue' : 'REPLAY',
                                 style: GoogleFonts.blackHanSans(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
                                 ),
-                              ),
-                            ),
-                            Text(
-                              widget.newLevel ? 'Continue' : 'REPLAY',
-                              style: GoogleFonts.blackHanSans(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
                         ),
                       ),
                       onPress: () {
+                        context.read<QuestionBloc>().add(FetchQuestions());
                         context
                             .read<OnlineSinglePlayerCubit>()
                             .resetGameState();

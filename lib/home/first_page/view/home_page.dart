@@ -204,14 +204,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                     );
                   }),
                 ),
-                SizedBox(height: data.height * 0.05),
+                SizedBox(height: data.height * 0.01),
                 SizedBox(
                   width: data.width,
                   height: 200,
                   child: Stack(
                     children: [
-                      Positioned(
-                        left: 0.37 * data.width,
+                      Center(
                         child: Container(
                           height: 100,
                           width: 100,
@@ -245,8 +244,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                       ),
                       Positioned(
-                        top: 5.0,
-                        left: 0.54 * data.width,
+                        top: 65.0,
+                        left: 230.0,
                         child: GestureDetector(
                           onTap: () async {
                             try {
@@ -271,8 +270,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                       ),
                       Positioned(
-                        top: 55,
-                        left: 0.22 * data.width,
+                        top: 115,
+                        left: 95,
                         child: CustomBanner(
                           height: 100,
                           width: 250,
@@ -285,11 +284,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(
-                  height: data.height * 0.07,
+                  height: data.height * 0.05,
                 ),
                 ScoreCard(),
                 SizedBox(
-                  height: data.height * 0.15,
+                  height: data.height * 0.12,
                 ),
                 SizedBox(
                   height: 65,
@@ -300,7 +299,15 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       child: RoundRectBubbleButton(
                         text: 'Play',
                         onPressed: () {
-                          return showSelectionDialog();
+                          // return showSelectionDialog();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return OnlineSinglePlayer();
+                              },
+                            ),
+                          );
                         },
                       ),
                     ),
