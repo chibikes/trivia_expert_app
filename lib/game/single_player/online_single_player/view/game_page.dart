@@ -127,10 +127,15 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               if (gameState.life <= 0 ||
                   gameState.time <= 0 ||
                   gameState.newLevelEvent) {
-                var state = context.read<UserBloc>().state;
-                var totalScore = state.gameDetails.highScore;
-                GamingStats.recentStats[highScore] =
-                    totalScore + gameState.playerScore;
+                // TODO: move to userbloc when refactoring
+                var userState = context.read<UserBloc>().state;
+                var totalScore = userState.gameDetails.highScore;
+
+                !userState.timeElasped
+                    ? score = totalScore + gameState.playerScore
+                    : score = gameState.playerScore;
+
+                GamingStats.recentStats[highScore] = score;
 
                 GamingStats.recentStats[gameLevel] = gameState.level;
                 context.read<OnlineSinglePlayerCubit>().close();
@@ -138,7 +143,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 return FinishedGame(
                   stats: stats,
                   highScore: gameState.highScoreEvent,
-                  score: totalScore + gameState.playerScore,
+                  score: score,
                   newLevel: gameState.newLevelEvent,
                   reward: gameState.reward,
                 );
