@@ -93,6 +93,10 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black54),
                 ),
+                Text(
+                  'Ends in ${state.time}',
+                  style: TextStyle(color: Colors.black),
+                ),
               ],
             ),
           )),
@@ -137,16 +141,42 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                           return SizedBox(
                             height: 0.10 * MediaQuery.of(context).size.height,
                             child: Card(
-                              color: Colors.white,
+                              color: state.gameScores[index]['userId'] ==
+                                      context
+                                          .read<AuthenticationBloc>()
+                                          .state
+                                          .user
+                                          ?.id
+                                  ? Colors.blueGrey.shade100
+                                  : Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '${index + 1}',
-                                      style: GoogleFonts.ultra(),
-                                    ),
+                                    index > 2
+                                        ? Text(
+                                            '${index + 1}',
+                                            style: GoogleFonts.ultra(),
+                                          )
+                                        : Container(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                '${index + 1}',
+                                                style: GoogleFonts.ultra(),
+                                              ),
+                                            ),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: index == 0
+                                                  ? Colors.orange
+                                                  : index == 1
+                                                      ? Colors.grey
+                                                      : Colors.blue[300],
+                                            ),
+                                          ),
                                     SizedBox(
                                       width: 0.10 *
                                           MediaQuery.of(context).size.width,
@@ -186,50 +216,6 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                           );
                         }),
                   ),
-        bottomSheet: BottomSheet(
-          // animationController: _bottomSheetController,
-          builder: (BuildContext context) {
-            var user = context.read<UserBloc>().state.user;
-            return SizedBox(
-              height: null,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      state.position.toString(),
-                      style: GoogleFonts.ultra(),
-                    ),
-                    SizedBox(
-                      width: 0.10 * MediaQuery.of(context).size.width,
-                    ),
-                    CircleAvatar(
-                      backgroundImage:
-                          CachedNetworkImageProvider(user!.photoUrl!),
-                    ),
-                    SizedBox(
-                      width: 0.08 * MediaQuery.of(context).size.width,
-                    ),
-                    Expanded(child: Text(user.name!)),
-                    SizedBox(
-                      width: 0.17 * MediaQuery.of(context).size.width,
-                    ),
-                    SizedBox(
-                      width: 0.02 * MediaQuery.of(context).size.width,
-                    ),
-                    Text(
-                      '${context.read<UserBloc>().state.gameDetails.highScore}',
-                      style: GoogleFonts.ultra(color: Colors.blueGrey),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          onClosing: () {},
-          backgroundColor: Color(0xfff8f0e3),
-        ),
       );
     });
   }
