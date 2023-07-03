@@ -44,7 +44,8 @@ class App extends StatelessWidget {
               create: (_) => UserBloc(firebaseUserRepository,
                   authRepository: authenticationRepository,
                   gameRepository: gameRepository)
-                ..add(FetchUserData())),
+                ..add(FetchUserData())
+                ..add(GetTimeSinceLastUpdate())),
           BlocProvider(
             create: (_) => QuestionBloc(questionRepository: OnlineRepository())
               ..add(FetchQuestions()),
