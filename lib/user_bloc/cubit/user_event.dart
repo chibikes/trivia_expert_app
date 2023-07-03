@@ -1,16 +1,13 @@
 part of 'user_bloc.dart';
 
-abstract class UserEvent extends Equatable{
-
+abstract class UserEvent extends Equatable {
   @override
   List<Object?> get props => [];
-
 }
 
-class ChangeProfile extends UserEvent {
+class ChangeProfile extends UserEvent {}
 
-}
-
+class GetTimeSinceLastUpdate extends UserEvent {}
 
 class UpdateUserImage extends UserEvent {
   final String imgPath;
@@ -18,9 +15,8 @@ class UpdateUserImage extends UserEvent {
   UpdateUserImage(this.imgPath);
 }
 
-class FetchUserData extends UserEvent {
+class FetchUserData extends UserEvent {}
 
-}
 class UserUpdated extends UserEvent {
   UserUpdated(this.user);
 
@@ -29,18 +25,17 @@ class UserUpdated extends UserEvent {
   @override
   List<Object> get props => [user];
 }
+
 class UpdateUser extends UserEvent {
   final User user;
 
-   UpdateUser(this.user);
+  UpdateUser(this.user);
 
   @override
   List<Object> get props => [user];
 }
 
-class GetUserStat extends UserEvent{
-
-}
+class GetUserStat extends UserEvent {}
 
 class UpdatePlayerStat extends UserEvent {
   final int? highScore;
@@ -59,9 +54,6 @@ class SavePlayerStat extends UserEvent {
 class UserStatFetched extends UserEvent {
   final UserGameDetails gameDetails;
   UserStatFetched(this.gameDetails);
-
 }
 
-class DeleteUser extends UserEvent {
-
-}
+class DeleteUser extends UserEvent {}
