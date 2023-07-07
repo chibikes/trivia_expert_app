@@ -95,7 +95,7 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
                 ),
                 Text(
                   'Ends in ${state.time}',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ],
             ),
@@ -113,11 +113,21 @@ class LeaderBoardPageState extends State<LeaderBoardPage> {
               ))
             : state.leaderBoardStatus == LeaderBoardStatus.fetching
                 ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                      ],
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Color(0XFF4E4E4c),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Center(
+                        child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            )),
+                      ),
                     ),
                   )
                 : RefreshIndicator(
