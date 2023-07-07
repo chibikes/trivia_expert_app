@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,15 +36,15 @@ class StackedButton extends StatelessWidget {
           child: SizedBox(
             height: buttonHeight,
             width: buttonWidth * MediaQuery.of(context).size.width,
-            child: RawMaterialButton(
-              fillColor: bottomShade,
-              // Color(0xffd45500),
-              onPressed: () {},
-              child: Text(''),
-              shape: RoundedRectangleBorder(
-                side: BorderSide.none,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                backgroundBlendMode: BlendMode.srcATop,
                 borderRadius: BorderRadius.circular(8.0),
+                color: bottomShade,
               ),
+              // Color(0xffd45500),
+              child: Text(''),
             ),
           ),
         ),
@@ -57,20 +56,22 @@ class StackedButton extends StatelessWidget {
             child: GestureDetector(
               onLongPressEnd: tapUpFunction,
               onLongPress: tapDownFunction,
-              child: RawMaterialButton(
-                fillColor: topShade,
-                onPressed: function,
-                child: Text(text,
-                    style: GoogleFonts.blackHanSans(
-                      color: textColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    )),
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Color(0xb1ffffff), width: 0.5),
-                  borderRadius: BorderRadius.circular(8.0),
+              onTap: function,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                decoration: BoxDecoration(
+                    backgroundBlendMode: BlendMode.srcATop,
+                    color: topShade,
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(color: Color(0xb1ffffff), width: 0.5)),
+                child: Text(
+                  text,
+                  style: GoogleFonts.blackHanSans(
+                    color: textColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                // shape: Border(), // TODO:
               ),
             ),
           ),
