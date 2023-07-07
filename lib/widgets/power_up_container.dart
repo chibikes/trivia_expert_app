@@ -24,6 +24,7 @@ class PowerUpContainer extends StatelessWidget {
           height: height,
           width: 0.30 * width,
           decoration: BoxDecoration(
+            boxShadow: kElevationToShadow[1],
             color: Colors.black54,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(radius),
@@ -45,6 +46,7 @@ class PowerUpContainer extends StatelessWidget {
           height: height,
           width: 0.70 * width,
           decoration: BoxDecoration(
+            boxShadow: kElevationToShadow[1],
             color: Colors.teal,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(radius),
