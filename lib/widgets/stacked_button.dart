@@ -10,6 +10,7 @@ class StackedButtons extends StatefulWidget {
   final Function onPress;
   final double borderRadius;
   final double xHeight;
+  final bool shadow;
 
   const StackedButtons({
     Key? key,
@@ -20,6 +21,7 @@ class StackedButtons extends StatefulWidget {
     this.bottomColor = Colors.teal,
     this.borderRadius = 0,
     this.xHeight = 6.0,
+    this.shadow = false,
     required this.onPress,
   }) : super(key: key);
 
@@ -43,8 +45,10 @@ class _StackedButtonsState extends State<StackedButtons>
             child: SizedBox(
               width: widget.width,
               height: widget.height,
-              child: Container(
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
                 decoration: BoxDecoration(
+                  boxShadow: widget.shadow ? kElevationToShadow[1] : [],
                   color: widget.bottomColor,
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
@@ -76,7 +80,8 @@ class _StackedButtonsState extends State<StackedButtons>
                   await _buttonController.reverse();
                   widget.onPress();
                 },
-                child: Container(
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: widget.topColor,
