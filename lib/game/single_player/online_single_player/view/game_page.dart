@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 import 'package:trivia_expert_app/consts.dart';
@@ -17,7 +17,6 @@ import 'package:trivia_expert_app/shop_cubit/shop_state.dart';
 import 'package:trivia_expert_app/widgets/crystal_page_card.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/power_up_container.dart';
-import 'package:flutter/src/painting/gradient.dart' as gradient;
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 import '../../../../user_bloc/cubit/user_bloc.dart';
@@ -281,7 +280,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                           gameState.questions[gameState.index].answers!.length,
                           (index) => Column(
                             children: [
-                              AnimatedCustomButton(
+                              AnswerButton(
+                                secondary:
+                                    gameState.colors[index] == Colors.teal
+                                        ? Colors.teal.shade300
+                                        : gameState.colors[index] == Colors.red
+                                            ? Colors.red.shade300
+                                            : Colors.grey.shade300,
                                 buttonController: _buttonTapController!,
                                 onTap: () {
                                   if (gameState.gameStatus ==
@@ -343,6 +348,78 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
+                  BlocBuilder<OnlineSinglePlayerCubit, OnlineSinglePlayerState>(
+                      builder: (context, state) {
+                    return Animate(
+                      target: state.answerStatus == AnswerStatus.correct ||
+                              state.answerStatus == AnswerStatus.wrong
+                          ? 1
+                          : 0,
+                      effects: [
+                        ScaleEffect(
+                          duration: Duration(milliseconds: 700),
+                          curve: Curves.elasticInOut,
+                          begin: Offset(0, 0),
+                          end: Offset(1.15, 1.15),
+                        ),
+                      ],
+                      child: Center(
+                        child: state.answerStatus == AnswerStatus.wrong
+                            ? SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 2,
+                                      child: Text(
+                                        'OOpS!',
+                                        style: GoogleFonts.lilitaOne(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white,
+                                            fontSize: 32),
+                                      ),
+                                    ),
+                                    Text(
+                                      'OOpS!',
+                                      style: GoogleFonts.lilitaOne(
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.red.shade400,
+                                          fontSize: 32),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : state.answerStatus == AnswerStatus.correct
+                                ? SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          top: 2,
+                                          child: Text(
+                                            state.gameText,
+                                            style: GoogleFonts.lilitaOne(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.white,
+                                                fontSize: 32),
+                                          ),
+                                        ),
+                                        Text(
+                                          state.gameText,
+                                          style: GoogleFonts.lilitaOne(
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.teal,
+                                              fontSize: 32),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Text(''),
+                      ),
+                    );
+                  }),
                 ],
               );
             },
