@@ -38,10 +38,10 @@ class UpdateUser extends UserEvent {
 class GetUserStat extends UserEvent {}
 
 class UpdatePlayerStat extends UserEvent {
-  final int? highScore;
+  final int? newScore;
   final int? xp;
 
-  UpdatePlayerStat({this.highScore, this.xp});
+  UpdatePlayerStat({this.newScore, this.xp});
 }
 
 class SavePlayerStat extends UserEvent {
