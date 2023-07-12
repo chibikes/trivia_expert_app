@@ -11,6 +11,8 @@ enum GameStatus {
   highScore
 }
 
+enum AnswerStatus { initial, wrong, correct }
+
 /// should correct and incorrect be states? let's find out.
 
 class OnlineSinglePlayerState extends Equatable {
@@ -23,8 +25,10 @@ class OnlineSinglePlayerState extends Equatable {
       ],
       this.index = 0,
       this.rightAnswersUsed = 0,
+      this.gameText = '',
       this.questions = const [],
       this.gameStatus = GameStatus.inProgress,
+      this.answerStatus = AnswerStatus.initial,
       this.playerScore = 0,
       this.time = kTotalGameTime,
       this.life = gameLife,
@@ -34,6 +38,8 @@ class OnlineSinglePlayerState extends Equatable {
       this.newLevelEvent = false,
       this.stats = const {}});
   final GameStatus gameStatus;
+  final AnswerStatus answerStatus;
+  final String gameText;
   final int playerScore;
   final List<Questions> questions;
   final List<Color> colors;
@@ -62,9 +68,12 @@ class OnlineSinglePlayerState extends Equatable {
     double? reward,
     Map? stats,
     int? rightAnswersUsed,
+    AnswerStatus? answerStatus,
+    String? gameText,
   }) {
     return OnlineSinglePlayerState(
       gameStatus: gameStatus ?? this.gameStatus,
+      answerStatus: answerStatus ?? this.answerStatus,
       playerScore: playerScore ?? this.playerScore,
       index: index ?? this.index,
       colors: colors ?? this.colors,
@@ -77,6 +86,7 @@ class OnlineSinglePlayerState extends Equatable {
       reward: reward ?? this.reward,
       stats: stats ?? this.stats,
       rightAnswersUsed: rightAnswersUsed ?? this.rightAnswersUsed,
+      gameText: gameText ?? this.gameText,
     );
   }
 
@@ -94,6 +104,8 @@ class OnlineSinglePlayerState extends Equatable {
         newLevelEvent,
         reward,
         stats,
-        rightAnswersUsed
+        rightAnswersUsed,
+        answerStatus,
+        gameText,
       ];
 }
