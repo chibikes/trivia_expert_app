@@ -138,7 +138,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
 
     return BlocBuilder<GameEndCubit, GameEndState>(builder: (context, state) {
       return Scaffold(
-        backgroundColor: Color(0xFF607D8B),
+        backgroundColor: Colors.black,
         body: Stack(
           children: [
             Padding(
@@ -354,9 +354,6 @@ class FinishedGamePageState extends State<FinishedGamePage>
                       ),
                       onPress: () {
                         context.read<QuestionBloc>().add(FetchQuestions());
-                        context
-                            .read<OnlineSinglePlayerCubit>()
-                            .resetGameState();
                         Navigator.of(context).pop();
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
@@ -404,10 +401,12 @@ class FinishedGamePageState extends State<FinishedGamePage>
     final audioPlayer = AudioCache();
     if (widget.highScore || widget.newLevel) {
       audioPlayer.play('well_done.wav',
-          mode: PlayerMode.LOW_LATENCY, volume: 0.2);
+          mode: PlayerMode.LOW_LATENCY, volume: 0.5);
     } else {
-      audioPlayer.play('try_again.mp3',
-          mode: PlayerMode.LOW_LATENCY, volume: 0.2);
+      audioPlayer.play(
+        'fail_sound.mp3',
+        mode: PlayerMode.LOW_LATENCY,
+      );
     }
   }
 }
