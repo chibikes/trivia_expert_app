@@ -34,13 +34,26 @@ class Result {
 
   factory Result.fromJson(Map<String, dynamic> parsedJson) {
     var answersFromJson = parsedJson['incorrectAnswers'];
-    List<String>? incorrectAnswers = answersFromJson.cast<String>();
+    var type = parsedJson['type'];
+
+    List<String>? incorrectAnswers = [];
+    if (type == 'image_choice') {
+      var answerList = answersFromJson as List<dynamic>;
+      for (List answer in answerList) {
+        Map<String, dynamic> dy = answer[0];
+        incorrectAnswers.add(answer[0]['url'] as String);
+      }
+    } else {
+      incorrectAnswers = answersFromJson.cast<String>();
+    }
     return Result(
         category: parsedJson['category'],
         type: parsedJson['type'],
         difficulty: parsedJson['difficulty'],
         question: parsedJson['question']['text'],
-        correctAnswer: parsedJson['correctAnswer'],
+        correctAnswer: type == 'text_choice'
+            ? parsedJson['correctAnswer']
+            : parsedJson['correctAnswer'][0]['url'],
         incorrectAnswers: incorrectAnswers);
   }
 }
