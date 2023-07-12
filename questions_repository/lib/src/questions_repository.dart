@@ -2,5 +2,5 @@ import 'models/questions.dart';
 
 abstract class QuestionRepository {
   Future<List<TriviaQuestion>> fetchQuestions(
-      int offset, int limit, String? category);
+      int offset, int limit, String? category, String? type);
 }
