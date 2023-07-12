@@ -12,6 +12,7 @@ part 'question_state.dart';
 
 class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
   final prefs = SharedPreferences.getInstance();
+  String questionType = 'text_choice';
 
   QuestionBloc({required QuestionRepository questionRepository})
       : _questionRepository = questionRepository,
@@ -32,6 +33,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
   @override
   Stream<QuestionState> mapEventToState(QuestionEvent event) async* {
     if (event is FetchQuestions) {
+      yield state.copyWith(status: QuestionStatus.inProgress, questions: []);
       yield await _mapQuestionFetchedToState(state);
     } else if (event is FetchingQuestions) {
       yield state.copyWith(status: QuestionStatus.inProgress);
@@ -61,6 +63,9 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       return state.copyWith(
           status: QuestionStatus.success,
           questions: questions,
+          type: questionType == 'text_choice'
+              ? QuestionType.text
+              : QuestionType.image,
           hasReachedMax: _hasReachedMax(questions.length));
     } on Exception catch (e) {
       return state.copyWith(status: QuestionStatus.failure);
@@ -74,8 +79,12 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
 
   bool _hasReachedMax(int postCount) => false; // TODO: delete hasREachedmax
   Future<List<Questions>> retrieveQuestionsFromDatabase() async {
-    List<TriviaQuestion> triviaQuestions = await _questionRepository
-        .fetchQuestions(state.offset, state.limit, state.category);
+    var type = ["text_choice", "text_choice", "image_choice"];
+    type.shuffle();
+    questionType = type.first;
+    List<TriviaQuestion> triviaQuestions =
+        await _questionRepository.fetchQuestions(
+            state.offset, state.limit, state.category, questionType);
 
     return List.generate(
       triviaQuestions.length,
