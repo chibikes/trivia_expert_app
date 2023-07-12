@@ -19,7 +19,7 @@ class StackedButtons extends StatefulWidget {
     required this.child,
     this.topColor = Colors.teal,
     this.bottomColor = Colors.teal,
-    this.borderRadius = 0,
+    this.borderRadius = 8.0,
     this.xHeight = 6.0,
     this.shadow = false,
     required this.onPress,
@@ -51,7 +51,7 @@ class _StackedButtonsState extends State<StackedButtons>
                   boxShadow: widget.shadow ? kElevationToShadow[1] : [],
                   color: widget.bottomColor,
                   borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+                    Radius.circular(widget.borderRadius),
                   ),
                 ),
               ),
@@ -86,7 +86,7 @@ class _StackedButtonsState extends State<StackedButtons>
                   decoration: BoxDecoration(
                     color: widget.topColor,
                     borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
+                      Radius.circular(widget.borderRadius),
                     ),
                     border: Border.all(
                       width: 0.5,
