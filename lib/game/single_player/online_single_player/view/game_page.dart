@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/file_storage.dart';
+import 'package:trivia_expert_app/game/reward_screen.dart';
 import 'package:trivia_expert_app/game/single_player/animations.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
@@ -20,6 +21,7 @@ import 'package:trivia_expert_app/widgets/power_up_container.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
 
 import '../../../../user_bloc/cubit/user_bloc.dart';
+import '../../../../widgets/img_container.dart';
 import '../../../../widgets/other_widgets/mainpage_container.dart';
 
 class GamePage extends StatefulWidget {
@@ -78,8 +80,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   void deactivate() {
     GameStats.gameStats.clear();
-    context.read<UserBloc>().add(UpdatePlayerStat(
-        xp: xp, highScore: GamingStats.recentStats[highScore]?.toInt()));
+    context.read<UserBloc>().add(
+          UpdatePlayerStat(
+              xp: xp,
+              newScore:
+                  context.read<OnlineSinglePlayerCubit>().state.playerScore),
+        );
     context
         .read<OnlineSinglePlayerCubit>()
         .saveGameState(context.read<OnlineSinglePlayerCubit>().state.index);
@@ -95,20 +101,22 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         builder: (context, questionState) {
       switch (questionState.status) {
         case QuestionStatus.inProgress:
-          return Stack(
-            children: [
-              SizedBox(
-                  height: data.height,
-                  width: data.width,
-                  child: MainPageContainer()),
-              Center(
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CircularProgressIndicator(),
+          return SafeArea(
+            child: Stack(
+              children: [
+                SizedBox(
+                    height: data.height,
+                    width: data.width,
+                    child: MainPageContainer()),
+                Center(
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         case QuestionStatus.failure:
           return const Center(child: Text('Failed to get questions'));
@@ -139,13 +147,22 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 GamingStats.recentStats[gameLevel] = gameState.level;
                 context.read<OnlineSinglePlayerCubit>().close();
                 var stats = GameStats.gameStats;
-                return FinishedGame(
-                  stats: stats,
-                  highScore: gameState.highScoreEvent,
-                  score: score,
-                  newLevel: gameState.newLevelEvent,
-                  reward: gameState.reward,
-                );
+                return gameState.playerScore >= 9
+                    ? FinishedGame(
+                        stats: stats,
+                        highScore: gameState.highScoreEvent,
+                        score: score,
+                        newLevel: gameState.newLevelEvent,
+                        reward: gameState.reward,
+                      )
+                    : RewardScreen(
+                        newLevel: gameState.newLevelEvent,
+                        lastScore: gameState.playerScore,
+                        stats: stats,
+                        highScoreEvent: gameState.highScoreEvent,
+                        reward: gameState.reward,
+                        score: score,
+                      );
               } else if (gameState.gameStatus == GameStatus.getQuestions) {
                 context.read<QuestionBloc>().add(FetchingQuestions());
               }
@@ -160,13 +177,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                   Column(
                     children: [
                       SizedBox(
-                        height: 0.05 * data.height,
-                      ),
-                      Text(
-                        'Category: ' +
-                            questionState.questions[gameState.index].category!,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                        height: 30,
                       ),
                       Text(
                         ' ${gameState.playerScore} / 10',
@@ -273,43 +284,73 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                       ),
 
                       SizedBox(
-                        height: data.height * 0.15,
+                        height:
+                            questionState.type == QuestionType.image ? 8 : 50,
                       ),
-                      Column(
-                        children: List.generate(
-                          gameState.questions[gameState.index].answers!.length,
-                          (index) => Column(
-                            children: [
-                              AnswerButton(
-                                secondary:
-                                    gameState.colors[index] == Colors.teal
-                                        ? Colors.teal.shade300
-                                        : gameState.colors[index] == Colors.red
-                                            ? Colors.red.shade300
-                                            : Colors.grey.shade300,
-                                buttonController: _buttonTapController!,
-                                onTap: () {
-                                  if (gameState.gameStatus ==
-                                      GameStatus.inProgress) {
-                                    context
-                                        .read<OnlineSinglePlayerCubit>()
-                                        .validateAnswer(index);
-                                  }
-                                },
-                                color: gameState.colors[index],
-                                interval: Interval(0.25, 1.0,
-                                    curve: Curves.elasticIn),
-                                multiButtonMotionController:
-                                    _multiButtonMotionController,
-                                animationController:
-                                    AnimationHelper.controllerTwo,
-                                text: question.answers![index],
+                      questionState.type == QuestionType.text
+                          ? Column(
+                              children: List.generate(
+                                gameState
+                                    .questions[gameState.index].answers!.length,
+                                (index) => Column(
+                                  children: [
+                                    AnswerButton(
+                                      secondary:
+                                          gameState.colors[index] == Colors.teal
+                                              ? Colors.teal.shade300
+                                              : gameState.colors[index] ==
+                                                      Colors.red
+                                                  ? Colors.red.shade300
+                                                  : Colors.grey.shade300,
+                                      buttonController: _buttonTapController!,
+                                      onTap: () {
+                                        if (gameState.gameStatus ==
+                                            GameStatus.inProgress) {
+                                          context
+                                              .read<OnlineSinglePlayerCubit>()
+                                              .validateAnswer(index);
+                                        }
+                                      },
+                                      color: gameState.colors[index],
+                                      interval: Interval(0.25, 1.0,
+                                          curve: Curves.elasticIn),
+                                      multiButtonMotionController:
+                                          _multiButtonMotionController,
+                                      animationController:
+                                          AnimationHelper.controllerTwo,
+                                      text: question.answers![index],
+                                    ),
+                                    SizedBox(height: 0.010 * data.height),
+                                  ],
+                                ),
                               ),
-                              SizedBox(height: 0.010 * data.height),
-                            ],
-                          ),
-                        ),
-                      ),
+                            )
+                          : Container(
+                              child: GridView.count(
+                                shrinkWrap: true,
+                                crossAxisCount: 2,
+                                children: List.generate(
+                                  gameState.questions[gameState.index].answers!
+                                      .length,
+                                  (index) => GestureDetector(
+                                    onTap: () {
+                                      if (gameState.gameStatus ==
+                                          GameStatus.inProgress) {
+                                        context
+                                            .read<OnlineSinglePlayerCubit>()
+                                            .validateAnswer(index);
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: ImageContainer(
+                                        url: question.answers![index],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                       SizedBox(
                         height: 0.020 * data.height,
                       ),
