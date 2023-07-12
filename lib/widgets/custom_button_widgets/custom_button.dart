@@ -1,52 +1,42 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
-import 'package:trivia_expert_app/widgets/other_widgets/styles.dart';
+import '../stacked_button.dart';
 
-class AnimatedCustomButton extends StatelessWidget  {
+class AnswerButton extends StatelessWidget {
   final AnimationController buttonController;
   final Widget? child;
   final AnimationController? animationController;
   final AnimationController? multiButtonMotionController;
   final Interval interval;
   final Color color;
+  final Color secondary;
   final Function()? onTap;
   final String text;
 
-  const AnimatedCustomButton({Key? key, required this.animationController, this.child, required this.multiButtonMotionController, required this.interval, required this.color, required this.onTap, required this.buttonController, this.text = ''}) : super(key: key);
+  const AnswerButton(
+      {Key? key,
+      required this.animationController,
+      this.child,
+      required this.multiButtonMotionController,
+      required this.interval,
+      required this.color,
+      required this.secondary,
+      required this.onTap,
+      required this.buttonController,
+      this.text = ''})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var data = MediaQuery.of(context).size;
-    return SlideTransition(
-      position: Tween<Offset>(
-          begin: Offset.zero, end: Offset(3.5, 0.0))
-          .animate(CurvedAnimation(
-          parent: multiButtonMotionController!,
-          curve: interval,)),
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(text, style: MyTextStyle.style,),
-            ),
-            alignment: Alignment.center,
-            height: text.length >= 34 ? 0.07555 * data.height : 0.0555 * data.height,
-            width: MediaQuery.of(context).size.width * 0.90,
-            duration: Duration(milliseconds: 300),
-            decoration: BoxDecoration(
-              color: color,
-              backgroundBlendMode: BlendMode.srcATop,
-              borderRadius: BorderRadius.circular(8.0),
-              // color: color
-
-            )
-        ),
-      ),
+    return StackedButtons(
+      shadow: true,
+      topColor: color,
+      bottomColor: secondary,
+      child: Text(text),
+      onPress: onTap ?? () {},
+      width: MediaQuery.of(context).size.width * 0.80,
+      height: text.length >= 34 ? 0.07555 * data.height : 0.0555 * data.height,
     );
   }
-  }
-
-
+}
