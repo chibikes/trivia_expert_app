@@ -109,9 +109,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Stream<UserState> _updateHighScore(UpdatePlayerStat event) async* {
-    add(SavePlayerStat(event.highScore ?? state.gameDetails.highScore,
-        event.xp ?? state.gameDetails.xp));
-    yield state.copyWith(highScore: event.highScore, xp: event.xp);
+    // check if leaderboard time has expired. Add prev score if it has not
+    final hasExpired = await hasLeaderBoardExpired();
+    int newScore = event.newScore ?? state.gameDetails.highScore;
+    newScore = !hasExpired ? newScore + state.gameDetails.highScore : newScore;
+    add(SavePlayerStat(newScore, event.xp ?? state.gameDetails.xp));
+    yield state.copyWith(highScore: newScore, xp: event.xp);
   }
 
   void _saveUserStats(SavePlayerStat event) {
@@ -161,5 +164,42 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     }
     return state.copyWith(timeElaps: false);
+  }
+
+  Future<bool> hasLeaderBoardExpired() async {
+    bool hasExpired = false;
+
+    /// leaderboard ends every day that is divisible by 4
+    var timeSinceLastScore =
+        await prefs.then((value) => value.getString("time"));
+    timeSinceLastScore ??= DateTime.now().toUtc().toIso8601String();
+    DateTime timeLastScore =
+        DateTime.tryParse(timeSinceLastScore) ?? DateTime.now().toUtc();
+    var prevLeaderBoard = DateTime.now().toUtc();
+
+    /// last time leaderboard ended
+    for (int i = 0; i < 30; i++) {
+      prevLeaderBoard = prevLeaderBoard.subtract(Duration(days: 1));
+      if (prevLeaderBoard.day % 4 == 0) {
+        break;
+      }
+    }
+
+    // time you saved last score is on or before prev leaderboard
+    if (timeLastScore.year > prevLeaderBoard.year) {
+      hasExpired = false;
+    } else if (timeLastScore.year < prevLeaderBoard.year) {
+      hasExpired = true;
+    } else if (timeLastScore.year == prevLeaderBoard.year) {
+      if (timeLastScore.month < prevLeaderBoard.month) {
+        hasExpired = true;
+      } else if (timeLastScore.month > prevLeaderBoard.month) {
+        hasExpired = false;
+      } else if (timeLastScore.day < prevLeaderBoard.day ||
+          timeLastScore.day == prevLeaderBoard.day) {
+        hasExpired = true;
+      }
+    }
+    return hasExpired;
   }
 }
