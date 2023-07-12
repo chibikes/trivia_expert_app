@@ -27,10 +27,11 @@ class ScoreCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Stack(
+                Center(
+                  child: Container(
+                    color: Colors.blue,
+                    width: 500,
+                    child: Stack(
                       children: [
                         Icon(
                           FontAwesomeIcons.trophy,
@@ -55,64 +56,70 @@ class ScoreCard extends StatelessWidget {
                                 color: Colors.white24, shape: BoxShape.circle),
                           ),
                         ),
+                        Positioned(
+                            left: 30,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0, vertical: 2.0),
+                                child: Text(
+                                  highScore.toString().length <= 6
+                                      ? '$highScore'
+                                      : highScore.toString().replaceRange(
+                                          7, highScore.toString().length, '..'),
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ))
                       ],
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          highScore.toString().length <= 6
-                              ? '$highScore'
-                              : highScore.toString().replaceRange(
-                                  7, highScore.toString().length, '..'),
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white70),
-                        ),
-                        Text(
-                          'Score',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
                 Divider(
                   thickness: 2.0,
                   color: Colors.white,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomPaint(
+                Container(
+                  color: Colors.cyan,
+                  width: 500,
+                  child: Stack(
+                    children: [
+                      CustomPaint(
                         painter: XPPainter(
                           Colors.blue,
                           Colors.lightBlue,
                         ),
                         // size: Size(28, 35),
-                        size: Size(data.width * 0.08, data.height * 0.05)),
-                    Column(
-                      children: [
-                        Text(
-                          '$xp',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white70),
+                        size: Size(data.width * 0.08, data.height * 0.05),
+                      ),
+                      Positioned(
+                        left: 30,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0, vertical: 2.0),
+                            child: Text(
+                              '$xp',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
                         ),
-                        Text(
-                          'Level',
-                          style: GoogleFonts.alegreyaSans(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
