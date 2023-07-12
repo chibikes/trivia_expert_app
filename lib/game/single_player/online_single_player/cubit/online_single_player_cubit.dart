@@ -66,7 +66,9 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
             index: reachedQuestionsEnd ? state.index : state.index + 1,
             gameStatus: reachedQuestionsEnd
                 ? GameStatus.getQuestions
-                : GameStatus.inProgress),
+                : GameStatus.inProgress,
+            answerStatus: AnswerStatus.initial,
+            gameText: ''),
       );
     });
   }
@@ -87,7 +89,18 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
             return Stats(1, 1);
           });
           score++;
-          emit(state.copyWith(reward: state.reward + 1));
+          var text = '';
+          if (score <= 3) {
+            text = 'GOOD!';
+          } else if (score == 6) {
+            text = 'NICE!';
+          } else if (score == 9) {
+            text = 'NICE!!';
+          }
+          emit(state.copyWith(
+              reward: state.reward + 1,
+              answerStatus: AnswerStatus.correct,
+              gameText: text));
           if (state.highScoreEvent == false && score > highScore) {
             // playVictorySound();
             emit(
@@ -112,7 +125,8 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           return Colors.teal;
         } else {
           playFailSound();
-          emit(state.copyWith(life: state.life - 1));
+          emit(state.copyWith(
+              life: state.life - 1, answerStatus: AnswerStatus.wrong));
           GameStats.gameStats.update(category,
               (value) => Stats(value.score, value.categoryFrequency + 1),
               ifAbsent: () {
@@ -121,6 +135,7 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
           return Colors.red;
         }
       }
+      //TODO: move this color logic to UI
       return question.correctAnswer == question.answers![index]
           ? Colors.teal
           : Colors.white;
@@ -172,13 +187,16 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
 
   void playWinSound() {
     final audioPlayer = AudioCache();
-    audioPlayer.play('win_sound.wav',
-        mode: PlayerMode.LOW_LATENCY, volume: 0.2);
+    audioPlayer.play(
+      'win.mp3',
+      volume: 0.5,
+      mode: PlayerMode.LOW_LATENCY,
+    );
   }
 
   void playFailSound() {
     final audioPlayer = AudioCache();
-    audioPlayer.play('fail_sound.mp3', mode: PlayerMode.LOW_LATENCY);
+    audioPlayer.play('wrong_answer.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 
   void playVictorySound() {
@@ -186,8 +204,9 @@ class OnlineSinglePlayerCubit extends Cubit<OnlineSinglePlayerState> {
     audioPlayer.play('high_score.mp3', mode: PlayerMode.LOW_LATENCY);
   }
 
-  void resetGameState() {
-    emit(state.copyWith(highScoreEvent: false, questions: []));
+  void resetGameState({int? score}) {
+    emit(state.copyWith(
+        highScoreEvent: false, questions: [], playerScore: score ?? 0));
   }
 }
 
