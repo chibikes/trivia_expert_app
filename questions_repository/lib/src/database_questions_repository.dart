@@ -17,7 +17,7 @@ class DatabaseQuestionsRepository implements QuestionRepository {
 
   @override
   Future<List<TriviaQuestion>> fetchQuestions(
-      int offset, int limit, category) async {
+      int offset, int limit, category, type) async {
     await initDatabase();
     offsetX == null
         ? await getOffsetFromStorage()
@@ -79,7 +79,7 @@ class DatabaseQuestionsRepository implements QuestionRepository {
 class OnlineRepository implements QuestionRepository {
   @override
   Future<List<TriviaQuestion>> fetchQuestions(
-      int offset, int limit, String? category) async {
+      int offset, int limit, String? category, String? type) async {
     var entertainment = [
       '26',
       '11',
@@ -116,9 +116,9 @@ class OnlineRepository implements QuestionRepository {
     difficulties.shuffle();
     var difficulty = difficulties.first;
 
-    var stringUrl = category == 'General'
+    var stringUrl = type != 'image_choice'
         ? 'https://the-trivia-api.com/v2/questions?difficulties=$difficulty'
-        : 'https://opentdb.com/api.php?amount=10&encode=base64&category=$category';
+        : 'https://the-trivia-api.com/v2/questions?types=$type';
     // Codec<String, String> stringToBase64 = utf8.fuse(base64);
     List<TriviaQuestion> questions = [];
     List<Result> results = [];
@@ -134,20 +134,23 @@ class OnlineRepository implements QuestionRepository {
       results = question.results!;
 
       for (int i = 0; i < results.length; i++) {
-        questions.add(TriviaQuestion(
-          category: results[i].category!,
-          type: results[i].type!,
-          difficulty: results[i].difficulty!,
-          question: results[i].question!,
-          correctAnswer: results[i].correctAnswer!,
-          incorrectOne: results[i].incorrectAnswers![0],
-          incorrectTwo: results[i].incorrectAnswers!.length > 1
-              ? results[i].incorrectAnswers![1]
-              : '',
-          incorrectThree: results[i].incorrectAnswers!.length > 2
-              ? results[i].incorrectAnswers![2]
-              : '',
-        ));
+        if (results[i].correctAnswer!.contains('.svg')) {
+        } else {
+          questions.add(TriviaQuestion(
+            category: results[i].category!,
+            type: results[i].type!,
+            difficulty: results[i].difficulty!,
+            question: results[i].question!,
+            correctAnswer: results[i].correctAnswer!,
+            incorrectOne: results[i].incorrectAnswers![0],
+            incorrectTwo: results[i].incorrectAnswers!.length > 1
+                ? results[i].incorrectAnswers![1]
+                : '',
+            incorrectThree: results[i].incorrectAnswers!.length > 2
+                ? results[i].incorrectAnswers![2]
+                : '',
+          ));
+        }
       }
     }
     return questions;
