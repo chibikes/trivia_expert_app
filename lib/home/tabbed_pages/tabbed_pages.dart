@@ -60,10 +60,10 @@ class _TabbedState extends State<HomePage> {
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home_rounded),
               label: 'Home',
               backgroundColor: Colors.lightBlue,
-              activeIcon: Icon(FontAwesomeIcons.home),
+              activeIcon: Icon(Icons.home_rounded),
             ),
             BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
             BottomNavigationBarItem(
