@@ -5,15 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:trivia_expert_app/consts.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/finished_game_page/finished_game_state.dart';
-import 'package:trivia_expert_app/game/single_player/online_single_player/cubit/online_single_player_cubit.dart';
 import 'package:trivia_expert_app/game/single_player/online_single_player/view/online_single_player.dart';
 import 'package:trivia_expert_app/game_stats.dart';
 import 'package:trivia_expert_app/questions/bloc/question_bloc.dart';
 import 'package:trivia_expert_app/shop_cubit/shop_cubit.dart';
-import 'package:trivia_expert_app/widgets/custom_button_widgets/proper_elevated_button.dart';
 import 'package:trivia_expert_app/widgets/end_game_card.dart';
 import 'package:trivia_expert_app/widgets/finished_game_card.dart';
-import 'package:trivia_expert_app/widgets/game_widgets/cyrstal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trivia_expert_app/widgets/game_widgets/red_life_crystal.dart';
 import 'package:trivia_expert_app/widgets/widgets.dart';
@@ -106,7 +103,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
   @override
   Widget build(BuildContext context) {
     var data = MediaQuery.of(context).size;
-    var gameStats = widget.stats;
+    var gameStats = GameStats.gameStats;
     List<Widget> listStats = [];
     listStats.add(
       Padding(
@@ -150,7 +147,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                       widget.highScore
                           ? 'NEW HIGH SCORE!'
                           : widget.newLevel
-                              ? 'NEW LEVEL ACQUIRED!'
+                              ? 'XP ACQUIRED!'
                               : 'SEE IF YOU CAN DO BETTER!',
                       style: GoogleFonts.droidSans(
                         fontSize: 25,
@@ -205,7 +202,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         ),
                       ),
                       EndGameCard(
-                        title: 'Level',
+                        title: 'XP',
                         contents: Stack(
                           children: [
                             Positioned(
@@ -353,6 +350,7 @@ class FinishedGamePageState extends State<FinishedGamePage>
                         ),
                       ),
                       onPress: () {
+                        GameStats.gameStats.clear();
                         context.read<QuestionBloc>().add(FetchQuestions());
                         Navigator.of(context).pop();
                         Navigator.of(context)
